@@ -3,17 +3,19 @@
 
 import 'package:vcore_m2m/vcore_m2m.dart';
 import 'package:test/test.dart';
+import 'package:vcore_m2m/src/model/transform.dart';
+import 'package:vcore_ecore/vcore_ecore.dart';
+import 'package:vcore/vcore.dart';
 
 void main() {
   group('A group of tests', () {
-    Awesome awesome;
-
-    setUp(() {
-      awesome = new Awesome();
-    });
 
     test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+
+      new ValueClassRelation((ValueClassRelationBuilder b) => b
+//      ..from = EClass
+      );
+
     });
   });
 }

@@ -22,8 +22,8 @@ abstract class ClassifierRelationBuilder<
     B extends ClassifierBuilder<V, B>,
     V2 extends Classifier<V2, B2>,
     B2 extends ClassifierBuilder<V2, B2>> {
-  B from;
-  B2 to;
+  V from;
+  V2 to;
 }
 
 abstract class ValueClassRelation
@@ -50,8 +50,8 @@ abstract class ValueClassRelationBuilder
             ValueClassBuilder> {
   ValueClassRelationBuilder._();
 
-  ValueClassBuilder from = new ValueClassBuilder();
-  ValueClassBuilder to = new ValueClassBuilder();
+  ValueClass from;
+  ValueClass to;
 
   factory ValueClassRelationBuilder() = _$ValueClassRelationBuilder;
 }
