@@ -8,21 +8,20 @@ part 'transform.g.dart';
 
 typedef Classifier Transform(Classifier);
 
+abstract class ClassifierRelation
+    implements Built<ClassifierRelation, ClassifierRelationBuilder> {
+  static final Serializer<ClassifierRelation> serializer =
+      _$classifierRelationSerializer;
 
-abstract class Relation
-  implements Built<Relation, RelationBuilder> {
-  static final Serializer<Relation> serializer = _$relationSerializer;
+  ClassifierRelation._();
 
-
-  Relation._();
-
-  factory Relation([updates(RelationBuilder b)]) = _$Relation;
+  factory ClassifierRelation([updates(ClassifierRelationBuilder b)]) =
+      _$ClassifierRelation;
 }
 
-abstract class RelationBuilder
-  implements Builder<Relation, RelationBuilder> {
+abstract class ClassifierRelationBuilder
+    implements Builder<ClassifierRelation, ClassifierRelationBuilder> {
+  ClassifierRelationBuilder._();
 
-  RelationBuilder._();
-
-  factory RelationBuilder() = _$RelationBuilder;
+  factory ClassifierRelationBuilder() = _$ClassifierRelationBuilder;
 }
