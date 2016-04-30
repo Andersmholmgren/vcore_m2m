@@ -1,8 +1,8 @@
 library transform;
 
-import 'package:vcore/vcore.dart';
-import 'package:built_value/built_value.dart';
 import 'package:built_json/built_json.dart';
+import 'package:built_value/built_value.dart';
+import 'package:vcore/vcore.dart';
 
 part 'transform.g.dart';
 
@@ -54,4 +54,22 @@ abstract class ValueClassRelationBuilder
   ValueClassBuilder to = new ValueClassBuilder();
 
   factory ValueClassRelationBuilder() = _$ValueClassRelationBuilder;
+}
+
+abstract class PropertyRelation
+    implements Built<PropertyRelation, PropertyRelationBuilder> {
+  static final Serializer<PropertyRelation> serializer =
+      _$propertyRelationSerializer;
+
+  PropertyRelation._();
+
+  factory PropertyRelation([updates(PropertyRelationBuilder b)]) =
+      _$PropertyRelation;
+}
+
+abstract class PropertyRelationBuilder
+    implements Builder<PropertyRelation, PropertyRelationBuilder> {
+  PropertyRelationBuilder._();
+
+  factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }

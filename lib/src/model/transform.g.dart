@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-04-30T04:39:43.205259Z
+// 2016-04-30T04:41:31.942603Z
 
 part of transform;
 
@@ -10,6 +10,8 @@ part of transform;
 
 Serializer<ValueClassRelation> _$valueClassRelationSerializer =
     new _$ValueClassRelationSerializer();
+Serializer<PropertyRelation> _$propertyRelationSerializer =
+    new _$PropertyRelationSerializer();
 
 class _$ValueClassRelationSerializer
     implements StructuredSerializer<ValueClassRelation> {
@@ -55,6 +57,43 @@ class _$ValueClassRelationSerializer
             result.to.replace(serializers.deserialize(value,
                 specifiedType: const FullType(ValueClass)));
             break;
+        }
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$PropertyRelationSerializer
+    implements StructuredSerializer<PropertyRelation> {
+  final Iterable<Type> types =
+      new BuiltList<Type>([PropertyRelation, _$PropertyRelation]);
+  final String wireName = 'PropertyRelation';
+
+  @override
+  Iterable serialize(Serializers serializers, PropertyRelation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    return [];
+  }
+
+  @override
+  PropertyRelation deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new PropertyRelationBuilder();
+
+    var key;
+    var value;
+    var expectingKey = true;
+    for (final item in serialized) {
+      if (expectingKey) {
+        key = item;
+        expectingKey = false;
+      } else {
+        value = item;
+        expectingKey = true;
+
+        switch (key as String) {
         }
       }
     }
@@ -113,5 +152,44 @@ class _$ValueClassRelationBuilder extends ValueClassRelationBuilder {
     if (from == null) throw new ArgumentError('null from');
     if (to == null) throw new ArgumentError('null to');
     return new _$ValueClassRelation._(from: from?.build(), to: to?.build());
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class PropertyRelation
+// **************************************************************************
+
+class _$PropertyRelation extends PropertyRelation {
+  _$PropertyRelation._() : super._() {}
+  factory _$PropertyRelation([updates(PropertyRelationBuilder b)]) =>
+      (new PropertyRelationBuilder()..update(updates)).build();
+  PropertyRelation rebuild(updates(PropertyRelationBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$PropertyRelationBuilder toBuilder() =>
+      new _$PropertyRelationBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! PropertyRelation) return false;
+    return true;
+  }
+
+  int get hashCode {
+    return 491450331;
+  }
+
+  String toString() {
+    return 'PropertyRelation {}';
+  }
+}
+
+class _$PropertyRelationBuilder extends PropertyRelationBuilder {
+  _$PropertyRelationBuilder() : super._();
+  void replace(PropertyRelation other) {}
+  void update(updates(PropertyRelationBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  PropertyRelation build() {
+    return new _$PropertyRelation._();
   }
 }
