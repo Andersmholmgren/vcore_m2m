@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-04-30T04:30:19.171128Z
+// 2016-04-30T04:39:43.205259Z
 
 part of transform;
 
@@ -8,25 +8,32 @@ part of transform;
 // Target: library transform
 // **************************************************************************
 
-Serializer<ClassifierRelation> _$classifierRelationSerializer =
-    new _$ClassifierRelationSerializer();
+Serializer<ValueClassRelation> _$valueClassRelationSerializer =
+    new _$ValueClassRelationSerializer();
 
-class _$ClassifierRelationSerializer
-    implements StructuredSerializer<ClassifierRelation> {
+class _$ValueClassRelationSerializer
+    implements StructuredSerializer<ValueClassRelation> {
   final Iterable<Type> types =
-      new BuiltList<Type>([ClassifierRelation, _$ClassifierRelation]);
-  final String wireName = 'ClassifierRelation';
+      new BuiltList<Type>([ValueClassRelation, _$ValueClassRelation]);
+  final String wireName = 'ValueClassRelation';
 
   @override
-  Iterable serialize(Serializers serializers, ClassifierRelation object,
+  Iterable serialize(Serializers serializers, ValueClassRelation object,
       {FullType specifiedType: FullType.unspecified}) {
-    return [];
+    return [
+      'from',
+      serializers.serialize(object.from,
+          specifiedType: const FullType(ValueClass)),
+      'to',
+      serializers.serialize(object.to,
+          specifiedType: const FullType(ValueClass)),
+    ];
   }
 
   @override
-  ClassifierRelation deserialize(Serializers serializers, Iterable serialized,
+  ValueClassRelation deserialize(Serializers serializers, Iterable serialized,
       {FullType specifiedType: FullType.unspecified}) {
-    final result = new ClassifierRelationBuilder();
+    final result = new ValueClassRelationBuilder();
 
     var key;
     var value;
@@ -40,6 +47,14 @@ class _$ClassifierRelationSerializer
         expectingKey = true;
 
         switch (key as String) {
+          case 'from':
+            result.from.replace(serializers.deserialize(value,
+                specifiedType: const FullType(ValueClass)));
+            break;
+          case 'to':
+            result.to.replace(serializers.deserialize(value,
+                specifiedType: const FullType(ValueClass)));
+            break;
         }
       }
     }
@@ -50,39 +65,53 @@ class _$ClassifierRelationSerializer
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class ClassifierRelation
+// Target: abstract class ValueClassRelation
 // **************************************************************************
 
-class _$ClassifierRelation extends ClassifierRelation {
-  _$ClassifierRelation._() : super._() {}
-  factory _$ClassifierRelation([updates(ClassifierRelationBuilder b)]) =>
-      (new ClassifierRelationBuilder()..update(updates)).build();
-  ClassifierRelation rebuild(updates(ClassifierRelationBuilder b)) =>
+class _$ValueClassRelation extends ValueClassRelation {
+  final ValueClass from;
+  final ValueClass to;
+  _$ValueClassRelation._({this.from, this.to}) : super._() {
+    if (from == null) throw new ArgumentError('null from');
+    if (to == null) throw new ArgumentError('null to');
+  }
+  factory _$ValueClassRelation([updates(ValueClassRelationBuilder b)]) =>
+      (new ValueClassRelationBuilder()..update(updates)).build();
+  ValueClassRelation rebuild(updates(ValueClassRelationBuilder b)) =>
       (toBuilder()..update(updates)).build();
-  _$ClassifierRelationBuilder toBuilder() =>
-      new _$ClassifierRelationBuilder()..replace(this);
+  _$ValueClassRelationBuilder toBuilder() =>
+      new _$ValueClassRelationBuilder()..replace(this);
   bool operator ==(other) {
-    if (other is! ClassifierRelation) return false;
-    return true;
+    if (other is! ValueClassRelation) return false;
+    return from == other.from && to == other.to;
   }
 
   int get hashCode {
-    return 230051829;
+    return hashObjects([from, to]);
   }
 
   String toString() {
-    return 'ClassifierRelation {}';
+    return 'ValueClassRelation {'
+        'from=${from.toString()}\n'
+        'to=${to.toString()}\n'
+        '}';
   }
 }
 
-class _$ClassifierRelationBuilder extends ClassifierRelationBuilder {
-  _$ClassifierRelationBuilder() : super._();
-  void replace(ClassifierRelation other) {}
-  void update(updates(ClassifierRelationBuilder b)) {
+class _$ValueClassRelationBuilder extends ValueClassRelationBuilder {
+  _$ValueClassRelationBuilder() : super._();
+  void replace(ValueClassRelation other) {
+    super.from = other.from?.toBuilder();
+    super.to = other.to?.toBuilder();
+  }
+
+  void update(updates(ValueClassRelationBuilder b)) {
     if (updates != null) updates(this);
   }
 
-  ClassifierRelation build() {
-    return new _$ClassifierRelation._();
+  ValueClassRelation build() {
+    if (from == null) throw new ArgumentError('null from');
+    if (to == null) throw new ArgumentError('null to');
+    return new _$ValueClassRelation._(from: from?.build(), to: to?.build());
   }
 }
