@@ -6,6 +6,5 @@
 /// More dartdocs go here.
 library vcore_m2m;
 
-export 'src/vcore_m2m_base.dart';
+export 'package:vcore_m2m/src/model/transform.dart';
 
-// TODO: Export any libraries intended for clients of this package.

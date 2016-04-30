@@ -7,8 +7,20 @@ version: 0.0.1
 environment:
   sdk: '>=1.0.0 <2.0.0'
 
-#dependencies:
-#  lib_name: any
-
+dependencies:
+  vcore:
+    path: ../vcore
+  vcore_generator:
+    path: ../vcore_generator
+  xml: '>=2.4.3 <3.0.0'
+  built_collection: "^1.0.0"
+  built_json: "^0.0.5"
+  built_value: "^0.0.6"
 dev_dependencies:
   test: '>=0.12.0 <0.13.0'
+  built_json_generator: '^0.0.5'
+  built_value_generator: "^0.0.6"
+  vcore_ecore:
+    path: ../vcore_ecore
+
+
