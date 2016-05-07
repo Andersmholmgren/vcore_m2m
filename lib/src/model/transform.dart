@@ -37,6 +37,7 @@ abstract class ValueClassRelation
 
   ValueClass get from;
   ValueClass get to;
+  BuiltSet<PropertyRelation> get propertyRelations;
 
   ValueClassRelation._();
 
@@ -53,6 +54,8 @@ abstract class ValueClassRelationBuilder
 
   ValueClass from;
   ValueClass to;
+  SetBuilder<PropertyRelation> propertyRelations =
+      new SetBuilder<PropertyRelation>();
 
   factory ValueClassRelationBuilder() = _$ValueClassRelationBuilder;
 }
@@ -76,9 +79,8 @@ abstract class PropertyRelationBuilder
     implements Builder<PropertyRelation, PropertyRelationBuilder> {
   PropertyRelationBuilder._();
 
-  ListBuilder<String> fromPath;
-  ListBuilder<String> toPath;
+  ListBuilder<String> fromPath = new ListBuilder<String>();
+  ListBuilder<String> toPath = new ListBuilder<String>();
 
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }
-
