@@ -55,7 +55,7 @@ abstract class ValueClassRelationBuilder
 
   factory ValueClassRelationBuilder() = _$ValueClassRelationBuilder;
 }
-
+// TODO: maybe rename a FeatureRelation
 abstract class PropertyRelation
     implements Built<PropertyRelation, PropertyRelationBuilder> {
   static final Serializer<PropertyRelation> serializer =
@@ -73,3 +73,5 @@ abstract class PropertyRelationBuilder
 
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }
+
+abstract class
