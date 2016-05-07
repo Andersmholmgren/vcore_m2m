@@ -1,3 +1,11 @@
+import 'transform_api_impl.dart' as impl;
+import 'package:vcore_m2m/src/model/transform.dart';
+import 'package:vcore/vcore.dart';
+
+PackageRelation relateModels(
+        Package from, Package to, updates(VPackageRelationHelper h)) =>
+    impl.relateModels(from, to, updates);
+
 abstract class VPackageRelationHelper {
   VClassRelationHelper relate(Type type);
 }
