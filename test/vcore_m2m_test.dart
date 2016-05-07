@@ -46,16 +46,17 @@ foo() {
   pb.relate(EBoolean).to(bool);
 }
 
+//PackageRelation
 abstract class VPackageRelationHelper {
-  VClassRelationHelper relate(Type type) => new _VClassRelationHelper(type);
+  VClassRelationHelper relate(Type type);
 }
 
-abstract class VClassRelationHelper {
-  VClassRelationHelper2 to(Type toType);
+abstract class VClassRelationHelper<F, T> {
+  VClassRelationHelper2<F, T> to(Type toType);
 }
 
-abstract class VClassRelationHelper2 {
-  by(updates(b));
+abstract class VClassRelationHelper2<F, T> {
+  by(updates(PropertyRelationHelper<F, T> b));
 }
 
 class _VPackageRelationHelper implements VPackageRelationHelper {
@@ -78,7 +79,7 @@ class _VPackageRelationHelper implements VPackageRelationHelper {
 }
 
 class _VClassRelationHelper<F, T>
-    implements VClassRelationHelper, VClassRelationHelper2 {
+    implements VClassRelationHelper<F, T>, VClassRelationHelper2<F, T> {
   Type fromType;
   Type toType;
   ValueClassRelation classRelation;
