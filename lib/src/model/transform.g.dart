@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-07T06:22:05.526727Z
+// 2016-05-07T06:23:45.934154Z
 
 part of transform;
 
@@ -24,7 +24,12 @@ class _$PackageRelationSerializer
   @override
   Iterable serialize(Serializers serializers, PackageRelation object,
       {FullType specifiedType: FullType.unspecified}) {
-    return [];
+    return [
+      'classifierRelations',
+      serializers.serialize(object.classifierRelations,
+          specifiedType: const FullType(
+              BuiltSet, const [const FullType(ClassifierRelation)])),
+    ];
   }
 
   @override
@@ -44,6 +49,11 @@ class _$PackageRelationSerializer
         expectingKey = true;
 
         switch (key as String) {
+          case 'classifierRelations':
+            result.classifierRelations.replace(serializers.deserialize(value,
+                specifiedType: const FullType(
+                    BuiltSet, const [const FullType(ClassifierRelation)])));
+            break;
         }
       }
     }
@@ -175,7 +185,11 @@ class _$PropertyRelationSerializer
 // **************************************************************************
 
 class _$PackageRelation extends PackageRelation {
-  _$PackageRelation._() : super._() {}
+  final BuiltSet<ClassifierRelation> classifierRelations;
+  _$PackageRelation._({this.classifierRelations}) : super._() {
+    if (classifierRelations == null)
+      throw new ArgumentError('null classifierRelations');
+  }
   factory _$PackageRelation([updates(PackageRelationBuilder b)]) =>
       (new PackageRelationBuilder()..update(updates)).build();
   PackageRelation rebuild(updates(PackageRelationBuilder b)) =>
@@ -184,27 +198,35 @@ class _$PackageRelation extends PackageRelation {
       new _$PackageRelationBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! PackageRelation) return false;
-    return true;
+    return classifierRelations == other.classifierRelations;
   }
 
   int get hashCode {
-    return 17345242;
+    return hashObjects([classifierRelations]);
   }
 
   String toString() {
-    return 'PackageRelation {}';
+    return 'PackageRelation {'
+        'classifierRelations=${classifierRelations.toString()}\n'
+        '}';
   }
 }
 
 class _$PackageRelationBuilder extends PackageRelationBuilder {
   _$PackageRelationBuilder() : super._();
-  void replace(PackageRelation other) {}
+  void replace(PackageRelation other) {
+    super.classifierRelations = other.classifierRelations?.toBuilder();
+  }
+
   void update(updates(PackageRelationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   PackageRelation build() {
-    return new _$PackageRelation._();
+    if (classifierRelations == null)
+      throw new ArgumentError('null classifierRelations');
+    return new _$PackageRelation._(
+        classifierRelations: classifierRelations?.build());
   }
 }
 
