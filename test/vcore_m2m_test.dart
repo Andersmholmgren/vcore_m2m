@@ -28,6 +28,17 @@ foo() {
         .relate((EClass f) => f.eStructuralFeatures)
         .to((ValueClass t) => t.properties);
   });
+
+  /**
+   * TODO: need to figure out how we would create instances of ecore model
+   * Since we won't generate code directly from an ecore model then presumably
+   * we need a dynamic instance model for ecore. i.e. like
+   *
+   * _properties[eReference.containment] = true
+   *
+   * where eReference.containment is representing the 'containment' property of eReference
+   */
+  pb.relate(EBoolean).to(bool);
 }
 
 abstract class VPackageRelationHelper {
