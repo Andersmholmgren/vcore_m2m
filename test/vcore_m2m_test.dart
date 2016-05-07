@@ -37,6 +37,8 @@ foo() {
    * _properties[eReference.containment] = true
    *
    * where eReference.containment is representing the 'containment' property of eReference
+   *
+   * If we do that then EBoolean to bool should really end up as bool to bool somehow??
    */
   pb.relate(EBoolean).to(bool);
 }
