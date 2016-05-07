@@ -9,6 +9,7 @@ import 'package:vcore_ecore/vcore_ecore_meta.dart' as e;
 import 'package:vcore/vcore.dart';
 import 'package:built_collection/built_collection.dart';
 import 'dart:mirrors';
+import 'package:vcore_m2m/src/model/transform_api.dart';
 
 void main() {
   group('A group of tests', () {
@@ -51,13 +52,13 @@ abstract class VPackageRelationHelper {
   VClassRelationHelper relate(Type type);
 }
 
-abstract class VClassRelationHelper<F, T> {
-  VClassRelationHelper2<F, T> to(Type toType);
-}
-
-abstract class VClassRelationHelper2<F, T> {
-  by(updates(PropertyRelationHelper<F, T> b));
-}
+//abstract class VClassRelationHelper<F, T> {
+//  VClassRelationHelper2<F, T> to(Type toType);
+//}
+//
+//abstract class VClassRelationHelper2<F, T> {
+//  by(updates(PropertyRelationHelper<F, T> b));
+//}
 
 class _VPackageRelationHelper implements VPackageRelationHelper {
   final ListBuilder<_VClassRelationHelper> classifierRelations =
@@ -101,14 +102,6 @@ class _VClassRelationHelper<F, T>
       ..propertyRelations
           .addAll(propRels._props.map((h) => h.builder.build())));
   }
-}
-
-abstract class PropertyRelationHelper<F, T> {
-  PropertyRelationHelper2<F, T> relate(properties(F from));
-}
-
-abstract class PropertyRelationHelper2<F, T> {
-  to(properties(T toType));
 }
 
 class _PropertyRelationsHelper<F, T> implements PropertyRelationHelper<F, T> {
