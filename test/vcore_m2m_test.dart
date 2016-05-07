@@ -16,3 +16,38 @@ void main() {
     });
   });
 }
+
+foo() {
+  final eClassToVClassRelation = relate(EClass).to(ValueClass).by((b) {
+    b
+        .relate((EClass a) => a.eStructuralFeatures)
+        .to((ValueClass b) => b.properties);
+  });
+}
+
+X relate(Type type) => new _Z(type);
+
+abstract class X {
+//  Type get fromType;
+//  Type get toType;
+
+  Y to(Type toType);
+}
+
+abstract class Y {
+  by(updates(b));
+}
+
+class _Z implements X, Y {
+  Type fromType;
+  Type toType;
+
+  _Z(this.fromType);
+
+  Y to(Type toType) {
+    this.toType = toType;
+    return this;
+  }
+
+  by(updates(b));
+}
