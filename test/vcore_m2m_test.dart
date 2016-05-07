@@ -39,6 +39,7 @@ foo() {
    * where eReference.containment is representing the 'containment' property of eReference
    *
    * If we do that then EBoolean to bool should really end up as bool to bool somehow??
+   * and we don't need to relate EBoolean to bool??? i.e. runtimeType both bool???
    */
   pb.relate(EBoolean).to(bool);
 }
