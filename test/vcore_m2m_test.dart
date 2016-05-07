@@ -58,15 +58,30 @@ abstract class VClassRelationHelper2 {
   by(updates(b));
 }
 
-
 class _VPackageRelationHelper implements VPackageRelationHelper {
-//  final
+  final ListBuilder<_VClassRelationHelper> classifierRelations =
+      new ListBuilder<_VClassRelationHelper>();
+
+  @override
+  VClassRelationHelper relate(Type fromType) {
+    final helper = new _VClassRelationHelper(fromType);
+    classifierRelations.add(helper);
+    return helper;
+  }
+
+  PackageRelation build() {
+    final PackageRelationBuilder builder = new PackageRelationBuilder();
+    builder.classifierRelations = new SetBuilder<ClassifierRelation>(
+        classifierRelations.build().map((h) => h.classRelation));
+    return builder.build();
+  }
 }
 
 class _VClassRelationHelper<F, T>
     implements VClassRelationHelper, VClassRelationHelper2 {
   Type fromType;
   Type toType;
+  ValueClassRelation classRelation;
 
   _VClassRelationHelper(this.fromType);
 
@@ -79,7 +94,7 @@ class _VClassRelationHelper<F, T>
     final propRels = new _PropertyRelationsHelper<F, T>();
     updates(propRels);
 
-    final relationBuilder = new ValueClassRelation((b) => b
+    classRelation = new ValueClassRelation((b) => b
       ..from = e.reflectVClass(fromType)
       ..to = e.reflectVClass(toType)
       ..propertyRelations
