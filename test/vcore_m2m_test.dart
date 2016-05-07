@@ -46,7 +46,7 @@ foo() {
 }
 
 abstract class VPackageRelationHelper {
-  VClassRelationHelper relate(Type type) => new _Z(type);
+  VClassRelationHelper relate(Type type) => new _VClassRelationHelper(type);
 }
 
 abstract class VClassRelationHelper {
@@ -57,11 +57,11 @@ abstract class VClassRelationHelper2 {
   by(updates(b));
 }
 
-class _Z<F, T> implements VClassRelationHelper, VClassRelationHelper2 {
+class _VClassRelationHelper<F, T> implements VClassRelationHelper, VClassRelationHelper2 {
   Type fromType;
   Type toType;
 
-  _Z(this.fromType);
+  _VClassRelationHelper(this.fromType);
 
   VClassRelationHelper2 to(Type toType) {
     this.toType = toType;
