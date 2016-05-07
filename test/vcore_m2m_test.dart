@@ -49,8 +49,6 @@ foo() {
   });
 }
 
-//PackageRelation
-
 PackageRelation relateModels(
     Package from, Package to, updates(VPackageRelationHelper h)) {
   final packageHelper = new _VPackageRelationHelper();
@@ -65,14 +63,6 @@ PackageRelation relateModels(
           .map((h) => h.classRelation));
   });
 }
-
-//abstract class VClassRelationHelper<F, T> {
-//  VClassRelationHelper2<F, T> to(Type toType);
-//}
-//
-//abstract class VClassRelationHelper2<F, T> {
-//  by(updates(PropertyRelationHelper<F, T> b));
-//}
 
 class _VPackageRelationHelper implements VPackageRelationHelper {
   final ListBuilder<_VClassRelationHelper> classifierRelations =
