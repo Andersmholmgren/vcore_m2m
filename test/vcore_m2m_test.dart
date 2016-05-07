@@ -71,5 +71,9 @@ class _Z<F, T> implements VClassRelationHelper, VClassRelationHelper2 {
 }
 
 abstract class PropertyRelationHelper<F, T> {
-  relate(properties(F from));
+  PropertyRelationHelper2<T, F> relate(properties(F from));
+}
+
+abstract class PropertyRelationHelper2<F, T> {
+  to(properties(T toType));
 }
