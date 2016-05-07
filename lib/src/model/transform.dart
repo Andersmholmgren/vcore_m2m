@@ -11,6 +11,8 @@ abstract class PackageRelation
     implements Built<PackageRelation, PackageRelationBuilder> {
   static final Serializer<PackageRelation> serializer =
       _$packageRelationSerializer;
+  Package get from;
+  Package get to;
 
   BuiltSet<ClassifierRelation> get classifierRelations;
 
@@ -23,6 +25,8 @@ abstract class PackageRelation
 abstract class PackageRelationBuilder
     implements Builder<PackageRelation, PackageRelationBuilder> {
   PackageRelationBuilder._();
+  Package from;
+  Package to;
 
   SetBuilder<ClassifierRelation> classifierRelations =
       new SetBuilder<ClassifierRelation>();

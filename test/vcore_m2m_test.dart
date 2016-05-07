@@ -48,8 +48,20 @@ foo() {
 }
 
 //PackageRelation
-abstract class VPackageRelationHelper {
-  VClassRelationHelper relate(Type type);
+
+PackageRelation relateModels(
+    Package from, Package to, updates(VPackageRelationHelper h)) {
+  final packageHelper = new _VPackageRelationHelper();
+  updates(packageHelper);
+
+  return new PackageRelation((PackageRelationBuilder b) {
+    b
+      ..from = from
+      ..to = to
+      ..classifierRelations.addAll(packageHelper.classifierRelations
+          .build()
+          .map((h) => h.classRelation));
+  });
 }
 
 //abstract class VClassRelationHelper<F, T> {

@@ -1,3 +1,7 @@
+abstract class VPackageRelationHelper {
+  VClassRelationHelper relate(Type type);
+}
+
 abstract class VClassRelationHelper<F, T> {
   VClassRelationHelper2<F, T> to(Type toType);
 }
