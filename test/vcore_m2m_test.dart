@@ -58,6 +58,11 @@ abstract class VClassRelationHelper2 {
   by(updates(b));
 }
 
+
+class _VPackageRelationHelper implements VPackageRelationHelper {
+//  final
+}
+
 class _VClassRelationHelper<F, T>
     implements VClassRelationHelper, VClassRelationHelper2 {
   Type fromType;

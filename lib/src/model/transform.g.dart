@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-07T06:14:15.032145Z
+// 2016-05-07T06:22:05.526727Z
 
 part of transform;
 
@@ -8,10 +8,49 @@ part of transform;
 // Target: library transform
 // **************************************************************************
 
+Serializer<PackageRelation> _$packageRelationSerializer =
+    new _$PackageRelationSerializer();
 Serializer<ValueClassRelation> _$valueClassRelationSerializer =
     new _$ValueClassRelationSerializer();
 Serializer<PropertyRelation> _$propertyRelationSerializer =
     new _$PropertyRelationSerializer();
+
+class _$PackageRelationSerializer
+    implements StructuredSerializer<PackageRelation> {
+  final Iterable<Type> types =
+      new BuiltList<Type>([PackageRelation, _$PackageRelation]);
+  final String wireName = 'PackageRelation';
+
+  @override
+  Iterable serialize(Serializers serializers, PackageRelation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    return [];
+  }
+
+  @override
+  PackageRelation deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new PackageRelationBuilder();
+
+    var key;
+    var value;
+    var expectingKey = true;
+    for (final item in serialized) {
+      if (expectingKey) {
+        key = item;
+        expectingKey = false;
+      } else {
+        value = item;
+        expectingKey = true;
+
+        switch (key as String) {
+        }
+      }
+    }
+
+    return result.build();
+  }
+}
 
 class _$ValueClassRelationSerializer
     implements StructuredSerializer<ValueClassRelation> {
@@ -127,6 +166,45 @@ class _$PropertyRelationSerializer
     }
 
     return result.build();
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class PackageRelation
+// **************************************************************************
+
+class _$PackageRelation extends PackageRelation {
+  _$PackageRelation._() : super._() {}
+  factory _$PackageRelation([updates(PackageRelationBuilder b)]) =>
+      (new PackageRelationBuilder()..update(updates)).build();
+  PackageRelation rebuild(updates(PackageRelationBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$PackageRelationBuilder toBuilder() =>
+      new _$PackageRelationBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! PackageRelation) return false;
+    return true;
+  }
+
+  int get hashCode {
+    return 17345242;
+  }
+
+  String toString() {
+    return 'PackageRelation {}';
+  }
+}
+
+class _$PackageRelationBuilder extends PackageRelationBuilder {
+  _$PackageRelationBuilder() : super._();
+  void replace(PackageRelation other) {}
+  void update(updates(PackageRelationBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  PackageRelation build() {
+    return new _$PackageRelation._();
   }
 }
 

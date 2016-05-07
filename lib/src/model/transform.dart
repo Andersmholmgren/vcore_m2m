@@ -7,6 +7,29 @@ import 'package:built_collection/built_collection.dart';
 
 part 'transform.g.dart';
 
+abstract class PackageRelation
+    implements Built<PackageRelation, PackageRelationBuilder> {
+  static final Serializer<PackageRelation> serializer =
+      _$packageRelationSerializer;
+
+  BuiltSet<ClassifierRelation> get classifierRelations;
+
+  PackageRelation._();
+
+  factory PackageRelation([updates(PackageRelationBuilder b)]) =
+      _$PackageRelation;
+}
+
+abstract class PackageRelationBuilder
+    implements Builder<PackageRelation, PackageRelationBuilder> {
+  PackageRelationBuilder._();
+
+  SetBuilder<ClassifierRelation> classifierRelations =
+      new SetBuilder<ClassifierRelation>();
+
+  factory PackageRelationBuilder() = _$PackageRelationBuilder;
+}
+
 typedef Classifier Transform(Classifier);
 
 abstract class ClassifierRelation<
