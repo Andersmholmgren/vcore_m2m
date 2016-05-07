@@ -101,14 +101,13 @@ class _PropertyRelationsHelper<F, T> implements PropertyRelationHelper<F, T> {
 
 class _PropertyRelationHelper<F, T>
     implements PropertyRelationHelper<F, T>, PropertyRelationHelper2<F, T> {
-  BuiltList<String> _fromPath;
-  BuiltList<String> _toPath;
+  final PropertyRelationBuilder builder = new PropertyRelationBuilder();
 
   @override
   PropertyRelationHelper2<F, T> relate(properties(F from)) {
     final capture = new PathExpressionCapturer();
     properties(capture as F);
-    _fromPath = new BuiltList<String>(capture._segments);
+    builder.fromPath = capture._segments;
     return this;
   }
 
@@ -116,7 +115,7 @@ class _PropertyRelationHelper<F, T>
   to(properties(T toType)) {
     final capture = new PathExpressionCapturer();
     properties(capture as T);
-    _toPath = new BuiltList<String>(capture._segments);
+    builder.toPath = capture._segments;
   }
 }
 
