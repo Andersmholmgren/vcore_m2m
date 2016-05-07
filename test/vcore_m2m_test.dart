@@ -105,7 +105,7 @@ class _PropertyRelationHelper<F, T>
 
   @override
   PropertyRelationHelper2<F, T> relate(properties(F from)) {
-    final capture = new PathExpressionCapturer();
+    final capture = new PathExpressionCaptor();
     properties(capture as F);
     builder.fromPath = capture._segments;
     return this;
@@ -113,13 +113,13 @@ class _PropertyRelationHelper<F, T>
 
   @override
   to(properties(T toType)) {
-    final capture = new PathExpressionCapturer();
+    final capture = new PathExpressionCaptor();
     properties(capture as T);
     builder.toPath = capture._segments;
   }
 }
 
-class PathExpressionCapturer {
+class PathExpressionCaptor {
   final ListBuilder<String> _segments = new ListBuilder<String>();
 
   noSuchMethod(Invocation i) {
