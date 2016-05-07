@@ -21,15 +21,17 @@ void main() {
 }
 
 foo() {
-  VPackageRelationHelper pb;
+  // TODO: relating ecore to ecore here :/
+  final packageRelation = relateModels(e.vCoreModelPackage, e.vCoreModelPackage,
+      (VPackageRelationHelper pb) {
+    pb.relate(EClass).to(ValueClass).by((PropertyRelationHelper b) {
+      b.relate((EClass f) => f.name).to((ValueClass t) => t.name);
+      b.relate((EClass f) => f.abstract).to((ValueClass t) => t.isAbstract);
 
-  pb.relate(EClass).to(ValueClass).by((PropertyRelationHelper b) {
-    b.relate((EClass f) => f.name).to((ValueClass t) => t.name);
-    b.relate((EClass f) => f.abstract).to((ValueClass t) => t.isAbstract);
-
-    b
-        .relate((EClass f) => f.eStructuralFeatures)
-        .to((ValueClass t) => t.properties);
+      b
+          .relate((EClass f) => f.eStructuralFeatures)
+          .to((ValueClass t) => t.properties);
+    });
   });
 
   /**
