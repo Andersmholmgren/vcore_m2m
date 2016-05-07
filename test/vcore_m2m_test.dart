@@ -73,7 +73,7 @@ class _VClassRelationHelper<F, T>
 }
 
 abstract class PropertyRelationHelper<F, T> {
-  PropertyRelationHelper2<T, F> relate(properties(F from));
+  PropertyRelationHelper2<F, T> relate(properties(F from));
 }
 
 abstract class PropertyRelationHelper2<F, T> {
@@ -87,14 +87,7 @@ class _PropertyRelationsHelper<F, T> implements PropertyRelationHelper<F, T> {
   PropertyRelationHelper2<F, T> relate(properties(F from)) {
     final ph = new _PropertyRelationHelper<F, T>();
     _props.add(ph);
-    return ph;
-  }
-
-  @override
-  to(properties(T toType)) {
-    final capture = new PathExpressionCapturer();
-    properties(capture as T);
-    _toPath = new BuiltList<String>(capture._segments);
+    return ph.relate(properties);
   }
 }
 
