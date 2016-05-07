@@ -74,9 +74,11 @@ class _VClassRelationHelper<F, T>
     final propRels = new _PropertyRelationsHelper<F, T>();
     updates(propRels);
 
-    final relationBuilder = new ValueClassRelationBuilder()
+    final relationBuilder = new ValueClassRelation((b) => b
       ..from = e.reflectVClass(fromType)
-      ..to = e.reflectVClass(toType);
+      ..to = e.reflectVClass(toType)
+      ..propertyRelations
+          .addAll(propRels._props.map((h) => h.builder.build())));
   }
 }
 
