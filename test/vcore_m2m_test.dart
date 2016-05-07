@@ -18,8 +18,9 @@ void main() {
 }
 
 foo() {
-  final eClassToVClassRelation =
-      relate(EClass).to(ValueClass).by((PropertyRelationHelper b) {
+  VPackageRelationHelper pb;
+
+  pb.relate(EClass).to(ValueClass).by((PropertyRelationHelper b) {
     b.relate((EClass f) => f.name).to((ValueClass t) => t.name);
     b.relate((EClass f) => f.abstract).to((ValueClass t) => t.isAbstract);
 
@@ -29,7 +30,9 @@ foo() {
   });
 }
 
-VClassRelationHelper relate(Type type) => new _Z(type);
+abstract class VPackageRelationHelper {
+  VClassRelationHelper relate(Type type) => new _Z(type);
+}
 
 abstract class VClassRelationHelper {
   VClassRelationHelper2 to(Type toType);
