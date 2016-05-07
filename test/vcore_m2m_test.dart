@@ -69,7 +69,15 @@ class _VClassRelationHelper<F, T>
     return this;
   }
 
-  by(updates(PropertyRelationHelper<F, T> b)) {}
+  by(updates(PropertyRelationHelper<F, T> b)) {
+    final propRels = new _PropertyRelationsHelper<F, T>();
+    updates(propRels);
+
+    final relationBuilder = new ValueClassRelationBuilder()
+      ..from = e.reflectVClass(fromType)
+      ..to = e.reflectVClass(toType)
+    ;
+  }
 }
 
 abstract class PropertyRelationHelper<F, T> {
