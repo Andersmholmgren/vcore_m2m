@@ -32,21 +32,21 @@ foo() {
           .relate((EClass f) => f.eStructuralFeatures)
           .to((ValueClass t) => t.properties);
     });
-  });
 
-  /**
-   * TODO: need to figure out how we would create instances of ecore model
-   * Since we won't generate code directly from an ecore model then presumably
-   * we need a dynamic instance model for ecore. i.e. like
-   *
-   * _properties[eReference.containment] = true
-   *
-   * where eReference.containment is representing the 'containment' property of eReference
-   *
-   * If we do that then EBoolean to bool should really end up as bool to bool somehow??
-   * and we don't need to relate EBoolean to bool??? i.e. runtimeType both bool???
-   */
-  pb.relate(EBoolean).to(bool);
+    /**
+     * TODO: need to figure out how we would create instances of ecore model
+     * Since we won't generate code directly from an ecore model then presumably
+     * we need a dynamic instance model for ecore. i.e. like
+     *
+     * _properties[eReference.containment] = true
+     *
+     * where eReference.containment is representing the 'containment' property of eReference
+     *
+     * If we do that then EBoolean to bool should really end up as bool to bool somehow??
+     * and we don't need to relate EBoolean to bool??? i.e. runtimeType both bool???
+     */
+    pb.relate(EBoolean).to(bool);
+  });
 }
 
 //PackageRelation
