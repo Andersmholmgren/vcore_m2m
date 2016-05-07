@@ -55,11 +55,15 @@ abstract class ValueClassRelationBuilder
 
   factory ValueClassRelationBuilder() = _$ValueClassRelationBuilder;
 }
+
 // TODO: maybe rename a FeatureRelation
 abstract class PropertyRelation
     implements Built<PropertyRelation, PropertyRelationBuilder> {
   static final Serializer<PropertyRelation> serializer =
       _$propertyRelationSerializer;
+
+  FeatureQuery get from;
+  FeatureQuery get to;
 
   PropertyRelation._();
 
@@ -71,7 +75,10 @@ abstract class PropertyRelationBuilder
     implements Builder<PropertyRelation, PropertyRelationBuilder> {
   PropertyRelationBuilder._();
 
+  FeatureQuery from;
+  FeatureQuery to;
+
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }
 
-abstract class
+abstract class FeatureQuery {}

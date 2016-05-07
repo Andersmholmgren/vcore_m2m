@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-04-30T04:41:31.942603Z
+// 2016-05-07T02:59:35.397385Z
 
 part of transform;
 
@@ -50,12 +50,12 @@ class _$ValueClassRelationSerializer
 
         switch (key as String) {
           case 'from':
-            result.from.replace(serializers.deserialize(value,
-                specifiedType: const FullType(ValueClass)));
+            result.from = serializers.deserialize(value,
+                specifiedType: const FullType(ValueClass));
             break;
           case 'to':
-            result.to.replace(serializers.deserialize(value,
-                specifiedType: const FullType(ValueClass)));
+            result.to = serializers.deserialize(value,
+                specifiedType: const FullType(ValueClass));
             break;
         }
       }
@@ -74,7 +74,14 @@ class _$PropertyRelationSerializer
   @override
   Iterable serialize(Serializers serializers, PropertyRelation object,
       {FullType specifiedType: FullType.unspecified}) {
-    return [];
+    return [
+      'from',
+      serializers.serialize(object.from,
+          specifiedType: const FullType(FeatureQuery)),
+      'to',
+      serializers.serialize(object.to,
+          specifiedType: const FullType(FeatureQuery)),
+    ];
   }
 
   @override
@@ -94,6 +101,14 @@ class _$PropertyRelationSerializer
         expectingKey = true;
 
         switch (key as String) {
+          case 'from':
+            result.from = serializers.deserialize(value,
+                specifiedType: const FullType(FeatureQuery));
+            break;
+          case 'to':
+            result.to = serializers.deserialize(value,
+                specifiedType: const FullType(FeatureQuery));
+            break;
         }
       }
     }
@@ -140,8 +155,8 @@ class _$ValueClassRelation extends ValueClassRelation {
 class _$ValueClassRelationBuilder extends ValueClassRelationBuilder {
   _$ValueClassRelationBuilder() : super._();
   void replace(ValueClassRelation other) {
-    super.from = other.from?.toBuilder();
-    super.to = other.to?.toBuilder();
+    super.from = other.from;
+    super.to = other.to;
   }
 
   void update(updates(ValueClassRelationBuilder b)) {
@@ -151,7 +166,7 @@ class _$ValueClassRelationBuilder extends ValueClassRelationBuilder {
   ValueClassRelation build() {
     if (from == null) throw new ArgumentError('null from');
     if (to == null) throw new ArgumentError('null to');
-    return new _$ValueClassRelation._(from: from?.build(), to: to?.build());
+    return new _$ValueClassRelation._(from: from, to: to);
   }
 }
 
@@ -161,7 +176,12 @@ class _$ValueClassRelationBuilder extends ValueClassRelationBuilder {
 // **************************************************************************
 
 class _$PropertyRelation extends PropertyRelation {
-  _$PropertyRelation._() : super._() {}
+  final FeatureQuery from;
+  final FeatureQuery to;
+  _$PropertyRelation._({this.from, this.to}) : super._() {
+    if (from == null) throw new ArgumentError('null from');
+    if (to == null) throw new ArgumentError('null to');
+  }
   factory _$PropertyRelation([updates(PropertyRelationBuilder b)]) =>
       (new PropertyRelationBuilder()..update(updates)).build();
   PropertyRelation rebuild(updates(PropertyRelationBuilder b)) =>
@@ -170,26 +190,35 @@ class _$PropertyRelation extends PropertyRelation {
       new _$PropertyRelationBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! PropertyRelation) return false;
-    return true;
+    return from == other.from && to == other.to;
   }
 
   int get hashCode {
-    return 491450331;
+    return hashObjects([from, to]);
   }
 
   String toString() {
-    return 'PropertyRelation {}';
+    return 'PropertyRelation {'
+        'from=${from.toString()}\n'
+        'to=${to.toString()}\n'
+        '}';
   }
 }
 
 class _$PropertyRelationBuilder extends PropertyRelationBuilder {
   _$PropertyRelationBuilder() : super._();
-  void replace(PropertyRelation other) {}
+  void replace(PropertyRelation other) {
+    super.from = other.from;
+    super.to = other.to;
+  }
+
   void update(updates(PropertyRelationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   PropertyRelation build() {
-    return new _$PropertyRelation._();
+    if (from == null) throw new ArgumentError('null from');
+    if (to == null) throw new ArgumentError('null to');
+    return new _$PropertyRelation._(from: from, to: to);
   }
 }
