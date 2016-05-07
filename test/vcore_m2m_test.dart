@@ -18,36 +18,41 @@ void main() {
 }
 
 foo() {
-  final eClassToVClassRelation = relate(EClass).to(ValueClass).by((b) {
+  final eClassToVClassRelation =
+      relate(EClass).to(ValueClass).by((PropertyRelationHelper b) {
+    b.relate((EClass f) => f.name).to((ValueClass t) => t.name);
+    b.relate((EClass f) => f.abstract).to((ValueClass t) => t.isAbstract);
+
     b
-        .relate((EClass a) => a.eStructuralFeatures)
-        .to((ValueClass b) => b.properties);
+        .relate((EClass f) => f.eStructuralFeatures)
+        .to((ValueClass t) => t.properties);
   });
 }
 
-X relate(Type type) => new _Z(type);
+VClassRelationHelper relate(Type type) => new _Z(type);
 
-abstract class X {
-//  Type get fromType;
-//  Type get toType;
-
-  Y to(Type toType);
+abstract class VClassRelationHelper {
+  VClassRelationHelper2 to(Type toType);
 }
 
-abstract class Y {
+abstract class VClassRelationHelper2 {
   by(updates(b));
 }
 
-class _Z implements X, Y {
+class _Z<F, T> implements VClassRelationHelper, VClassRelationHelper2 {
   Type fromType;
   Type toType;
 
   _Z(this.fromType);
 
-  Y to(Type toType) {
+  VClassRelationHelper2 to(Type toType) {
     this.toType = toType;
     return this;
   }
 
-  by(updates(b));
+  by(updates(PropertyRelationHelper<F, T> b));
+}
+
+abstract class PropertyRelationHelper<F, T> {
+  relate(properties(F from));
 }
