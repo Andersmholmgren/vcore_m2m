@@ -13,7 +13,7 @@ void main() {
     test('First Test', () {
 
       new ValueClassRelation((ValueClassRelationBuilder b) => b
-//      ..from = EClass
+      ..from = EClass
       );
 
     });
