@@ -77,3 +77,30 @@ abstract class PropertyRelationHelper<F, T> {
 abstract class PropertyRelationHelper2<F, T> {
   to(properties(T toType));
 }
+
+class _PropertyRelationHelper<F, T>
+    implements PropertyRelationHelper<F, T>, PropertyRelationHelper2<F, T> {
+  @override
+  PropertyRelationHelper2<F, T> relate(properties(F from)) {
+    final capture = new PathExpressionCapturer();
+    properties(capture as F);
+    return this;
+  }
+
+  @override
+  to(properties(T toType)) {
+    // TODO: implement to
+  }
+}
+
+class PathExpressionCapturer {
+  final List<Sting> _segments = <String>[];
+
+  noSuchMethod(Invocation i) {
+    if (!i.isGetter) {
+      throw new ArgumentError('can only reference getters in path expressions');
+    }
+    _segments.add(i.memberName);
+    return this;
+  }
+}
