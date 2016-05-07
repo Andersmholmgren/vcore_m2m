@@ -3,6 +3,7 @@ library transform;
 import 'package:built_json/built_json.dart';
 import 'package:built_value/built_value.dart';
 import 'package:vcore/vcore.dart';
+import 'package:built_collection/built_collection.dart';
 
 part 'transform.g.dart';
 
@@ -62,8 +63,8 @@ abstract class PropertyRelation
   static final Serializer<PropertyRelation> serializer =
       _$propertyRelationSerializer;
 
-  FeatureQuery get from;
-  FeatureQuery get to;
+  BuiltList<String> get fromPath;
+  BuiltList<String> get toPath;
 
   PropertyRelation._();
 
@@ -75,10 +76,9 @@ abstract class PropertyRelationBuilder
     implements Builder<PropertyRelation, PropertyRelationBuilder> {
   PropertyRelationBuilder._();
 
-  FeatureQuery from;
-  FeatureQuery to;
+  ListBuilder<String> fromPath;
+  ListBuilder<String> toPath;
 
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }
 
-abstract class FeatureQuery {}

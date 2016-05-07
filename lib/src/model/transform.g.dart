@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-07T02:59:35.397385Z
+// 2016-05-07T06:07:32.062013Z
 
 part of transform;
 
@@ -75,12 +75,14 @@ class _$PropertyRelationSerializer
   Iterable serialize(Serializers serializers, PropertyRelation object,
       {FullType specifiedType: FullType.unspecified}) {
     return [
-      'from',
-      serializers.serialize(object.from,
-          specifiedType: const FullType(FeatureQuery)),
-      'to',
-      serializers.serialize(object.to,
-          specifiedType: const FullType(FeatureQuery)),
+      'fromPath',
+      serializers.serialize(object.fromPath,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(String)])),
+      'toPath',
+      serializers.serialize(object.toPath,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(String)])),
     ];
   }
 
@@ -101,13 +103,15 @@ class _$PropertyRelationSerializer
         expectingKey = true;
 
         switch (key as String) {
-          case 'from':
-            result.from = serializers.deserialize(value,
-                specifiedType: const FullType(FeatureQuery));
+          case 'fromPath':
+            result.fromPath.replace(serializers.deserialize(value,
+                specifiedType:
+                    const FullType(BuiltList, const [const FullType(String)])));
             break;
-          case 'to':
-            result.to = serializers.deserialize(value,
-                specifiedType: const FullType(FeatureQuery));
+          case 'toPath':
+            result.toPath.replace(serializers.deserialize(value,
+                specifiedType:
+                    const FullType(BuiltList, const [const FullType(String)])));
             break;
         }
       }
@@ -176,11 +180,11 @@ class _$ValueClassRelationBuilder extends ValueClassRelationBuilder {
 // **************************************************************************
 
 class _$PropertyRelation extends PropertyRelation {
-  final FeatureQuery from;
-  final FeatureQuery to;
-  _$PropertyRelation._({this.from, this.to}) : super._() {
-    if (from == null) throw new ArgumentError('null from');
-    if (to == null) throw new ArgumentError('null to');
+  final BuiltList<String> fromPath;
+  final BuiltList<String> toPath;
+  _$PropertyRelation._({this.fromPath, this.toPath}) : super._() {
+    if (fromPath == null) throw new ArgumentError('null fromPath');
+    if (toPath == null) throw new ArgumentError('null toPath');
   }
   factory _$PropertyRelation([updates(PropertyRelationBuilder b)]) =>
       (new PropertyRelationBuilder()..update(updates)).build();
@@ -190,17 +194,17 @@ class _$PropertyRelation extends PropertyRelation {
       new _$PropertyRelationBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! PropertyRelation) return false;
-    return from == other.from && to == other.to;
+    return fromPath == other.fromPath && toPath == other.toPath;
   }
 
   int get hashCode {
-    return hashObjects([from, to]);
+    return hashObjects([fromPath, toPath]);
   }
 
   String toString() {
     return 'PropertyRelation {'
-        'from=${from.toString()}\n'
-        'to=${to.toString()}\n'
+        'fromPath=${fromPath.toString()}\n'
+        'toPath=${toPath.toString()}\n'
         '}';
   }
 }
@@ -208,8 +212,8 @@ class _$PropertyRelation extends PropertyRelation {
 class _$PropertyRelationBuilder extends PropertyRelationBuilder {
   _$PropertyRelationBuilder() : super._();
   void replace(PropertyRelation other) {
-    super.from = other.from;
-    super.to = other.to;
+    super.fromPath = other.fromPath?.toBuilder();
+    super.toPath = other.toPath?.toBuilder();
   }
 
   void update(updates(PropertyRelationBuilder b)) {
@@ -217,8 +221,9 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
   }
 
   PropertyRelation build() {
-    if (from == null) throw new ArgumentError('null from');
-    if (to == null) throw new ArgumentError('null to');
-    return new _$PropertyRelation._(from: from, to: to);
+    if (fromPath == null) throw new ArgumentError('null fromPath');
+    if (toPath == null) throw new ArgumentError('null toPath');
+    return new _$PropertyRelation._(
+        fromPath: fromPath?.build(), toPath: toPath?.build());
   }
 }

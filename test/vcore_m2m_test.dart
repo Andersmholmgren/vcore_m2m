@@ -8,6 +8,7 @@ import 'package:vcore_ecore/vcore_ecore.dart';
 import 'package:vcore_ecore/vcore_ecore_meta.dart' as e;
 import 'package:vcore/vcore.dart';
 import 'package:built_collection/built_collection.dart';
+import 'dart:mirrors';
 
 void main() {
   group('A group of tests', () {
@@ -75,8 +76,7 @@ class _VClassRelationHelper<F, T>
 
     final relationBuilder = new ValueClassRelationBuilder()
       ..from = e.reflectVClass(fromType)
-      ..to = e.reflectVClass(toType)
-    ;
+      ..to = e.reflectVClass(toType);
   }
 }
 
@@ -121,13 +121,13 @@ class _PropertyRelationHelper<F, T>
 }
 
 class PathExpressionCapturer {
-  final List<Sting> _segments = <String>[];
+  final ListBuilder<String> _segments = new ListBuilder<String>();
 
   noSuchMethod(Invocation i) {
     if (!i.isGetter) {
       throw new ArgumentError('can only reference getters in path expressions');
     }
-    _segments.add(i.memberName);
+    _segments.add(MirrorSystem.getName(i.memberName));
     return this;
   }
 }
