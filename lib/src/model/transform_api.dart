@@ -1,5 +1,5 @@
 abstract class VClassRelationHelper<F, T> {
-  VClassRelationHelper2<F, T> to2(Type toType);
+  VClassRelationHelper2<F, T> to(Type toType);
 }
 
 abstract class VClassRelationHelper2<F, T> {
