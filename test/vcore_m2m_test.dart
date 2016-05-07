@@ -7,6 +7,7 @@ import 'package:vcore_m2m/src/model/transform.dart';
 import 'package:vcore_ecore/vcore_ecore.dart';
 import 'package:vcore_ecore/vcore_ecore_meta.dart' as e;
 import 'package:vcore/vcore.dart';
+import 'package:built_collection/built_collection.dart';
 
 void main() {
   group('A group of tests', () {
@@ -80,16 +81,22 @@ abstract class PropertyRelationHelper2<F, T> {
 
 class _PropertyRelationHelper<F, T>
     implements PropertyRelationHelper<F, T>, PropertyRelationHelper2<F, T> {
+  BuiltList<String> _fromPath;
+  BuiltList<String> _toPath;
+
   @override
   PropertyRelationHelper2<F, T> relate(properties(F from)) {
     final capture = new PathExpressionCapturer();
     properties(capture as F);
+    _fromPath = new BuiltList<String>(capture._segments);
     return this;
   }
 
   @override
   to(properties(T toType)) {
-    // TODO: implement to
+    final capture = new PathExpressionCapturer();
+    properties(capture as T);
+    _toPath = new BuiltList<String>(capture._segments);
   }
 }
 
