@@ -7,8 +7,21 @@ import 'package:built_collection/built_collection.dart';
 
 part 'transform.g.dart';
 
+abstract class Relation<A, B, R1 extends Relation<A, B, R1, R2>,
+    R2 extends Relation<B, A, R2, R1>> {
+  R2 reversed();
+}
+
+abstract class SymmetricallyTypedRelation<A,
+        R extends SymmetricallyTypedRelation<A, R>>
+    implements
+        Relation<A, A, SymmetricallyTypedRelation<A, R>,
+            SymmetricallyTypedRelation<A, R>> {}
+
 abstract class PackageRelation
-    implements Built<PackageRelation, PackageRelationBuilder> {
+    implements
+        Built<PackageRelation, PackageRelationBuilder>,
+        SymmetricallyTypedRelation<Package, PackageRelation> {
   static final Serializer<PackageRelation> serializer =
       _$packageRelationSerializer;
   Package get from;
@@ -37,12 +50,17 @@ abstract class PackageRelationBuilder
 typedef Classifier Transform(Classifier);
 
 abstract class ClassifierRelation<
-    V extends Classifier<V, B>,
-    B extends ClassifierBuilder<V, B>,
-    V2 extends Classifier<V2, B2>,
-    B2 extends ClassifierBuilder<V2, B2>> {
+        V extends Classifier<V, B>,
+        B extends ClassifierBuilder<V, B>,
+        V2 extends Classifier<V2, B2>,
+        B2 extends ClassifierBuilder<V2, B2>>
+    implements
+        Relation<V, V2, ClassifierRelation<V, B, V2, B2>,
+            ClassifierRelation<V2, B2, V, B>> {
   V get from;
   V2 get to;
+
+  ClassifierRelation<V2, B2, V, B> reversed();
 }
 
 abstract class ClassifierRelationBuilder<
@@ -58,7 +76,8 @@ abstract class ValueClassRelation
     implements
         Built<ValueClassRelation, ValueClassRelationBuilder>,
         ClassifierRelation<ValueClass, ValueClassBuilder, ValueClass,
-            ValueClassBuilder> {
+            ValueClassBuilder>,
+        SymmetricallyTypedRelation<ValueClass, ValueClassRelation> {
   static final Serializer<ValueClassRelation> serializer =
       _$valueClassRelationSerializer;
 
@@ -70,6 +89,8 @@ abstract class ValueClassRelation
 
   factory ValueClassRelation([updates(ValueClassRelationBuilder b)]) =
       _$ValueClassRelation;
+
+  ValueClassRelation reversed() {}
 }
 
 abstract class ValueClassRelationBuilder
