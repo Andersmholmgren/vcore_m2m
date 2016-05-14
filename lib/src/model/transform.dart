@@ -90,7 +90,9 @@ abstract class ValueClassRelation
   factory ValueClassRelation([updates(ValueClassRelationBuilder b)]) =
       _$ValueClassRelation;
 
-  ValueClassRelation reversed() {}
+  ValueClassRelation reversed() {
+    propertyRelations.map((pr) => pr.reversed())
+  }
 }
 
 abstract class ValueClassRelationBuilder
@@ -110,7 +112,9 @@ abstract class ValueClassRelationBuilder
 
 // TODO: maybe rename a FeatureRelation
 abstract class PropertyRelation
-    implements Built<PropertyRelation, PropertyRelationBuilder> {
+    implements
+        Built<PropertyRelation, PropertyRelationBuilder>,
+        SymmetricallyTypedRelation<Property, PropertyRelation> {
   static final Serializer<PropertyRelation> serializer =
       _$propertyRelationSerializer;
 
