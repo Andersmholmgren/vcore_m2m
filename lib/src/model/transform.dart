@@ -137,6 +137,13 @@ abstract class PropertyRelation
 
   factory PropertyRelation([updates(PropertyRelationBuilder b)]) =
       _$PropertyRelation;
+
+  @override
+  PropertyRelation reversed() {
+    return new PropertyRelation((PropertyRelationBuilder b) => b
+      ..fromPath = toPath.toBuilder()
+      ..toPath = fromPath.toBuilder());
+  }
 }
 
 abstract class PropertyRelationBuilder
