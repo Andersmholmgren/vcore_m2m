@@ -33,6 +33,14 @@ abstract class PackageRelation
 
   factory PackageRelation([updates(PackageRelationBuilder b)]) =
       _$PackageRelation;
+
+  PackageRelation reversed() {
+    return new PackageRelation((PackageRelationBuilder b) => b
+      ..from = to
+      ..to = from
+      ..classifierRelations = (new SetBuilder<ClassifierRelation>()
+        ..addAll(classifierRelations.map((pr) => pr.reversed()))));
+  }
 }
 
 abstract class PackageRelationBuilder
