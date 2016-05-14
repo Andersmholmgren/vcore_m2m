@@ -91,7 +91,11 @@ abstract class ValueClassRelation
       _$ValueClassRelation;
 
   ValueClassRelation reversed() {
-    propertyRelations.map((pr) => pr.reversed())
+    return new ValueClassRelation((ValueClassRelationBuilder b) => b
+      ..from = to
+      ..to = from
+      ..propertyRelations = (new SetBuilder<PropertyRelation>()
+        ..addAll(propertyRelations.map((pr) => pr.reversed()))));
   }
 }
 
