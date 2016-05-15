@@ -27,7 +27,7 @@ class Transformer {
 
     if (classifierRelation is ValueClassRelation) {
       final toBuilder = context.builderFor(classifierRelation.to);
-      ValueClassRelation classRelation = classifierRelation;
+      final ValueClassRelation classRelation = classifierRelation;
       classRelation.propertyRelations.forEach((pr) {
         _transformProperty(fromClassifier, toBuilder, pr, context);
       });
@@ -51,13 +51,22 @@ class Transformer {
       // can't be null
       if (targetProperty.isCollection != sourceProperty.isCollection) {
         String _m(Property p) =>
-            'a value that is ${p.isCollection ? "" : "not "} a collection';
+            'a property that is ${p.isCollection ? "" : "not "}a collection';
         throw new ArgumentError('Can only map collections to collections. '
             'Tried to map ${_m(sourceProperty)} to ${_m(targetProperty)}');
       }
       if (sourceProperty.isCollection) {
         print('TODO: support mapping collections');
-      } else {}
+      } else {
+        final sourceValue = context.lookupSourceValue(pr.fromPath);
+        if (sourceValue == null) {
+          return;
+        }
+        else {
+          final targetValue = (sourceProperty.type == targetProperty.type) ? sourceValue
+  : _transform()
+        }
+      }
     }
   }
 
