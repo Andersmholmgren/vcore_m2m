@@ -1,9 +1,7 @@
-
 import 'dart:mirrors';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:vcore/vcore.dart';
-import 'package:vcore_ecore/vcore_ecore_meta.dart' as e;
 import 'package:vcore_m2m/src/model/transform.dart';
 import 'package:vcore_m2m/src/model/transform_api.dart';
 import 'package:vcore_m2m/vcore_m2m.dart';

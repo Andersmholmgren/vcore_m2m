@@ -8,4 +8,4 @@ library vcore_m2m;
 
 export 'package:vcore_m2m/src/model/transform.dart';
 export 'package:vcore_m2m/src/model/transform_api.dart';
-
+export 'package:vcore_m2m/src/transformer.dart';
