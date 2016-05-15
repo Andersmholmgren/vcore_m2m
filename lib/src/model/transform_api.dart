@@ -7,7 +7,7 @@ PackageRelation relateModels(
     impl.relateModels(from, to, updates);
 
 abstract class VPackageRelationHelper {
-  VClassRelationHelper relate(Type type);
+  VClassRelationHelper/*<F, T>*/ relate/*<F, T>*/(Type type);
 }
 
 abstract class VClassRelationHelper<F, T> {
