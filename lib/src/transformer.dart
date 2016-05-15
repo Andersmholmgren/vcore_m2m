@@ -46,7 +46,8 @@ class Transformer {
           'on $fromClassifier');
       // ignore. Is that correct or an error?
     } else {
-      final Property targetProperty = _resolveAndCreate(toBuilder, pr.toPath);
+      final Property targetProperty =
+          _resolvePath(toBuilder.build(), pr.toPath);
       // can't be null
       if (targetProperty.isCollection != sourceProperty.isCollection) {
         String _m(Property p) =>
