@@ -16,8 +16,14 @@ class Transformer {
   }
 
   /*=T*/ _transform/*<F, T>*/(/*=F*/ from, _TransformationContext context) {
-    final fromClassifier = sourceMirrorSystem(from.runtimeType);
+    return _transformTo(from, sourceMirrorSystem(from.runtimeType), context);
+  }
 
+  /*=T*/ _transformTo/*<F, T>*/(
+      /*=F*/ from,
+      ValueClass fromClassifier,
+//    ValueClass toClassifier,
+      _TransformationContext context) {
     /**
      * TODO: need to do something much more efficient (probably code gen)
      * Lookup needs to support inheritance on both sides
@@ -26,20 +32,17 @@ class Transformer {
         .firstWhere((cr) => cr.from == fromClassifier);
 
     if (classifierRelation is ValueClassRelation) {
-      final toBuilder = context.builderFor(classifierRelation.to);
+//      final toBuilder = context.builderFor(classifierRelation.to);
       final ValueClassRelation classRelation = classifierRelation;
       classRelation.propertyRelations.forEach((pr) {
-        _transformProperty(fromClassifier, toBuilder, pr, context);
+        _transformProperty(fromClassifier, classifierRelation.to, pr, context);
       });
     }
 //    classifierRelation.
   }
 
-  void _transformProperty(
-      ValueClass fromClassifier,
-      ValueClassBuilder toBuilder,
-      PropertyRelation pr,
-      _TransformationContext context) {
+  void _transformProperty(ValueClass fromClassifier, ValueClass toClassifier,
+      PropertyRelation pr, _TransformationContext context) {
     final Property sourceProperty = _resolvePath(fromClassifier, pr.fromPath);
     if (sourceProperty == null) {
       print('No property found for path ${pr.fromPath.join('.')} '
@@ -47,7 +50,7 @@ class Transformer {
       // ignore. Is that correct or an error?
     } else {
       final Property targetProperty =
-          _resolvePath(toBuilder.build(), pr.toPath);
+          _resolvePath(toClassifier.build(), pr.toPath);
       // can't be null
       if (targetProperty.isCollection != sourceProperty.isCollection) {
         String _m(Property p) =>
@@ -61,10 +64,11 @@ class Transformer {
         final sourceValue = context.lookupSourceValue(pr.fromPath);
         if (sourceValue == null) {
           return;
-        }
-        else {
-          final targetValue = (sourceProperty.type == targetProperty.type) ? sourceValue
-  : _transform()
+        } else {
+          final targetValue = (sourceProperty.type == targetProperty.type)
+              ? sourceValue
+              : _transformTo(sourceValue, sourceProperty.type, context);
+          context.setTargetValue(pr.toPath, targetValue);
         }
       }
     }
