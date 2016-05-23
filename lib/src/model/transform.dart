@@ -132,6 +132,7 @@ abstract class PropertyRelation
 
   BuiltList<String> get fromPath;
   BuiltList<String> get toPath;
+  NameRelation get nameRelation;
 
   PropertyRelation._();
 
@@ -152,6 +153,85 @@ abstract class PropertyRelationBuilder
 
   ListBuilder<String> fromPath = new ListBuilder<String>();
   ListBuilder<String> toPath = new ListBuilder<String>();
+  NameRelation nameRelation;
 
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }
+
+
+abstract class NameRelationContext {}
+
+/// TODO: Need to formalise how identifier names are mapped
+/// - needs to work with schema id -> value class names
+///   - note we may need to populate id's in each schema when we parse them
+///   as otherwise we need to do it in the translation
+///   - names are namespaced (package.name => fully qualified name)
+/// - needs to support custom name mappings in bv property <-> json property
+///   .e.g @jsonName("fred_flintstone")
+/// - we should also support transformation wide snake case to camel case etc
+///
+abstract class NameRelation {
+  String deriveForwards(String from, NameRelationContext context);
+  String deriveBackwards(String to, NameRelationContext context);
+}
+
+
+abstract class SchemeBasedNameRelation
+  implements Built<SchemeBasedNameRelation, SchemeBasedNameRelationBuilder>,
+    NameRelation {
+  static final Serializer<SchemeBasedNameRelation> serializer = _$schemeBasedNameRelationSerializer;
+
+  NameConversion get forwardConversion;
+  NameConversion get reverseConversion;
+
+  SchemeBasedNameRelation._();
+
+  factory SchemeBasedNameRelation([updates(SchemeBasedNameRelationBuilder b)]) =
+  _$SchemeBasedNameRelation;
+
+  @override
+  String deriveBackwards(String to, NameRelationContext context) =>
+    forwardConversion(to);
+
+  @override
+  String deriveForwards(String from, NameRelationContext context) =>
+    reverseConversion(from);
+
+}
+
+abstract class SchemeBasedNameRelationBuilder
+  implements Builder<SchemeBasedNameRelation, SchemeBasedNameRelationBuilder> {
+
+  NameConversion forwardConversion;
+  NameConversion reverseConversion;
+
+  SchemeBasedNameRelationBuilder._();
+
+  factory SchemeBasedNameRelationBuilder() = _$SchemeBasedNameRelationBuilder;
+}
+
+//abstract class NamingScheme {
+//  String convert(String input);
+//}
+//
+//class CamelCaseNamingScheme implements NamingScheme {
+//
+//  @override
+//  String convert(String input) {
+//    // TODO: implement convert
+//  }
+//}
+
+typedef String NameConversion(String input);
+
+String toCamelCase(String input) {}
+
+String toSnakeCase(String input) {}
+
+//class CamelCaseNamingScheme implements NamingScheme {
+//
+//  @override
+//  String convert(String input) {
+//    // TODO: implement convert
+//  }
+//}

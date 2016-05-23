@@ -25,3 +25,4 @@ abstract class PropertyRelationHelper<F, T> {
 abstract class PropertyRelationHelper2<F, T> {
   to(properties(T toType));
 }
+

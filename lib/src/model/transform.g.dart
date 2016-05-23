@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-07T07:09:26.692342Z
+// 2016-05-23T05:05:35.683802Z
 
 part of transform;
 
@@ -14,6 +14,8 @@ Serializer<ValueClassRelation> _$valueClassRelationSerializer =
     new _$ValueClassRelationSerializer();
 Serializer<PropertyRelation> _$propertyRelationSerializer =
     new _$PropertyRelationSerializer();
+Serializer<SchemeBasedNameRelation> _$schemeBasedNameRelationSerializer =
+    new _$SchemeBasedNameRelationSerializer();
 
 class _$PackageRelationSerializer
     implements StructuredSerializer<PackageRelation> {
@@ -154,6 +156,9 @@ class _$PropertyRelationSerializer
       serializers.serialize(object.toPath,
           specifiedType:
               const FullType(BuiltList, const [const FullType(String)])),
+      'nameRelation',
+      serializers.serialize(object.nameRelation,
+          specifiedType: const FullType(NameRelation)),
     ];
   }
 
@@ -183,6 +188,63 @@ class _$PropertyRelationSerializer
             result.toPath.replace(serializers.deserialize(value,
                 specifiedType:
                     const FullType(BuiltList, const [const FullType(String)])));
+            break;
+          case 'nameRelation':
+            result.nameRelation = serializers.deserialize(value,
+                specifiedType: const FullType(NameRelation));
+            break;
+        }
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$SchemeBasedNameRelationSerializer
+    implements StructuredSerializer<SchemeBasedNameRelation> {
+  final Iterable<Type> types =
+      new BuiltList<Type>([SchemeBasedNameRelation, _$SchemeBasedNameRelation]);
+  final String wireName = 'SchemeBasedNameRelation';
+
+  @override
+  Iterable serialize(Serializers serializers, SchemeBasedNameRelation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    return [
+      'forwardConversion',
+      serializers.serialize(object.forwardConversion,
+          specifiedType: const FullType(NameConversion)),
+      'reverseConversion',
+      serializers.serialize(object.reverseConversion,
+          specifiedType: const FullType(NameConversion)),
+    ];
+  }
+
+  @override
+  SchemeBasedNameRelation deserialize(
+      Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new SchemeBasedNameRelationBuilder();
+
+    var key;
+    var value;
+    var expectingKey = true;
+    for (final item in serialized) {
+      if (expectingKey) {
+        key = item;
+        expectingKey = false;
+      } else {
+        value = item;
+        expectingKey = true;
+
+        switch (key as String) {
+          case 'forwardConversion':
+            result.forwardConversion = serializers.deserialize(value,
+                specifiedType: const FullType(NameConversion));
+            break;
+          case 'reverseConversion':
+            result.reverseConversion = serializers.deserialize(value,
+                specifiedType: const FullType(NameConversion));
             break;
         }
       }
@@ -328,9 +390,12 @@ class _$ValueClassRelationBuilder extends ValueClassRelationBuilder {
 class _$PropertyRelation extends PropertyRelation {
   final BuiltList<String> fromPath;
   final BuiltList<String> toPath;
-  _$PropertyRelation._({this.fromPath, this.toPath}) : super._() {
+  final NameRelation nameRelation;
+  _$PropertyRelation._({this.fromPath, this.toPath, this.nameRelation})
+      : super._() {
     if (fromPath == null) throw new ArgumentError('null fromPath');
     if (toPath == null) throw new ArgumentError('null toPath');
+    if (nameRelation == null) throw new ArgumentError('null nameRelation');
   }
   factory _$PropertyRelation([updates(PropertyRelationBuilder b)]) =>
       (new PropertyRelationBuilder()..update(updates)).build();
@@ -340,17 +405,20 @@ class _$PropertyRelation extends PropertyRelation {
       new _$PropertyRelationBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! PropertyRelation) return false;
-    return fromPath == other.fromPath && toPath == other.toPath;
+    return fromPath == other.fromPath &&
+        toPath == other.toPath &&
+        nameRelation == other.nameRelation;
   }
 
   int get hashCode {
-    return hashObjects([fromPath, toPath]);
+    return hashObjects([fromPath, toPath, nameRelation]);
   }
 
   String toString() {
     return 'PropertyRelation {'
         'fromPath=${fromPath.toString()}\n'
         'toPath=${toPath.toString()}\n'
+        'nameRelation=${nameRelation.toString()}\n'
         '}';
   }
 }
@@ -360,6 +428,7 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
   void replace(PropertyRelation other) {
     super.fromPath = other.fromPath?.toBuilder();
     super.toPath = other.toPath?.toBuilder();
+    super.nameRelation = other.nameRelation;
   }
 
   void update(updates(PropertyRelationBuilder b)) {
@@ -369,7 +438,72 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
   PropertyRelation build() {
     if (fromPath == null) throw new ArgumentError('null fromPath');
     if (toPath == null) throw new ArgumentError('null toPath');
+    if (nameRelation == null) throw new ArgumentError('null nameRelation');
     return new _$PropertyRelation._(
-        fromPath: fromPath?.build(), toPath: toPath?.build());
+        fromPath: fromPath?.build(),
+        toPath: toPath?.build(),
+        nameRelation: nameRelation);
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class SchemeBasedNameRelation
+// **************************************************************************
+
+class _$SchemeBasedNameRelation extends SchemeBasedNameRelation {
+  final NameConversion forwardConversion;
+  final NameConversion reverseConversion;
+  _$SchemeBasedNameRelation._({this.forwardConversion, this.reverseConversion})
+      : super._() {
+    if (forwardConversion == null)
+      throw new ArgumentError('null forwardConversion');
+    if (reverseConversion == null)
+      throw new ArgumentError('null reverseConversion');
+  }
+  factory _$SchemeBasedNameRelation(
+          [updates(SchemeBasedNameRelationBuilder b)]) =>
+      (new SchemeBasedNameRelationBuilder()..update(updates)).build();
+  SchemeBasedNameRelation rebuild(updates(SchemeBasedNameRelationBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$SchemeBasedNameRelationBuilder toBuilder() =>
+      new _$SchemeBasedNameRelationBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! SchemeBasedNameRelation) return false;
+    return forwardConversion == other.forwardConversion &&
+        reverseConversion == other.reverseConversion;
+  }
+
+  int get hashCode {
+    return hashObjects([forwardConversion, reverseConversion]);
+  }
+
+  String toString() {
+    return 'SchemeBasedNameRelation {'
+        'forwardConversion=${forwardConversion.toString()}\n'
+        'reverseConversion=${reverseConversion.toString()}\n'
+        '}';
+  }
+}
+
+class _$SchemeBasedNameRelationBuilder extends SchemeBasedNameRelationBuilder {
+  _$SchemeBasedNameRelationBuilder() : super._();
+  void replace(SchemeBasedNameRelation other) {
+    super.forwardConversion = other.forwardConversion;
+    super.reverseConversion = other.reverseConversion;
+  }
+
+  void update(updates(SchemeBasedNameRelationBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  SchemeBasedNameRelation build() {
+    if (forwardConversion == null)
+      throw new ArgumentError('null forwardConversion');
+    if (reverseConversion == null)
+      throw new ArgumentError('null reverseConversion');
+    return new _$SchemeBasedNameRelation._(
+        forwardConversion: forwardConversion,
+        reverseConversion: reverseConversion);
   }
 }
