@@ -23,6 +23,9 @@ abstract class PropertyRelationHelper<F, T> {
 }
 
 abstract class PropertyRelationHelper2<F, T> {
-  to(properties(T toType));
+  PropertyRelationHelper3<F, T> to(properties(T toType));
 }
 
+abstract class PropertyRelationHelper3<F, T> {
+  withNameRelation(NameRelation nameRelation);
+}

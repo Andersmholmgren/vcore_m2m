@@ -77,7 +77,8 @@ class _PropertyRelationsHelper<F, T> implements PropertyRelationHelper<F, T> {
 }
 
 class _PropertyRelationHelper<F, T>
-    implements PropertyRelationHelper<F, T>, PropertyRelationHelper2<F, T> {
+    implements PropertyRelationHelper<F, T>, PropertyRelationHelper2<F, T> ,
+      PropertyRelationHelper3<F, T> {
   final PropertyRelationBuilder builder = new PropertyRelationBuilder();
 
   @override
@@ -89,10 +90,16 @@ class _PropertyRelationHelper<F, T>
   }
 
   @override
-  to(properties(T toType)) {
+  PropertyRelationHelper3<F, T> to(properties(T toType)) {
     final capture = new PathExpressionCaptor();
     properties(capture as T);
     builder.toPath = capture._segments;
+    return this;
+  }
+
+  @override
+  withNameRelation(NameRelation nameRelation) {
+    builder.nameRelation = nameRelation;
   }
 }
 

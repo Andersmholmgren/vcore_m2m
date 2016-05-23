@@ -158,7 +158,6 @@ abstract class PropertyRelationBuilder
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }
 
-
 abstract class NameRelationContext {}
 
 /// TODO: Need to formalise how identifier names are mapped
@@ -175,11 +174,12 @@ abstract class NameRelation {
   String deriveBackwards(String to, NameRelationContext context);
 }
 
-
 abstract class SchemeBasedNameRelation
-  implements Built<SchemeBasedNameRelation, SchemeBasedNameRelationBuilder>,
-    NameRelation {
-  static final Serializer<SchemeBasedNameRelation> serializer = _$schemeBasedNameRelationSerializer;
+    implements
+        Built<SchemeBasedNameRelation, SchemeBasedNameRelationBuilder>,
+        NameRelation {
+  static final Serializer<SchemeBasedNameRelation> serializer =
+      _$schemeBasedNameRelationSerializer;
 
   NameConversion get forwardConversion;
   NameConversion get reverseConversion;
@@ -187,21 +187,20 @@ abstract class SchemeBasedNameRelation
   SchemeBasedNameRelation._();
 
   factory SchemeBasedNameRelation([updates(SchemeBasedNameRelationBuilder b)]) =
-  _$SchemeBasedNameRelation;
+      _$SchemeBasedNameRelation;
 
   @override
   String deriveBackwards(String to, NameRelationContext context) =>
-    forwardConversion(to);
+      forwardConversion(to);
 
   @override
   String deriveForwards(String from, NameRelationContext context) =>
-    reverseConversion(from);
-
+      reverseConversion(from);
 }
 
 abstract class SchemeBasedNameRelationBuilder
-  implements Builder<SchemeBasedNameRelation, SchemeBasedNameRelationBuilder> {
-
+    implements
+        Builder<SchemeBasedNameRelation, SchemeBasedNameRelationBuilder> {
   NameConversion forwardConversion;
   NameConversion reverseConversion;
 
