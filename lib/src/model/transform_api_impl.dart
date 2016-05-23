@@ -21,13 +21,16 @@ PackageRelation relateModels(
   });
 }
 
-class _VPackageRelationHelper implements VPackageRelationHelper {
+class _VPackageRelationHelper<F, T> implements VPackageRelationHelper<F, T> {
+  VCoreMirrorSystem reflectFrom;
+  VCoreMirrorSystem reflectTo;
   final ListBuilder<_VClassRelationHelper> classifierRelations =
       new ListBuilder<_VClassRelationHelper>();
 
   @override
-  VClassRelationHelper relate(Type fromType) {
-    final helper = new _VClassRelationHelper(fromType);
+  VClassRelationHelper/*<F, T>*/ relate/*<F, T>*/(Type fromType) {
+    final helper =
+        new _VClassRelationHelper/*<F, T>*/(fromType, reflectFrom, reflectTo);
     classifierRelations.add(helper);
     return helper;
   }
@@ -45,10 +48,12 @@ class _VClassRelationHelper<F, T>
   Type fromType;
   Type toType;
   ValueClassRelation classRelation;
+  VCoreMirrorSystem reflectFrom;
+  VCoreMirrorSystem reflectTo;
 
-  _VClassRelationHelper(this.fromType);
+  _VClassRelationHelper(this.fromType, this.reflectFrom, this.reflectTo);
 
-  VClassRelationHelper2 to(Type toType) {
+  VClassRelationHelper2<F, T> to(Type toType) {
     this.toType = toType;
     return this;
   }
@@ -58,9 +63,9 @@ class _VClassRelationHelper<F, T>
     updates(propRels);
 
     classRelation = new ValueClassRelation((b) => b
-    // TODO: damn how this gonna work. Need 2 mirror systems
-      ..from = e.reflectVClass(fromType)
-      ..to = e.reflectVClass(toType)
+      // TODO: damn how this gonna work. Need 2 mirror systems
+      ..from = reflectFrom(fromType)
+      ..to = reflectTo(toType)
       ..propertyRelations
           .addAll(propRels._props.map((h) => h.builder.build())));
   }
@@ -78,8 +83,10 @@ class _PropertyRelationsHelper<F, T> implements PropertyRelationHelper<F, T> {
 }
 
 class _PropertyRelationHelper<F, T>
-    implements PropertyRelationHelper<F, T>, PropertyRelationHelper2<F, T> ,
-      PropertyRelationHelper3<F, T> {
+    implements
+        PropertyRelationHelper<F, T>,
+        PropertyRelationHelper2<F, T>,
+        PropertyRelationHelper3<F, T> {
   final PropertyRelationBuilder builder = new PropertyRelationBuilder();
 
   @override

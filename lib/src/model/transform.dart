@@ -7,6 +7,8 @@ import 'package:built_collection/built_collection.dart';
 
 part 'transform.g.dart';
 
+typedef Classifier VCoreMirrorSystem(Type type);
+
 abstract class Relation<A, B, R1 extends Relation<A, B, R1, R2>,
     R2 extends Relation<B, A, R2, R1>> {
   R2 reversed();
@@ -26,6 +28,10 @@ abstract class PackageRelation
       _$packageRelationSerializer;
   Package get from;
   Package get to;
+
+  VCoreMirrorSystem get reflectFrom;
+  VCoreMirrorSystem get reflectTo;
+
 
   BuiltSet<ClassifierRelation> get classifierRelations;
 
@@ -48,6 +54,8 @@ abstract class PackageRelationBuilder
   PackageRelationBuilder._();
   Package from;
   Package to;
+  VCoreMirrorSystem reflectFrom;
+  VCoreMirrorSystem reflectTo;
 
   SetBuilder<ClassifierRelation> classifierRelations =
       new SetBuilder<ClassifierRelation>();
