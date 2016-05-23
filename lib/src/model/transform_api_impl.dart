@@ -58,6 +58,7 @@ class _VClassRelationHelper<F, T>
     updates(propRels);
 
     classRelation = new ValueClassRelation((b) => b
+    // TODO: damn how this gonna work. Need 2 mirror systems
       ..from = e.reflectVClass(fromType)
       ..to = e.reflectVClass(toType)
       ..propertyRelations
