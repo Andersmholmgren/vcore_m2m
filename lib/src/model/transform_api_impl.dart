@@ -7,8 +7,9 @@ import 'package:vcore_m2m/src/model/transform_api.dart';
 import 'package:vcore_m2m/vcore_m2m.dart';
 
 PackageRelation relateModels(
-    Package from, Package to, updates(VPackageRelationHelper h)) {
-  final packageHelper = new _VPackageRelationHelper();
+    Package from, Package to, VCoreMirrorSystem reflectFrom,
+  VCoreMirrorSystem reflectTo, updates(VPackageRelationHelper h)) {
+  final packageHelper = new _VPackageRelationHelper(reflectFrom, reflectTo);
   updates(packageHelper);
 
   return new PackageRelation((PackageRelationBuilder b) {
@@ -22,10 +23,13 @@ PackageRelation relateModels(
 }
 
 class _VPackageRelationHelper implements VPackageRelationHelper {
-  VCoreMirrorSystem reflectFrom;
-  VCoreMirrorSystem reflectTo;
+  final VCoreMirrorSystem reflectFrom;
+  final VCoreMirrorSystem reflectTo;
+
   final ListBuilder<_VClassRelationHelper> classifierRelations =
       new ListBuilder<_VClassRelationHelper>();
+
+  _VPackageRelationHelper(this.reflectFrom, this.reflectTo);
 
   @override
   VClassRelationHelper/*<F, T>*/ relate/*<F, T>*/(Type fromType) {

@@ -3,8 +3,12 @@ import 'package:vcore_m2m/src/model/transform.dart';
 import 'package:vcore/vcore.dart';
 
 PackageRelation relateModels(
-        Package from, Package to, updates(VPackageRelationHelper h)) =>
-    impl.relateModels(from, to, updates);
+        Package from,
+        Package to,
+        VCoreMirrorSystem reflectFrom,
+        VCoreMirrorSystem reflectTo,
+        updates(VPackageRelationHelper h)) =>
+    impl.relateModels(from, to, reflectFrom, reflectTo, updates);
 
 abstract class VPackageRelationHelper {
   VClassRelationHelper/*<F, T>*/ relate/*<F, T>*/(Type type);
