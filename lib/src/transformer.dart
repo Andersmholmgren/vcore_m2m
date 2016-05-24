@@ -2,6 +2,9 @@ import 'package:vcore_m2m/src/model/transform.dart';
 import 'package:vcore/vcore.dart';
 import 'package:built_collection/src/list.dart';
 
+import 'package:logging/logging.dart';
+
+final Logger _log = new Logger('transformer');
 typedef Classifier ClassifierMirrorSystem(Type type);
 
 class Transformer {
@@ -24,6 +27,7 @@ class Transformer {
       ValueClass fromClassifier,
 //    ValueClass toClassifier,
       _TransformationContext context) {
+    _log.finer('_transformTo(${from?.runtimeType}, ${fromClassifier?.name})');
     /**
      * TODO: need to do something much more efficient (probably code gen)
      * Lookup needs to support inheritance on both sides
