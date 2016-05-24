@@ -14,12 +14,20 @@ class Transformer {
 
   Transformer(this.packageRelation, this.sourceMirrorSystem);
 
-  /*=T*/ transform/*<F, T>*/(/*=F*/ from) {
-    return _transform(from, new _TransformationContext());
+  // TODO: would like to avoid fromType but from.runtimeType is the _$ one
+  // and we can't reflect on it
+  /*=T*/ transform/*<F, T>*/(/*=F*/ from, Type fromType) {
+    return _transform(from, fromType, new _TransformationContext());
   }
 
-  /*=T*/ _transform/*<F, T>*/(/*=F*/ from, _TransformationContext context) {
-    return _transformTo(from, sourceMirrorSystem(from.runtimeType), context);
+  /*=T*/ _transform/*<F, T>*/(/*=F*/ from, Type fromType, _TransformationContext context) {
+    /*
+     * Damn. sourceMirrorSystem needs to include _$ classes as that is the
+     * runtime type
+     */
+    return from != null
+        ? _transformTo(from, sourceMirrorSystem(fromType), context)
+        : null;
   }
 
   /*=T*/ _transformTo/*<F, T>*/(
@@ -28,6 +36,9 @@ class Transformer {
 //    ValueClass toClassifier,
       _TransformationContext context) {
     _log.finer('_transformTo(${from?.runtimeType}, ${fromClassifier?.name})');
+
+    if (fromClassifier == null) throw new ArgumentError.notNull('fromClassifier');
+
     /**
      * TODO: need to do something much more efficient (probably code gen)
      * Lookup needs to support inheritance on both sides
