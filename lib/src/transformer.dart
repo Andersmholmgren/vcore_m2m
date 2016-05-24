@@ -65,7 +65,7 @@ class Transformer {
       // ignore. Is that correct or an error?
     } else {
       final Property targetProperty =
-          _resolvePath(toClassifier.build(), pr.toPath);
+          _resolvePath(toClassifier, pr.toPath);
       // can't be null
       if (targetProperty.isCollection != sourceProperty.isCollection) {
         String _m(Property p) =>
@@ -90,6 +90,7 @@ class Transformer {
   }
 
   Property _resolvePath(ValueClass fromClassifier, BuiltList<String> fromPath) {
+    _log.finest('_resolvePath(${fromClassifier.name}, $fromPath)');
     final property =
         fromClassifier.properties.firstWhere((p) => p.name == fromPath.first);
     if (property == null || fromPath.length == 1) {
