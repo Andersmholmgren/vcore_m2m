@@ -16,6 +16,9 @@ PackageRelation relateModels(
     b
       ..from = from
       ..to = to
+      // TODO: not sure we need the mirrors on the model itself??
+      ..reflectFrom = reflectFrom
+      ..reflectTo = reflectTo
       ..classifierRelations.addAll(packageHelper.classifierRelations
           .build()
           .map((h) => h.classRelation));
@@ -29,7 +32,10 @@ class _VPackageRelationHelper implements VPackageRelationHelper {
   final ListBuilder<_VClassRelationHelper> classifierRelations =
       new ListBuilder<_VClassRelationHelper>();
 
-  _VPackageRelationHelper(this.reflectFrom, this.reflectTo);
+  _VPackageRelationHelper(this.reflectFrom, this.reflectTo) {
+    if (reflectFrom == null) throw new ArgumentError.notNull('reflectFrom');
+    if (reflectTo == null) throw new ArgumentError.notNull('reflectTo');
+  }
 
   @override
   VClassRelationHelper/*<F, T>*/ relate/*<F, T>*/(Type fromType) {

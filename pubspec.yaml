@@ -16,6 +16,7 @@ dependencies:
   built_collection: "^1.0.0"
   built_json: "^0.0.5"
   built_value: "^0.0.6"
+  quiver: '>=0.20.0 <0.23.0'
 dev_dependencies:
   test: '>=0.12.0 <0.13.0'
   built_json_generator: '^0.0.5'
