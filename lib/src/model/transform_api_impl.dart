@@ -21,7 +21,7 @@ PackageRelation relateModels(
   });
 }
 
-class _VPackageRelationHelper<F, T> implements VPackageRelationHelper<F, T> {
+class _VPackageRelationHelper implements VPackageRelationHelper {
   VCoreMirrorSystem reflectFrom;
   VCoreMirrorSystem reflectTo;
   final ListBuilder<_VClassRelationHelper> classifierRelations =
@@ -63,9 +63,8 @@ class _VClassRelationHelper<F, T>
     updates(propRels);
 
     classRelation = new ValueClassRelation((b) => b
-      // TODO: damn how this gonna work. Need 2 mirror systems
-      ..from = reflectFrom(fromType)
-      ..to = reflectTo(toType)
+      ..from = reflectFrom(fromType) as ValueClass
+      ..to = reflectTo(toType) as ValueClass
       ..propertyRelations
           .addAll(propRels._props.map((h) => h.builder.build())));
   }
