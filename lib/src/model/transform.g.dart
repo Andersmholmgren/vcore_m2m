@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-23T05:05:35.683802Z
+// 2016-05-24T05:35:22.012475Z
 
 part of transform;
 
@@ -32,6 +32,12 @@ class _$PackageRelationSerializer
           specifiedType: const FullType(Package)),
       'to',
       serializers.serialize(object.to, specifiedType: const FullType(Package)),
+      'reflectFrom',
+      serializers.serialize(object.reflectFrom,
+          specifiedType: const FullType(VCoreMirrorSystem)),
+      'reflectTo',
+      serializers.serialize(object.reflectTo,
+          specifiedType: const FullType(VCoreMirrorSystem)),
       'classifierRelations',
       serializers.serialize(object.classifierRelations,
           specifiedType: const FullType(
@@ -63,6 +69,14 @@ class _$PackageRelationSerializer
           case 'to':
             result.to = serializers.deserialize(value,
                 specifiedType: const FullType(Package));
+            break;
+          case 'reflectFrom':
+            result.reflectFrom = serializers.deserialize(value,
+                specifiedType: const FullType(VCoreMirrorSystem));
+            break;
+          case 'reflectTo':
+            result.reflectTo = serializers.deserialize(value,
+                specifiedType: const FullType(VCoreMirrorSystem));
             break;
           case 'classifierRelations':
             result.classifierRelations.replace(serializers.deserialize(value,
@@ -262,11 +276,20 @@ class _$SchemeBasedNameRelationSerializer
 class _$PackageRelation extends PackageRelation {
   final Package from;
   final Package to;
+  final VCoreMirrorSystem reflectFrom;
+  final VCoreMirrorSystem reflectTo;
   final BuiltSet<ClassifierRelation> classifierRelations;
-  _$PackageRelation._({this.from, this.to, this.classifierRelations})
+  _$PackageRelation._(
+      {this.from,
+      this.to,
+      this.reflectFrom,
+      this.reflectTo,
+      this.classifierRelations})
       : super._() {
     if (from == null) throw new ArgumentError('null from');
     if (to == null) throw new ArgumentError('null to');
+    if (reflectFrom == null) throw new ArgumentError('null reflectFrom');
+    if (reflectTo == null) throw new ArgumentError('null reflectTo');
     if (classifierRelations == null)
       throw new ArgumentError('null classifierRelations');
   }
@@ -280,17 +303,21 @@ class _$PackageRelation extends PackageRelation {
     if (other is! PackageRelation) return false;
     return from == other.from &&
         to == other.to &&
+        reflectFrom == other.reflectFrom &&
+        reflectTo == other.reflectTo &&
         classifierRelations == other.classifierRelations;
   }
 
   int get hashCode {
-    return hashObjects([from, to, classifierRelations]);
+    return hashObjects([from, to, reflectFrom, reflectTo, classifierRelations]);
   }
 
   String toString() {
     return 'PackageRelation {'
         'from=${from.toString()}\n'
         'to=${to.toString()}\n'
+        'reflectFrom=${reflectFrom.toString()}\n'
+        'reflectTo=${reflectTo.toString()}\n'
         'classifierRelations=${classifierRelations.toString()}\n'
         '}';
   }
@@ -301,6 +328,8 @@ class _$PackageRelationBuilder extends PackageRelationBuilder {
   void replace(PackageRelation other) {
     super.from = other.from;
     super.to = other.to;
+    super.reflectFrom = other.reflectFrom;
+    super.reflectTo = other.reflectTo;
     super.classifierRelations = other.classifierRelations?.toBuilder();
   }
 
@@ -311,10 +340,16 @@ class _$PackageRelationBuilder extends PackageRelationBuilder {
   PackageRelation build() {
     if (from == null) throw new ArgumentError('null from');
     if (to == null) throw new ArgumentError('null to');
+    if (reflectFrom == null) throw new ArgumentError('null reflectFrom');
+    if (reflectTo == null) throw new ArgumentError('null reflectTo');
     if (classifierRelations == null)
       throw new ArgumentError('null classifierRelations');
     return new _$PackageRelation._(
-        from: from, to: to, classifierRelations: classifierRelations?.build());
+        from: from,
+        to: to,
+        reflectFrom: reflectFrom,
+        reflectTo: reflectTo,
+        classifierRelations: classifierRelations?.build());
   }
 }
 
@@ -395,7 +430,6 @@ class _$PropertyRelation extends PropertyRelation {
       : super._() {
     if (fromPath == null) throw new ArgumentError('null fromPath');
     if (toPath == null) throw new ArgumentError('null toPath');
-    if (nameRelation == null) throw new ArgumentError('null nameRelation');
   }
   factory _$PropertyRelation([updates(PropertyRelationBuilder b)]) =>
       (new PropertyRelationBuilder()..update(updates)).build();
@@ -438,7 +472,6 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
   PropertyRelation build() {
     if (fromPath == null) throw new ArgumentError('null fromPath');
     if (toPath == null) throw new ArgumentError('null toPath');
-    if (nameRelation == null) throw new ArgumentError('null nameRelation');
     return new _$PropertyRelation._(
         fromPath: fromPath?.build(),
         toPath: toPath?.build(),

@@ -140,6 +140,7 @@ abstract class PropertyRelation
 
   BuiltList<String> get fromPath;
   BuiltList<String> get toPath;
+  @nullable
   NameRelation get nameRelation;
 
   PropertyRelation._();
@@ -161,6 +162,7 @@ abstract class PropertyRelationBuilder
 
   ListBuilder<String> fromPath = new ListBuilder<String>();
   ListBuilder<String> toPath = new ListBuilder<String>();
+  @nullable
   NameRelation nameRelation;
 
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
