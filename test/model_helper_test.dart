@@ -10,21 +10,46 @@ foo() {
   var pr = prs.first;
   pr.toPath;
 
-  final carBuilder = new CarBuilder();
-  if (carBuilder.engine == null) {
-    carBuilder.engine = new EngineBuilder();
-  }
-  final engineBuilder = carBuilder.engine;
 
-  if (engineBuilder.piston == null) {
-    engineBuilder.piston = new PistonBuilder();
+  EngineBuilder engineResolver(CarBuilder carBuilder) {
+    if (carBuilder.engine == null) {
+      carBuilder.engine = new EngineBuilder();
+    }
+    return carBuilder.engine;
   }
-  final pistonBuilder = engineBuilder.piston;
+  PistonBuilder pistonResolver(EngineBuilder engineBuilder) {
+    if (engineBuilder.piston == null) {
+      engineBuilder.piston = new PistonBuilder();
+    }
+    return engineBuilder.piston;
+  }
+
+  // TODO: maybe we just enforce that builders cannot have null properties for
+  // other non primitives (i.e. for buildable stuff)
+  // Then we can skip the resolving stuff and actually just do
+  // car.engine.piston.colour = 'green'
+  final carBuilder = new CarBuilder();
+  final engineBuilder = engineResolver(carBuilder);
+  final pistonBuilder = pistonResolver(engineBuilder);
+
+//
+//
+//  if (carBuilder.engine == null) {
+//    carBuilder.engine = new EngineBuilder();
+//  }
+//  final engineBuilder = carBuilder.engine;
+//
+//  if (engineBuilder.piston == null) {
+//    engineBuilder.piston = new PistonBuilder();
+//  }
+//  final pistonBuilder = engineBuilder.piston;
 
   pistonBuilder.colour = 'green';
 
 
 }
+
+
 
 resolveSegment(StringSink sink, ValueClass vc, BuiltList<String> paths) {
   // TODO: handle end segment

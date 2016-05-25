@@ -3,6 +3,7 @@ import 'package:vcore/vcore.dart';
 import 'package:built_collection/src/list.dart';
 
 import 'package:logging/logging.dart';
+import 'package:built_value/built_value.dart';
 
 final Logger _log = new Logger('transformer');
 typedef Classifier ClassifierMirrorSystem(Type type);
@@ -123,4 +124,32 @@ class _TransformationContext {
   }
 
   void setTargetValue(BuiltList<String> toPath, value) {}
+}
+
+//typedef Classifier Transform(Classifier classifier);
+//Built<PackageRelation, PackageRelationBuilder>
+
+abstract class TransformationContext {
+  /*=T*/ transform/*<F, T>*/(/*=F*/ from, Type fromType, Type toType);
+}
+
+abstract class AbstractTransformation<
+    F extends Built<F, FB>,
+    FB extends Builder<F, FB>,
+    T extends Built<T, TB>,
+    TB extends Builder<T, TB>> {
+  final F from;
+  final TB toBuilder;
+  final TransformationContext context;
+
+  AbstractTransformation(this.from, this.toBuilder, this.context);
+
+  void mapProperties();
+
+  T transform() {
+    // create
+    mapProperties();
+
+    return toBuilder.build();
+  }
 }
