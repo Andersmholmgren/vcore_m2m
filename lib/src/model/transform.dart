@@ -32,7 +32,6 @@ abstract class PackageRelation
   VCoreMirrorSystem get reflectFrom;
   VCoreMirrorSystem get reflectTo;
 
-
   BuiltSet<ClassifierRelation> get classifierRelations;
 
   PackageRelation._();
@@ -65,7 +64,10 @@ abstract class PackageRelationBuilder
 
 //typedef Classifier Transform(Classifier classifier);
 
-typedef T Transform<F, T>(F from, Type fromType, Type toType);
+//typedef T Transform<F, T>(F from, Type fromType, Type toType);
+typedef T Transform<F, T>(F from);
+
+typedef Transform<F, T> TransformLookup<F, T>(Type fromType, Type toType);
 
 abstract class ClassifierRelation<
         V extends Classifier<V, B>,
