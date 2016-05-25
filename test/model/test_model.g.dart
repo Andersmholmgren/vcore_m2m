@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-25T02:05:39.983200Z
+// 2016-05-25T02:07:14.554879Z
 
 part of test_model;
 
@@ -24,6 +24,9 @@ class _$CarSerializer implements StructuredSerializer<Car> {
       serializers.serialize(object.wheels,
           specifiedType:
               const FullType(BuiltSet, const [const FullType(Wheel)])),
+      'engine',
+      serializers.serialize(object.engine,
+          specifiedType: const FullType(Engine)),
     ];
   }
 
@@ -48,6 +51,10 @@ class _$CarSerializer implements StructuredSerializer<Car> {
             result.wheels.replace(serializers.deserialize(value,
                 specifiedType:
                     const FullType(BuiltSet, const [const FullType(Wheel)])));
+            break;
+          case 'engine':
+            result.engine.replace(serializers.deserialize(value,
+                specifiedType: const FullType(Engine)));
             break;
         }
       }
@@ -134,8 +141,10 @@ class _$EngineSerializer implements StructuredSerializer<Engine> {
 
 class _$Car extends Car {
   final BuiltSet<Wheel> wheels;
-  _$Car._({this.wheels}) : super._() {
+  final Engine engine;
+  _$Car._({this.wheels, this.engine}) : super._() {
     if (wheels == null) throw new ArgumentError('null wheels');
+    if (engine == null) throw new ArgumentError('null engine');
   }
   factory _$Car([updates(CarBuilder b)]) =>
       (new CarBuilder()..update(updates)).build();
@@ -143,16 +152,17 @@ class _$Car extends Car {
   _$CarBuilder toBuilder() => new _$CarBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! Car) return false;
-    return wheels == other.wheels;
+    return wheels == other.wheels && engine == other.engine;
   }
 
   int get hashCode {
-    return hashObjects([wheels]);
+    return hashObjects([wheels, engine]);
   }
 
   String toString() {
     return 'Car {'
         'wheels=${wheels.toString()}\n'
+        'engine=${engine.toString()}\n'
         '}';
   }
 }
@@ -161,6 +171,7 @@ class _$CarBuilder extends CarBuilder {
   _$CarBuilder() : super._();
   void replace(Car other) {
     super.wheels = other.wheels?.toBuilder();
+    super.engine = other.engine?.toBuilder();
   }
 
   void update(updates(CarBuilder b)) {
@@ -169,7 +180,8 @@ class _$CarBuilder extends CarBuilder {
 
   Car build() {
     if (wheels == null) throw new ArgumentError('null wheels');
-    return new _$Car._(wheels: wheels?.build());
+    if (engine == null) throw new ArgumentError('null engine');
+    return new _$Car._(wheels: wheels?.build(), engine: engine?.build());
   }
 }
 
