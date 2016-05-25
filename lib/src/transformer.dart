@@ -10,17 +10,22 @@ typedef Classifier ClassifierMirrorSystem(Type type);
 class Transformer {
   final PackageRelation packageRelation;
   final ClassifierMirrorSystem sourceMirrorSystem;
-//  final ClassifierMirrorSystem targetMirrorSystem;
+  final ClassifierMirrorSystem targetMirrorSystem;
 
-  Transformer(this.packageRelation, this.sourceMirrorSystem);
+  Transformer(
+      this.packageRelation, this.sourceMirrorSystem, this.targetMirrorSystem);
 
   // TODO: would like to avoid fromType but from.runtimeType is the _$ one
   // and we can't reflect on it
-  /*=T*/ transform/*<F, T>*/(/*=F*/ from, Type fromType) {
-    return _transform(from, fromType, new _TransformationContext());
+  /*=T*/ transform/*<F, T>*/(/*=F*/ from, Type fromType, Type toType) {
+    return _transform(
+        from, fromType, new _TransformationContext(targetMirrorSystem(toType)));
   }
 
-  /*=T*/ _transform/*<F, T>*/(/*=F*/ from, Type fromType, _TransformationContext context) {
+  /*=T*/ _transform/*<F, T>*/(
+      /*=F*/ from,
+      Type fromType,
+      _TransformationContext context) {
     /*
      * Damn. sourceMirrorSystem needs to include _$ classes as that is the
      * runtime type
@@ -37,7 +42,8 @@ class Transformer {
       _TransformationContext context) {
     _log.finer('_transformTo(${from?.runtimeType}, ${fromClassifier?.name})');
 
-    if (fromClassifier == null) throw new ArgumentError.notNull('fromClassifier');
+    if (fromClassifier == null)
+      throw new ArgumentError.notNull('fromClassifier');
 
     /**
      * TODO: need to do something much more efficient (probably code gen)
@@ -64,8 +70,7 @@ class Transformer {
           'on $fromClassifier');
       // ignore. Is that correct or an error?
     } else {
-      final Property targetProperty =
-          _resolvePath(toClassifier, pr.toPath);
+      final Property targetProperty = _resolvePath(toClassifier, pr.toPath);
       // can't be null
       if (targetProperty.isCollection != sourceProperty.isCollection) {
         String _m(Property p) =>
@@ -107,5 +112,13 @@ class Transformer {
 }
 
 class _TransformationContext {
+  final ValueClassBuilder _targetBuilder;
+  _TransformationContext(Classifier targetClassifier)
+      : _targetBuilder = targetClassifier.toBuilder() as ValueClassBuilder;
+
   ClassifierBuilder builderFor(Classifier to) {}
+
+  lookupSourceValue(BuiltList<String> fromPath) {}
+
+  void setTargetValue(BuiltList<String> toPath, value) {}
 }
