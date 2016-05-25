@@ -129,6 +129,8 @@ class _TransformationContext {
 //typedef Classifier Transform(Classifier classifier);
 //Built<PackageRelation, PackageRelationBuilder>
 
+//typedef T Transform2<F, T>(F from, Type fromType, Type toType);
+
 abstract class TransformationContext {
   /*=T*/ transform/*<F, T>*/(/*=F*/ from, Type fromType, Type toType);
 }

@@ -63,7 +63,9 @@ abstract class PackageRelationBuilder
   factory PackageRelationBuilder() = _$PackageRelationBuilder;
 }
 
-typedef Classifier Transform(Classifier classifier);
+//typedef Classifier Transform(Classifier classifier);
+
+typedef T Transform<F, T>(F from, Type fromType, Type toType);
 
 abstract class ClassifierRelation<
         V extends Classifier<V, B>,
