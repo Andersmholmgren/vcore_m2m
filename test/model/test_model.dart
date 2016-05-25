@@ -43,12 +43,16 @@ abstract class WheelBuilder implements Builder<Wheel, WheelBuilder> {
 abstract class Engine implements Built<Engine, EngineBuilder> {
   static final Serializer<Engine> serializer = _$engineSerializer;
 
+  double get capacity;
+
   Engine._();
 
   factory Engine([updates(EngineBuilder b)]) = _$Engine;
 }
 
 abstract class EngineBuilder implements Builder<Engine, EngineBuilder> {
+  double capacity;
+
   EngineBuilder._();
 
   factory EngineBuilder() = _$EngineBuilder;
