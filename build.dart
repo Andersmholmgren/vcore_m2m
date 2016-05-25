@@ -8,6 +8,6 @@ import 'package:source_gen/source_gen.dart';
 /// All you need is to import the generators you want and call [build].
 void main(List<String> args) {
   build(args, [new BuiltJsonGenerator(), new BuiltValueGenerator()],
-    librarySearchPaths: ['lib/src/model'])
+    librarySearchPaths: ['lib/src/model', 'test/model'])
     .then((result) => print(result));
 }

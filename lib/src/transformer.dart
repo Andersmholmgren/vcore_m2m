@@ -118,7 +118,9 @@ class _TransformationContext {
 
   ClassifierBuilder builderFor(Classifier to) {}
 
-  lookupSourceValue(BuiltList<String> fromPath) {}
+  lookupSourceValue(BuiltList<String> fromPath) {
+    //    e.g. schema.id
+  }
 
   void setTargetValue(BuiltList<String> toPath, value) {}
 }
