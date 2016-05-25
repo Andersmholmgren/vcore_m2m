@@ -44,6 +44,7 @@ abstract class Engine implements Built<Engine, EngineBuilder> {
   static final Serializer<Engine> serializer = _$engineSerializer;
 
   double get capacity;
+  Piston get piston;
 
   Engine._();
 
@@ -52,8 +53,27 @@ abstract class Engine implements Built<Engine, EngineBuilder> {
 
 abstract class EngineBuilder implements Builder<Engine, EngineBuilder> {
   double capacity;
+  PistonBuilder piston = new PistonBuilder();
 
   EngineBuilder._();
 
   factory EngineBuilder() = _$EngineBuilder;
+}
+
+abstract class Piston implements Built<Piston, PistonBuilder> {
+  static final Serializer<Piston> serializer = _$pistonSerializer;
+
+  String get colour;
+
+  Piston._();
+
+  factory Piston([updates(PistonBuilder b)]) = _$Piston;
+}
+
+abstract class PistonBuilder implements Builder<Piston, PistonBuilder> {
+  PistonBuilder._();
+
+  String colour;
+
+  factory PistonBuilder() = _$PistonBuilder;
 }

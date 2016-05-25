@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-25T02:07:14.554879Z
+// 2016-05-25T02:32:42.314682Z
 
 part of test_model;
 
@@ -11,6 +11,7 @@ part of test_model;
 Serializer<Car> _$carSerializer = new _$CarSerializer();
 Serializer<Wheel> _$wheelSerializer = new _$WheelSerializer();
 Serializer<Engine> _$engineSerializer = new _$EngineSerializer();
+Serializer<Piston> _$pistonSerializer = new _$PistonSerializer();
 
 class _$CarSerializer implements StructuredSerializer<Car> {
   final Iterable<Type> types = new BuiltList<Type>([Car, _$Car]);
@@ -106,7 +107,14 @@ class _$EngineSerializer implements StructuredSerializer<Engine> {
   @override
   Iterable serialize(Serializers serializers, Engine object,
       {FullType specifiedType: FullType.unspecified}) {
-    return [];
+    return [
+      'capacity',
+      serializers.serialize(object.capacity,
+          specifiedType: const FullType(double)),
+      'piston',
+      serializers.serialize(object.piston,
+          specifiedType: const FullType(Piston)),
+    ];
   }
 
   @override
@@ -126,6 +134,57 @@ class _$EngineSerializer implements StructuredSerializer<Engine> {
         expectingKey = true;
 
         switch (key as String) {
+          case 'capacity':
+            result.capacity = serializers.deserialize(value,
+                specifiedType: const FullType(double));
+            break;
+          case 'piston':
+            result.piston.replace(serializers.deserialize(value,
+                specifiedType: const FullType(Piston)));
+            break;
+        }
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$PistonSerializer implements StructuredSerializer<Piston> {
+  final Iterable<Type> types = new BuiltList<Type>([Piston, _$Piston]);
+  final String wireName = 'Piston';
+
+  @override
+  Iterable serialize(Serializers serializers, Piston object,
+      {FullType specifiedType: FullType.unspecified}) {
+    return [
+      'colour',
+      serializers.serialize(object.colour,
+          specifiedType: const FullType(String)),
+    ];
+  }
+
+  @override
+  Piston deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new PistonBuilder();
+
+    var key;
+    var value;
+    var expectingKey = true;
+    for (final item in serialized) {
+      if (expectingKey) {
+        key = item;
+        expectingKey = false;
+      } else {
+        value = item;
+        expectingKey = true;
+
+        switch (key as String) {
+          case 'colour':
+            result.colour = serializers.deserialize(value,
+                specifiedType: const FullType(String));
+            break;
         }
       }
     }
@@ -229,7 +288,12 @@ class _$WheelBuilder extends WheelBuilder {
 // **************************************************************************
 
 class _$Engine extends Engine {
-  _$Engine._() : super._() {}
+  final double capacity;
+  final Piston piston;
+  _$Engine._({this.capacity, this.piston}) : super._() {
+    if (capacity == null) throw new ArgumentError('null capacity');
+    if (piston == null) throw new ArgumentError('null piston');
+  }
   factory _$Engine([updates(EngineBuilder b)]) =>
       (new EngineBuilder()..update(updates)).build();
   Engine rebuild(updates(EngineBuilder b)) =>
@@ -237,26 +301,82 @@ class _$Engine extends Engine {
   _$EngineBuilder toBuilder() => new _$EngineBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! Engine) return false;
-    return true;
+    return capacity == other.capacity && piston == other.piston;
   }
 
   int get hashCode {
-    return 1043237298;
+    return hashObjects([capacity, piston]);
   }
 
   String toString() {
-    return 'Engine {}';
+    return 'Engine {'
+        'capacity=${capacity.toString()}\n'
+        'piston=${piston.toString()}\n'
+        '}';
   }
 }
 
 class _$EngineBuilder extends EngineBuilder {
   _$EngineBuilder() : super._();
-  void replace(Engine other) {}
+  void replace(Engine other) {
+    super.capacity = other.capacity;
+    super.piston = other.piston?.toBuilder();
+  }
+
   void update(updates(EngineBuilder b)) {
     if (updates != null) updates(this);
   }
 
   Engine build() {
-    return new _$Engine._();
+    if (capacity == null) throw new ArgumentError('null capacity');
+    if (piston == null) throw new ArgumentError('null piston');
+    return new _$Engine._(capacity: capacity, piston: piston?.build());
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class Piston
+// **************************************************************************
+
+class _$Piston extends Piston {
+  final String colour;
+  _$Piston._({this.colour}) : super._() {
+    if (colour == null) throw new ArgumentError('null colour');
+  }
+  factory _$Piston([updates(PistonBuilder b)]) =>
+      (new PistonBuilder()..update(updates)).build();
+  Piston rebuild(updates(PistonBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$PistonBuilder toBuilder() => new _$PistonBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! Piston) return false;
+    return colour == other.colour;
+  }
+
+  int get hashCode {
+    return hashObjects([colour]);
+  }
+
+  String toString() {
+    return 'Piston {'
+        'colour=${colour.toString()}\n'
+        '}';
+  }
+}
+
+class _$PistonBuilder extends PistonBuilder {
+  _$PistonBuilder() : super._();
+  void replace(Piston other) {
+    super.colour = other.colour;
+  }
+
+  void update(updates(PistonBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  Piston build() {
+    if (colour == null) throw new ArgumentError('null colour');
+    return new _$Piston._(colour: colour);
   }
 }
