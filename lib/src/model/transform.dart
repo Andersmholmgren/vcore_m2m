@@ -250,3 +250,26 @@ String toSnakeCase(String input) {}
 //    // TODO: implement convert
 //  }
 //}
+
+
+abstract class TransformKey
+  implements Built<TransformKey, TransformKeyBuilder> {
+
+  Type get from;
+  Type get to;
+
+  TransformKey._();
+
+  factory TransformKey([updates(TransformKeyBuilder b)]) = _$TransformKey;
+}
+
+abstract class TransformKeyBuilder
+  implements Builder<TransformKey, TransformKeyBuilder> {
+
+  Type from;
+  Type to;
+
+  TransformKeyBuilder._();
+
+  factory TransformKeyBuilder() = _$TransformKeyBuilder;
+}
