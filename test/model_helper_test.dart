@@ -4,18 +4,25 @@ import 'package:vcore/vcore.dart';
 import 'package:built_collection/built_collection.dart';
 
 foo() {
-  // resolve car.engine.capacity and set to 10
+  // resolve car.engine.piston.colour and set to 'green'
   ValueClassRelation vcr;
   var prs = vcr.propertyRelations;
   var pr = prs.first;
   pr.toPath;
 
-  final cb = new CarBuilder();
-  if (cb.engine == null) {
-    cb.engine = new EngineBuilder();
+  final carBuilder = new CarBuilder();
+  if (carBuilder.engine == null) {
+    carBuilder.engine = new EngineBuilder();
   }
-  final engineBuilder = cb.engine;
-  engineBuilder.capacity = 10.0;
+  final engineBuilder = carBuilder.engine;
+
+  if (engineBuilder.piston == null) {
+    engineBuilder.piston = new PistonBuilder();
+  }
+  final pistonBuilder = engineBuilder.piston;
+
+  pistonBuilder.colour = 'green';
+
 
 }
 
