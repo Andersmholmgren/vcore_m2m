@@ -252,6 +252,9 @@ String toSnakeCase(String input) {}
 //}
 
 
+
+/// TODO This is an impl class. Being lazy and putting it here as I want to
+/// benefit from built_value hashCode / equals
 abstract class TransformKey
   implements Built<TransformKey, TransformKeyBuilder> {
 
