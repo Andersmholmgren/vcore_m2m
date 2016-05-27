@@ -12,15 +12,19 @@ dependencies:
     path: ../vcore
   vcore_generator:
     path: ../vcore_generator
+  built_value:
+    path: ../built_value.dart/built_value
   xml: '>=2.4.3 <3.0.0'
   built_collection: "^1.0.0"
   built_json: "^0.0.5"
-  built_value: "^0.0.6"
+#  built_value: "^0.0.6"
   quiver: '>=0.20.0 <0.23.0'
+  option: '>=1.2.0 <2.0.0'
 dev_dependencies:
   test: '>=0.12.0 <0.13.0'
   built_json_generator: '^0.0.5'
-  built_value_generator: "^0.0.6"
+  built_value_generator:
+    path: ../built_value.dart/built_value_generator
   vcore_ecore:
     path: ../vcore_ecore
 

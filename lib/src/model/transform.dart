@@ -67,7 +67,9 @@ abstract class PackageRelationBuilder
 //typedef T Transform<F, T>(F from, Type fromType, Type toType);
 typedef T Transform<F, T>(F from);
 
-//typedef Transform<F, T> TransformLookup<F, T>(Type fromType, Type toType);
+typedef Option<Transform<F, T>> TransformLookup<F, T>(Type fromType, Type toType);
+//Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
+//  Type fromType, Type toType) {
 
 typedef Transform<F, T> TransformFactory<F, T>();
 
