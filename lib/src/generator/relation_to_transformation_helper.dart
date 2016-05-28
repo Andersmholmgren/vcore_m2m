@@ -58,7 +58,9 @@ class $className extends AbstractTransformation<$fromName,
 
   @override
   void mapProperties() {
-    ${_generateProperties(relation)}
+  ''');
+    _generateProperties(relation);
+sink.writeln('''
   }
 }
 ''');
@@ -88,7 +90,7 @@ class $className extends AbstractTransformation<$fromName,
     // Do we reflect here or when we create the relation and store it on the relation?
 //    propertyRelation.
 
-    sink.writeln('toBuilder.${propertyRelation.fromPath.join('.')} = '
-        'from?.${propertyRelation.fromPath.join('?.')}');
+    sink.writeln('toBuilder.${propertyRelation.toPath.join('.')} = '
+        'from?.${propertyRelation.fromPath.join('?.')};');
   }
 }
