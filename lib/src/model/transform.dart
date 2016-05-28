@@ -176,6 +176,21 @@ abstract class PropertyRelationBuilder
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }
 
+abstract class PropertyRelationEnd
+    implements Built<PropertyRelationEnd, PropertyRelationEndBuilder> {
+  PropertyRelationEnd._();
+
+  factory PropertyRelationEnd([updates(PropertyRelationEndBuilder b)]) =
+      _$PropertyRelationEnd;
+}
+
+abstract class PropertyRelationEndBuilder
+    implements Builder<PropertyRelationEnd, PropertyRelationEndBuilder> {
+  PropertyRelationEndBuilder._();
+
+  factory PropertyRelationEndBuilder() = _$PropertyRelationEndBuilder;
+}
+
 abstract class NameRelationContext {}
 
 /// TODO: Need to formalise how identifier names are mapped

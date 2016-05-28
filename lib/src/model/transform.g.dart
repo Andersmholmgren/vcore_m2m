@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-25T23:25:58.529094Z
+// 2016-05-28T01:20:50.362457Z
 
 part of transform;
 
@@ -476,6 +476,45 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
         fromPath: fromPath?.build(),
         toPath: toPath?.build(),
         nameRelation: nameRelation);
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class PropertyRelationEnd
+// **************************************************************************
+
+class _$PropertyRelationEnd extends PropertyRelationEnd {
+  _$PropertyRelationEnd._() : super._() {}
+  factory _$PropertyRelationEnd([updates(PropertyRelationEndBuilder b)]) =>
+      (new PropertyRelationEndBuilder()..update(updates)).build();
+  PropertyRelationEnd rebuild(updates(PropertyRelationEndBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$PropertyRelationEndBuilder toBuilder() =>
+      new _$PropertyRelationEndBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! PropertyRelationEnd) return false;
+    return true;
+  }
+
+  int get hashCode {
+    return 354698863;
+  }
+
+  String toString() {
+    return 'PropertyRelationEnd {}';
+  }
+}
+
+class _$PropertyRelationEndBuilder extends PropertyRelationEndBuilder {
+  _$PropertyRelationEndBuilder() : super._();
+  void replace(PropertyRelationEnd other) {}
+  void update(updates(PropertyRelationEndBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  PropertyRelationEnd build() {
+    return new _$PropertyRelationEnd._();
   }
 }
 
