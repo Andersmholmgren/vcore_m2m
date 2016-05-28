@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-28T01:23:22.317676Z
+// 2016-05-28T01:26:01.900824Z
 
 part of transform;
 
@@ -162,14 +162,12 @@ class _$PropertyRelationSerializer
   Iterable serialize(Serializers serializers, PropertyRelation object,
       {FullType specifiedType: FullType.unspecified}) {
     return [
-      'fromPath',
-      serializers.serialize(object.fromPath,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(String)])),
-      'toPath',
-      serializers.serialize(object.toPath,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(String)])),
+      'from',
+      serializers.serialize(object.from,
+          specifiedType: const FullType(PropertyRelationEnd)),
+      'to',
+      serializers.serialize(object.to,
+          specifiedType: const FullType(PropertyRelationEnd)),
       'nameRelation',
       serializers.serialize(object.nameRelation,
           specifiedType: const FullType(NameRelation)),
@@ -193,15 +191,13 @@ class _$PropertyRelationSerializer
         expectingKey = true;
 
         switch (key as String) {
-          case 'fromPath':
-            result.fromPath.replace(serializers.deserialize(value,
-                specifiedType:
-                    const FullType(BuiltList, const [const FullType(String)])));
+          case 'from':
+            result.from.replace(serializers.deserialize(value,
+                specifiedType: const FullType(PropertyRelationEnd)));
             break;
-          case 'toPath':
-            result.toPath.replace(serializers.deserialize(value,
-                specifiedType:
-                    const FullType(BuiltList, const [const FullType(String)])));
+          case 'to':
+            result.to.replace(serializers.deserialize(value,
+                specifiedType: const FullType(PropertyRelationEnd)));
             break;
           case 'nameRelation':
             result.nameRelation = serializers.deserialize(value,
@@ -423,13 +419,12 @@ class _$ValueClassRelationBuilder extends ValueClassRelationBuilder {
 // **************************************************************************
 
 class _$PropertyRelation extends PropertyRelation {
-  final BuiltList<String> fromPath;
-  final BuiltList<String> toPath;
+  final PropertyRelationEnd from;
+  final PropertyRelationEnd to;
   final NameRelation nameRelation;
-  _$PropertyRelation._({this.fromPath, this.toPath, this.nameRelation})
-      : super._() {
-    if (fromPath == null) throw new ArgumentError('null fromPath');
-    if (toPath == null) throw new ArgumentError('null toPath');
+  _$PropertyRelation._({this.from, this.to, this.nameRelation}) : super._() {
+    if (from == null) throw new ArgumentError('null from');
+    if (to == null) throw new ArgumentError('null to');
   }
   factory _$PropertyRelation([updates(PropertyRelationBuilder b)]) =>
       (new PropertyRelationBuilder()..update(updates)).build();
@@ -439,19 +434,19 @@ class _$PropertyRelation extends PropertyRelation {
       new _$PropertyRelationBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! PropertyRelation) return false;
-    return fromPath == other.fromPath &&
-        toPath == other.toPath &&
+    return from == other.from &&
+        to == other.to &&
         nameRelation == other.nameRelation;
   }
 
   int get hashCode {
-    return hashObjects([fromPath, toPath, nameRelation]);
+    return hashObjects([from, to, nameRelation]);
   }
 
   String toString() {
     return 'PropertyRelation {'
-        'fromPath=${fromPath.toString()}\n'
-        'toPath=${toPath.toString()}\n'
+        'from=${from.toString()}\n'
+        'to=${to.toString()}\n'
         'nameRelation=${nameRelation.toString()}\n'
         '}';
   }
@@ -460,8 +455,8 @@ class _$PropertyRelation extends PropertyRelation {
 class _$PropertyRelationBuilder extends PropertyRelationBuilder {
   _$PropertyRelationBuilder() : super._();
   void replace(PropertyRelation other) {
-    super.fromPath = other.fromPath?.toBuilder();
-    super.toPath = other.toPath?.toBuilder();
+    super.from = other.from?.toBuilder();
+    super.to = other.to?.toBuilder();
     super.nameRelation = other.nameRelation;
   }
 
@@ -470,12 +465,10 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
   }
 
   PropertyRelation build() {
-    if (fromPath == null) throw new ArgumentError('null fromPath');
-    if (toPath == null) throw new ArgumentError('null toPath');
+    if (from == null) throw new ArgumentError('null from');
+    if (to == null) throw new ArgumentError('null to');
     return new _$PropertyRelation._(
-        fromPath: fromPath?.build(),
-        toPath: toPath?.build(),
-        nameRelation: nameRelation);
+        from: from?.build(), to: to?.build(), nameRelation: nameRelation);
   }
 }
 

@@ -146,8 +146,8 @@ abstract class PropertyRelation
   static final Serializer<PropertyRelation> serializer =
       _$propertyRelationSerializer;
 
-  BuiltList<String> get fromPath;
-  BuiltList<String> get toPath;
+  PropertyRelationEnd get from;
+  PropertyRelationEnd get to;
   @nullable
   NameRelation get nameRelation;
 
@@ -159,8 +159,8 @@ abstract class PropertyRelation
   @override
   PropertyRelation reversed() {
     return new PropertyRelation((PropertyRelationBuilder b) => b
-      ..fromPath = toPath.toBuilder()
-      ..toPath = fromPath.toBuilder());
+      ..to = from.toBuilder()
+      ..from = to.toBuilder());
   }
 }
 
@@ -168,8 +168,9 @@ abstract class PropertyRelationBuilder
     implements Builder<PropertyRelation, PropertyRelationBuilder> {
   PropertyRelationBuilder._();
 
-  ListBuilder<String> fromPath = new ListBuilder<String>();
-  ListBuilder<String> toPath = new ListBuilder<String>();
+  PropertyRelationEndBuilder from = new PropertyRelationEndBuilder();
+  PropertyRelationEndBuilder to = new PropertyRelationEndBuilder();
+
   @nullable
   NameRelation nameRelation;
 
