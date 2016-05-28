@@ -7,8 +7,11 @@ import 'package:vcore_m2m/src/model/transform_api.dart';
 import 'package:vcore_m2m/vcore_m2m.dart';
 
 PackageRelation relateModels(
-    Package from, Package to, VCoreMirrorSystem reflectFrom,
-  VCoreMirrorSystem reflectTo, updates(VPackageRelationHelper h)) {
+    Package from,
+    Package to,
+    VCoreMirrorSystem reflectFrom,
+    VCoreMirrorSystem reflectTo,
+    updates(VPackageRelationHelper h)) {
   final packageHelper = new _VPackageRelationHelper(reflectFrom, reflectTo);
   updates(packageHelper);
 
@@ -57,7 +60,9 @@ class _VClassRelationHelper<F, T>
     implements VClassRelationHelper<F, T>, VClassRelationHelper2<F, T> {
   Type fromType;
   Type toType;
-  ValueClassRelation classRelation;
+  ValueClassRelationBuilder _classRelationBuilder =
+      new ValueClassRelationBuilder();
+  ValueClassRelation get classRelation => _classRelationBuilder.build();
   VCoreMirrorSystem reflectFrom;
   VCoreMirrorSystem reflectTo;
 
@@ -65,23 +70,30 @@ class _VClassRelationHelper<F, T>
 
   VClassRelationHelper2<F, T> to(Type toType) {
     this.toType = toType;
+
+    _classRelationBuilder
+      ..from = reflectFrom(fromType) as ValueClass
+      ..to = reflectTo(toType) as ValueClass;
+
     return this;
   }
 
   by(updates(PropertyRelationHelper<F, T> b)) {
-    final propRels = new _PropertyRelationsHelper<F, T>();
+    final propRels = new _PropertyRelationsHelper<F, T>(
+        _classRelationBuilder.from, _classRelationBuilder.to);
     updates(propRels);
 
-    classRelation = new ValueClassRelation((b) => b
-      ..from = reflectFrom(fromType) as ValueClass
-      ..to = reflectTo(toType) as ValueClass
-      ..propertyRelations
-          .addAll(propRels._props.map((h) => h.builder.build())));
+    _classRelationBuilder
+      ..propertyRelations.addAll(propRels._props.map((h) => h.builder.build()));
   }
 }
 
 class _PropertyRelationsHelper<F, T> implements PropertyRelationHelper<F, T> {
   final List<_PropertyRelationHelper<F, T>> _props = [];
+  final ValueClass from;
+  final ValueClass to;
+
+  _PropertyRelationsHelper(this.from, this.to);
 
   @override
   PropertyRelationHelper2<F, T> relate(properties(F from)) {
@@ -102,7 +114,9 @@ class _PropertyRelationHelper<F, T>
   PropertyRelationHelper2<F, T> relate(properties(F from)) {
     final capture = new PathExpressionCaptor();
     properties(capture as F);
-    builder.fromPath = capture._segments;
+    final fromPath = capture._segments;
+//    builder.
+
     return this;
   }
 
