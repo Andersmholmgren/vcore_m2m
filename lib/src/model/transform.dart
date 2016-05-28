@@ -1,9 +1,10 @@
 library transform;
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_json/built_json.dart';
 import 'package:built_value/built_value.dart';
+import 'package:option/option.dart';
 import 'package:vcore/vcore.dart';
-import 'package:built_collection/built_collection.dart';
 
 part 'transform.g.dart';
 
@@ -67,9 +68,8 @@ abstract class PackageRelationBuilder
 //typedef T Transform<F, T>(F from, Type fromType, Type toType);
 typedef T Transform<F, T>(F from);
 
-typedef Option<Transform<F, T>> TransformLookup<F, T>(Type fromType, Type toType);
-//Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
-//  Type fromType, Type toType) {
+typedef Option<Transform<F, T>> TransformLookup<F, T>(
+    Type fromType, Type toType);
 
 typedef Transform<F, T> TransformFactory<F, T>();
 
@@ -253,13 +253,10 @@ String toSnakeCase(String input) {}
 //  }
 //}
 
-
-
 /// TODO This is an impl class. Being lazy and putting it here as I want to
 /// benefit from built_value hashCode / equals
 abstract class TransformKey
-  implements Built<TransformKey, TransformKeyBuilder> {
-
+    implements Built<TransformKey, TransformKeyBuilder> {
   Type get from;
   Type get to;
 
@@ -269,8 +266,7 @@ abstract class TransformKey
 }
 
 abstract class TransformKeyBuilder
-  implements Builder<TransformKey, TransformKeyBuilder> {
-
+    implements Builder<TransformKey, TransformKeyBuilder> {
   Type from;
   Type to;
 
