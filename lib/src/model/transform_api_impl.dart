@@ -110,12 +110,17 @@ class _PropertyRelationHelper<F, T>
         PropertyRelationHelper3<F, T> {
   final PropertyRelationBuilder builder = new PropertyRelationBuilder();
 
+  final ValueClass from;
+  final ValueClass toCls;
+
+  _PropertyRelationHelper(this.from, this.toCls);
+
   @override
   PropertyRelationHelper2<F, T> relate(properties(F from)) {
     final capture = new PathExpressionCaptor();
     properties(capture as F);
-    final fromPath = capture._segments;
-//    builder.
+
+    _setEnd(capture._segments.build(), from, builder.from);
 
     return this;
   }
@@ -124,8 +129,18 @@ class _PropertyRelationHelper<F, T>
   PropertyRelationHelper3<F, T> to(properties(T toType)) {
     final capture = new PathExpressionCaptor();
     properties(capture as T);
-    builder.toPath = capture._segments;
+    _setEnd(capture._segments.build(), toCls, builder.to);
     return this;
+  }
+
+  void _setEnd(Iterable<String> path, ValueClass cls,
+      PropertyRelationEndBuilder endBuilder) {
+    final endProperty = from.lookupPropertyByPath(path).getOrElse(() =>
+        throw new StateError(
+            'failed to resolve path $path on class ${cls.name}'));
+    endBuilder
+      ..path = path
+      ..property = endProperty;
   }
 
   @override
