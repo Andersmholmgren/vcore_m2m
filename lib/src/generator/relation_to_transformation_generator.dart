@@ -19,13 +19,16 @@ class RelationToTransformationGenerator extends Generator {
     print('#########: ${element.name} ${element.runtimeType}');
     if (element is! FunctionElement) return null;
     print('*********: ${element.name}');
-    final FunctionElement felement = element;
-    print(felement.returnType.displayName);
-    if (!felement.returnType.displayName.startsWith('TransformLookup'))
+    final FunctionElement fElement = element;
+    print(fElement.returnType.displayName);
+    if (!fElement.returnType.displayName.startsWith('TransformLookup'))
       return null;
 
 
     print('yaaay: ${element.name}');
+
+
+
     return "yay";
 //    final package = convert(element);
 //
