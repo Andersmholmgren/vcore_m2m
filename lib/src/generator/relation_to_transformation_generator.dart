@@ -20,7 +20,7 @@ class RelationToTransformationGenerator extends Generator {
     print('*********: ${element.name}');
 
     // TODO(moi): better way of checking for top level declaration.
-    if (!element.definingCompilationUnit.accessors
+    if (!element.definingCompilationUnit.functions
         .any((element) {
       print('${element.name}');
       print(element.returnType.displayName);
