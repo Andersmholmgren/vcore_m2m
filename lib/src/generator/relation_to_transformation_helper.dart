@@ -60,7 +60,7 @@ class $className extends AbstractTransformation<$fromName,
   void mapProperties() {
   ''');
     _generateProperties(relation);
-sink.writeln('''
+    sink.writeln('''
   }
 }
 ''');
@@ -90,7 +90,32 @@ sink.writeln('''
     // Do we reflect here or when we create the relation and store it on the relation?
 //    propertyRelation.
 
-    sink.writeln('toBuilder.${propertyRelation.toPath.join('.')} = '
-        'from?.${propertyRelation.fromPath.join('?.')};');
+    final to = propertyRelation.to;
+    final from = propertyRelation.from;
+    final toPathExpression = 'toBuilder.${to.path.join('.')}';
+    final fromPathExpression = 'from.${from.path.join('?.')}';
+    final converterRequired = to.property.type != from.property.type;
+    String maybeConvertedValue(String valueVariable) {
+      return converterRequired
+          ? '${from.property.type.name}To${to.property.type.name}Transform($valueVariable)'
+          : valueVariable;
+    }
+
+    if (to.property.isCollection != from.property.isCollection) {
+      throw new ArgumentError(
+          'only support relationships between properties of the same arity');
+    }
+    if (from.property.isCollection) {
+      sink.writeln('''
+    if ($fromPathExpression != null) {
+      $fromPathExpression.forEach((d) {
+        $toPathExpression.add(${maybeConvertedValue('d')});
+      });
+    }
+      ''');
+    } else {
+      sink.writeln('$toPathExpression = '
+          '${maybeConvertedValue(fromPathExpression)};');
+    }
   }
 }

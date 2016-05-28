@@ -97,7 +97,7 @@ class _PropertyRelationsHelper<F, T> implements PropertyRelationHelper<F, T> {
 
   @override
   PropertyRelationHelper2<F, T> relate(properties(F from)) {
-    final ph = new _PropertyRelationHelper<F, T>();
+    final ph = new _PropertyRelationHelper<F, T>(from, to);
     _props.add(ph);
     return ph.relate(properties);
   }
@@ -135,7 +135,7 @@ class _PropertyRelationHelper<F, T>
 
   void _setEnd(Iterable<String> path, ValueClass cls,
       PropertyRelationEndBuilder endBuilder) {
-    final endProperty = from.lookupPropertyByPath(path).getOrElse(() =>
+    final endProperty = cls.lookupPropertyByPath(path).getOrElse(() =>
         throw new StateError(
             'failed to resolve path $path on class ${cls.name}'));
     endBuilder
