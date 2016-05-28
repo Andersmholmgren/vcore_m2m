@@ -178,6 +178,9 @@ abstract class PropertyRelationBuilder
 
 abstract class PropertyRelationEnd
     implements Built<PropertyRelationEnd, PropertyRelationEndBuilder> {
+  BuiltList<String> get path;
+  Property get property;
+
   PropertyRelationEnd._();
 
   factory PropertyRelationEnd([updates(PropertyRelationEndBuilder b)]) =
@@ -186,6 +189,9 @@ abstract class PropertyRelationEnd
 
 abstract class PropertyRelationEndBuilder
     implements Builder<PropertyRelationEnd, PropertyRelationEndBuilder> {
+  BuiltList<String> path;
+  Property property;
+
   PropertyRelationEndBuilder._();
 
   factory PropertyRelationEndBuilder() = _$PropertyRelationEndBuilder;

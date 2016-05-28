@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-28T01:20:50.362457Z
+// 2016-05-28T01:23:22.317676Z
 
 part of transform;
 
@@ -485,7 +485,12 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
 // **************************************************************************
 
 class _$PropertyRelationEnd extends PropertyRelationEnd {
-  _$PropertyRelationEnd._() : super._() {}
+  final BuiltList<String> path;
+  final Property property;
+  _$PropertyRelationEnd._({this.path, this.property}) : super._() {
+    if (path == null) throw new ArgumentError('null path');
+    if (property == null) throw new ArgumentError('null property');
+  }
   factory _$PropertyRelationEnd([updates(PropertyRelationEndBuilder b)]) =>
       (new PropertyRelationEndBuilder()..update(updates)).build();
   PropertyRelationEnd rebuild(updates(PropertyRelationEndBuilder b)) =>
@@ -494,27 +499,36 @@ class _$PropertyRelationEnd extends PropertyRelationEnd {
       new _$PropertyRelationEndBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! PropertyRelationEnd) return false;
-    return true;
+    return path == other.path && property == other.property;
   }
 
   int get hashCode {
-    return 354698863;
+    return hashObjects([path, property]);
   }
 
   String toString() {
-    return 'PropertyRelationEnd {}';
+    return 'PropertyRelationEnd {'
+        'path=${path.toString()}\n'
+        'property=${property.toString()}\n'
+        '}';
   }
 }
 
 class _$PropertyRelationEndBuilder extends PropertyRelationEndBuilder {
   _$PropertyRelationEndBuilder() : super._();
-  void replace(PropertyRelationEnd other) {}
+  void replace(PropertyRelationEnd other) {
+    super.path = other.path;
+    super.property = other.property;
+  }
+
   void update(updates(PropertyRelationEndBuilder b)) {
     if (updates != null) updates(this);
   }
 
   PropertyRelationEnd build() {
-    return new _$PropertyRelationEnd._();
+    if (path == null) throw new ArgumentError('null path');
+    if (property == null) throw new ArgumentError('null property');
+    return new _$PropertyRelationEnd._(path: path, property: property);
   }
 }
 
