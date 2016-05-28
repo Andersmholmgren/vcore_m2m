@@ -16,17 +16,14 @@ import 'package:vcore_m2m/src/model/transform.dart';
 ///
 class RelationToTransformationGenerator extends Generator {
   Future<String> generate(Element element) async {
-    if (element is! LibraryElement) return null;
+    print('#########: ${element.name} ${element.runtimeType}');
+    if (element is! FunctionElement) return null;
     print('*********: ${element.name}');
-
-    // TODO(moi): better way of checking for top level declaration.
-    if (!element.definingCompilationUnit.functions
-        .any((element) {
-      print('${element.name}');
-      print(element.returnType.displayName);
-          return element.returnType.displayName.startsWith('TransformLookup');
-        }))
+    final FunctionElement felement = element;
+    print(felement.returnType.displayName);
+    if (!felement.returnType.displayName.startsWith('TransformLookup'))
       return null;
+
 
     print('yaaay: ${element.name}');
     return "yay";
