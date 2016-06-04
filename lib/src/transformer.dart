@@ -4,6 +4,8 @@ import 'package:built_collection/src/list.dart';
 
 import 'package:logging/logging.dart';
 import 'package:built_value/built_value.dart';
+import 'package:option/option.dart';
+import 'package:built_collection/built_collection.dart';
 
 final Logger _log = new Logger('transformer');
 typedef Classifier ClassifierMirrorSystem(Type type);
@@ -132,7 +134,9 @@ class _TransformationContext {
 //typedef T Transform2<F, T>(F from, Type fromType, Type toType);
 
 abstract class TransformationContext {
-  /*=T*/ transform/*<F, T>*/(/*=F*/ from, Type fromType, Type toType);
+//  /*=T*/ transform/*<F, T>*/(/*=F*/ from, Type fromType, Type toType);
+  Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
+      Type fromType, Type toType);
 }
 
 abstract class AbstractTransformation<
@@ -153,5 +157,33 @@ abstract class AbstractTransformation<
     mapProperties();
 
     return toBuilder.build();
+  }
+}
+
+abstract class BaseTransformationContext implements TransformationContext {
+  BuiltMap<TransformKey, TransformFactory> transformers;
+
+//
+//  TransformLookup/*<F, T>*/ transformLookup/*<F, T>*/() =>
+//    lookupTransform/*<F, T>*/;
+
+  Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
+      Type fromType, Type toType) {
+    return _lookupTransformFactory(fromType, toType)
+        .map((TransformFactory/*<F, T>*/ f) {
+      /*=T*/ transform/*<F, T>*/(/*=F*/ from) {
+        final Transform/*<F, T>*/ t = f();
+        return t(from);
+      }
+      return transform;
+    }) as Option<Transform/*<F, T>*/ >;
+  }
+
+  Option<TransformFactory/*<F, T>*/ > _lookupTransformFactory/*<F, T>*/(
+      Type fromType, Type toType) {
+    return new Option<TransformFactory/*<F, T>*/ >(
+        transformers[new TransformKey((b) => b
+          ..from = fromType
+          ..to = toType)] as TransformFactory/*<F, T>*/);
   }
 }
