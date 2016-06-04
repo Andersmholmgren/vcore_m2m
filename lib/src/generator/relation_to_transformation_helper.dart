@@ -1,5 +1,6 @@
 import 'package:vcore_m2m/vcore_m2m.dart';
 import 'package:vcore/vcore.dart';
+import 'package:option/option.dart';
 
 class RelationToTransformationHelper {
   final PackageRelation packageRelation;
@@ -95,21 +96,13 @@ class $className extends AbstractTransformation<$fromName,
     final from = propertyRelation.from;
     final toPathExpression = 'toBuilder.${to.path.join('.')}';
     final fromPathExpression = 'from.${from.path.join('?.')}';
-    final converterRequired = to.property.type != from.property.type;
-    String maybeConvertedValue(String valueVariable) {
-      String simpleTypeName(Property p) {
-//        print('simpleTypeName type: ${p.type.runtimeType} ${p.type.name} => ismulti: ${p.isMultiValued}');
-//        if (p.isMultiValued) { // not sure what to do with maps
-        if (p.isCollection) {
-          final gt = p.type as GenericType;
-          return gt.genericTypeValues.values.first.name;
-        }
-        return p.type.name;
-      }
 
-      return converterRequired
-          ? '${_uncapitalise(simpleTypeName(from.property))}To${simpleTypeName(to.property)}Transform($valueVariable)'
-          : valueVariable;
+    String maybeConvertedValue(String valueVariable) {
+      final descOpt = _getTransformDescriptor(propertyRelation);
+
+      return descOpt
+          .map((d) => '${d.variableName}($valueVariable)')
+          .getOrElse(() => valueVariable);
     }
 
     if (to.property.isCollection != from.property.isCollection) {
@@ -129,6 +122,40 @@ class $className extends AbstractTransformation<$fromName,
           '${maybeConvertedValue(fromPathExpression)};');
     }
   }
+
+  Option<_TransformDescriptor> _getTransformDescriptor(PropertyRelation pr) {
+    final to = pr.to;
+    final from = pr.from;
+    final converterRequired = to.property.type != from.property.type;
+    if (!converterRequired) return const None();
+
+    String simpleTypeName(Property p) {
+//        print('simpleTypeName type: ${p.type.runtimeType} ${p.type.name} => ismulti: ${p.isMultiValued}');
+//        if (p.isMultiValued) { // not sure what to do with maps
+      if (p.isCollection) {
+        final gt = p.type as GenericType;
+        return gt.genericTypeValues.values.first.name;
+      }
+      return p.type.name;
+    }
+
+    final fromName = simpleTypeName(from.property);
+    final toName = simpleTypeName(to.property);
+
+    final variableName = '${_uncapitalise(fromName)}To'
+        '${toName}Transform';
+
+    final typeString = 'Transform<$fromName, $toName>';
+
+    return new Some<_TransformDescriptor>(
+        new _TransformDescriptor(typeString, variableName));
+  }
+}
+
+class _TransformDescriptor {
+  final String typeString, variableName;
+
+  _TransformDescriptor(this.typeString, this.variableName);
 }
 
 // TODO: these should be in a util
