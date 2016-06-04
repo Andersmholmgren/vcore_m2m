@@ -47,14 +47,26 @@ class SchemaToPackageTransformation extends AbstractTransformation<Schema,
     final toName = relation.to.name;
     final className = '${fromName}To${toName}Transformation';
 
+    final transformers =
+        relation.propertyRelations.expand(_getTransformDescriptor);
+
+    final transformerFields = transformers
+        .map((d) => 'final ${d.typeString} ${d.variableName};')
+        .join('\n');
+
+    final transformerParams =
+        transformers.map((d) => 'this.${d.variableName}').join(', ');
+
+    final transformerParamExtra =
+        transformers.isEmpty ? '' : ', $transformerParams';
+
     sink.writeln('''
 class $className extends AbstractTransformation<$fromName,
     ${fromName}Builder, $toName, ${toName}Builder> {
-//  final Transform<Schema, ValueClass> schemaToValueClassTransform;
+  $transformerFields
 
   $className($fromName from, TransformationContext context
-//  ,
-//      this.schemaToValueClassTransform
+  $transformerParamExtra
       )
       : super(from, new ${toName}Builder(), context);
 
