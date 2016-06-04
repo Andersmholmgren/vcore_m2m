@@ -1,4 +1,5 @@
 import 'package:vcore_m2m/vcore_m2m.dart';
+import 'package:vcore/vcore.dart';
 
 class RelationToTransformationHelper {
   final PackageRelation packageRelation;
@@ -96,8 +97,13 @@ class $className extends AbstractTransformation<$fromName,
     final fromPathExpression = 'from.${from.path.join('?.')}';
     final converterRequired = to.property.type != from.property.type;
     String maybeConvertedValue(String valueVariable) {
+      String simpleTypeName(Property p) {
+        print('simpleTypeName type: ${p.type.runtimeType} ${p.type.name} => ismulti: ${p.isMultiValued}');
+        return p.type.name;
+      }
+
       return converterRequired
-          ? '${from.property.type.name}To${to.property.type.name}Transform($valueVariable)'
+          ? '${simpleTypeName(from.property)}To${simpleTypeName(to.property)}Transform($valueVariable)'
           : valueVariable;
     }
 
