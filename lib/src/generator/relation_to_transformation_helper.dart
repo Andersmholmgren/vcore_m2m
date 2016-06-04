@@ -98,7 +98,7 @@ class $className extends AbstractTransformation<$fromName,
     final converterRequired = to.property.type != from.property.type;
     String maybeConvertedValue(String valueVariable) {
       String simpleTypeName(Property p) {
-        print('simpleTypeName type: ${p.type.runtimeType} ${p.type.name} => ismulti: ${p.isMultiValued}');
+//        print('simpleTypeName type: ${p.type.runtimeType} ${p.type.name} => ismulti: ${p.isMultiValued}');
 //        if (p.isMultiValued) { // not sure what to do with maps
         if (p.isCollection) {
           final gt = p.type as GenericType;
@@ -108,7 +108,7 @@ class $className extends AbstractTransformation<$fromName,
       }
 
       return converterRequired
-          ? '${simpleTypeName(from.property)}To${simpleTypeName(to.property)}Transform($valueVariable)'
+          ? '${_uncapitalise(simpleTypeName(from.property))}To${simpleTypeName(to.property)}Transform($valueVariable)'
           : valueVariable;
     }
 
@@ -130,3 +130,10 @@ class $className extends AbstractTransformation<$fromName,
     }
   }
 }
+
+// TODO: these should be in a util
+String _capitalise(String s) =>
+    s.substring(0, 1).toUpperCase() + s.substring(1);
+
+String _uncapitalise(String s) =>
+    s.substring(0, 1).toLowerCase() + s.substring(1);
