@@ -10,36 +10,7 @@ class RelationToTransformationHelper {
 
   void generate() {
     packageRelation.classifierRelations.forEach(_generateClassifiers);
-
-/*
-'''
-class SchemaToPackageTransformation extends AbstractTransformation<Schema,
-    SchemaBuilder, Package, PackageBuilder> {
-  final Transform<Schema, ValueClass> schemaToValueClassTransform;
-
-  SchemaToPackageTransformation(Schema from, TransformationContext context,
-      this.schemaToValueClassTransform)
-      : super(from, new PackageBuilder(), context);
-
-  @override
-  void mapProperties() {
-    toBuilder.name = from?.id?.toString(); // TODO: name to id transform
-
-//    b.relate((f) => f.definitions).to((t) => t.classifiers);
-    if (from.definitions != null) {
-      from.definitions.forEach((d) {
-        final classifier = schemaToValueClassTransform(d);
-        toBuilder.classifiers.add(classifier);
-      });
-    }
-
-//    b.relate((f) => f).to((t) => t.classifiers);
-    toBuilder.classifiers.add(schemaToValueClassTransform(from));
-  }
-}
-'''
-
-     */
+    _generateTransformationContext();
   }
 
   void _generateClassifiers(ValueClassRelation relation) {
@@ -173,6 +144,70 @@ class $className extends AbstractTransformation<$fromName,
     return new Some<_TransformDescriptor>(new _TransformDescriptor(
         typeString, variableName, isBuilder(to.property)));
   }
+
+  void _generateTransformationContext() {
+    sink.writeln('''
+class _TransformationContext extends BaseTransformationContext {
+  _TransformationContext() {
+    transformers = (new MapBuilder<TransformKey, TransformFactory>()
+    ''');
+
+    packageRelation.classifierRelations.forEach((cr) {
+      final fromName = cr.from.name;
+      final toName = cr.to.name;
+      sink.writeln('''
+      ..[new TransformKey((b) => b
+        ..from = $fromName
+        ..to = $toName)] = _create${fromName}To${toName}Transform
+    ''');
+    });
+
+    sink.writeln(''')
+    .build();
+  }
+    ''');
+
+    sink.writeln('''
+}
+    ''');
+  }
+
+/*
+class _TransformationContext extends BaseTransformationContext {
+  _TransformationContext() {
+    transformers = (new MapBuilder<TransformKey, TransformFactory>()
+          ..[new TransformKey((b) => b
+            ..from = Schema
+            ..to = Package)] = _createSchemaToPackageTransform
+          ..[new TransformKey((b) => b
+            ..from = Schema
+            ..to = ValueClass)] = _createSchemaToValueClassTransform
+          ..[new TransformKey((b) => b
+            ..from = SchemaProperty
+            ..to = Property)] = _createSchemaPropertyToPropertyTransformation)
+        .build();
+  }
+
+  Transform<Schema, Package> _createSchemaToPackageTransform() {
+    return (Schema schema) => new SchemaToPackageTransformation(
+            schema, this, _createSchemaToValueClassTransform())
+        .transform();
+  }
+
+  Transform<Schema, ValueClass> _createSchemaToValueClassTransform() {
+    return (Schema schema) => new SchemaToValueClassTransformation(
+            schema, this, _createSchemaPropertyToPropertyTransformation())
+        .transform();
+  }
+
+  Transform<SchemaProperty, Property>
+      _createSchemaPropertyToPropertyTransformation() {
+    return (SchemaProperty schemaProperty) =>
+        new SchemaPropertyToPropertyTransformation(schemaProperty, this)
+            .transform();
+  }
+}
+     */
 }
 
 class _TransformDescriptor {
