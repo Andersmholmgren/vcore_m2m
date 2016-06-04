@@ -147,6 +147,12 @@ class $className extends AbstractTransformation<$fromName,
 
   void _generateTransformationContext() {
     sink.writeln('''
+Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
+    Type fromType, Type toType) {
+  return new _TransformationContext()
+      .lookupTransform/*<F, T>*/(fromType, toType);
+}
+
 class _TransformationContext extends BaseTransformationContext {
   _TransformationContext() {
     transformers = (new MapBuilder<TransformKey, TransformFactory>()
