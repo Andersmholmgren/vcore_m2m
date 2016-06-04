@@ -99,6 +99,11 @@ class $className extends AbstractTransformation<$fromName,
     String maybeConvertedValue(String valueVariable) {
       String simpleTypeName(Property p) {
         print('simpleTypeName type: ${p.type.runtimeType} ${p.type.name} => ismulti: ${p.isMultiValued}');
+//        if (p.isMultiValued) { // not sure what to do with maps
+        if (p.isCollection) {
+          final gt = p.type as GenericType;
+          return gt.genericTypeValues.values.first.name;
+        }
         return p.type.name;
       }
 
