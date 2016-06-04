@@ -112,8 +112,11 @@ class $className extends AbstractTransformation<$fromName,
     String maybeConvertedValue(String valueVariable) {
       final descOpt = _getTransformDescriptor(propertyRelation);
 
+      String toBuilderClause(_TransformDescriptor d) =>
+          d.isBuilder ? '?.toBuilder()' : '';
+
       return descOpt
-          .map((d) => '${d.variableName}($valueVariable)')
+          .map((d) => '${d.variableName}($valueVariable)${toBuilderClause(d)}')
           .getOrElse(() => valueVariable);
     }
 
@@ -124,8 +127,8 @@ class $className extends AbstractTransformation<$fromName,
     if (from.property.isCollection) {
       sink.writeln('''
     if ($fromPathExpression != null) {
-      $fromPathExpression.forEach((d) {
-        $toPathExpression.add(${maybeConvertedValue('d')});
+      $fromPathExpression.forEach((e) {
+        $toPathExpression.add(${maybeConvertedValue('e')});
       });
     }
       ''');
@@ -151,6 +154,14 @@ class $className extends AbstractTransformation<$fromName,
       return p.type.name;
     }
 
+    bool isBuilder(Property p) {
+      if (p.isCollection) {
+        final gt = p.type as GenericType;
+        return gt.genericTypeValues.values.first is ValueClass;
+      }
+      return p.type is ValueClass;
+    }
+
     final fromName = simpleTypeName(from.property);
     final toName = simpleTypeName(to.property);
 
@@ -159,15 +170,16 @@ class $className extends AbstractTransformation<$fromName,
 
     final typeString = 'Transform<$fromName, $toName>';
 
-    return new Some<_TransformDescriptor>(
-        new _TransformDescriptor(typeString, variableName));
+    return new Some<_TransformDescriptor>(new _TransformDescriptor(
+        typeString, variableName, isBuilder(to.property)));
   }
 }
 
 class _TransformDescriptor {
   final String typeString, variableName;
+  final bool isBuilder;
 
-  _TransformDescriptor(this.typeString, this.variableName);
+  _TransformDescriptor(this.typeString, this.variableName, this.isBuilder);
 }
 
 // TODO: these should be in a util
