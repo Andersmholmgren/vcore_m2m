@@ -173,6 +173,20 @@ class _TransformationContext extends BaseTransformationContext {
   }
     ''');
 
+    packageRelation.classifierRelations.forEach((cr) {
+      final fromName = cr.from.name;
+      final toName = cr.to.name;
+      sink.writeln('''
+    Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
+      return ($fromName ${_uncapitalise(fromName)}) => new ${fromName}To${toName}Transformation(
+        ${_uncapitalise(fromName)}, this
+//        , _createSchemaToValueClassTransform()
+        )
+        .transform();
+    }
+    ''');
+    });
+
     sink.writeln('''
 }
     ''');
