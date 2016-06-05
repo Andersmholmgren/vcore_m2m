@@ -6,15 +6,18 @@ import 'package:built_collection/built_collection.dart';
 class RelationToTransformationHelper {
   final PackageRelation packageRelation;
   final StringSink sink;
+  final _PackageRelationHelper packageRelationHelper;
 
-  RelationToTransformationHelper(this.packageRelation, this.sink);
+  RelationToTransformationHelper._(
+      this.packageRelation, this.sink, this.packageRelationHelper);
+
+  RelationToTransformationHelper(
+      PackageRelation packageRelation, StringSink sink)
+      : this._(
+            packageRelation, sink, new _PackageRelationHelper(packageRelation));
 
   void generate() {
-    final helpers = packageRelation.classifierRelations
-        .where((cr) => cr is ValueClassRelation)
-        .map((vr) => new _ValueClassRelationHelper(vr));
-
-    helpers.forEach(_generateClassifiers);
+    packageRelationHelper.valueClasses.values.forEach(_generateClassifiers);
     _generateTransformationContext();
   }
 
@@ -111,8 +114,9 @@ class _TransformationContext extends BaseTransformationContext {
     transformers = (new MapBuilder<TransformKey, TransformFactory>()
     ''');
 
-    packageRelation.classifierRelations.forEach((cr) {
-      final helper = new _ValueClassRelationHelper(cr as ValueClassRelation);
+    final classHelpers = packageRelationHelper.classHelpers;
+
+    classHelpers.forEach((helper) {
       sink.writeln('''
       ..[new TransformKey((b) => b
         ..from = ${helper.fromName}
@@ -125,8 +129,7 @@ class _TransformationContext extends BaseTransformationContext {
   }
     ''');
 
-    packageRelation.classifierRelations.forEach((cr) {
-      final helper = new _ValueClassRelationHelper(cr as ValueClassRelation);
+    classHelpers.forEach((helper) {
       final fromName = helper.fromName;
       final toName = helper.toName;
       final constructorParamExtra =
@@ -187,6 +190,7 @@ class _TransformationContext extends BaseTransformationContext {
 class _PackageRelationHelper {
   final PackageRelation packageRelation;
   final BuiltMap<ValueClassRelation, _ValueClassRelationHelper> valueClasses;
+  Iterable<_ValueClassRelationHelper> get classHelpers => valueClasses.values;
 
   Iterable<PropertyRelation> get abstractPropertyRelations =>
       valueClasses.keys.expand((cr) =>
