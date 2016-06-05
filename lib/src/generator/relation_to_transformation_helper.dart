@@ -150,6 +150,11 @@ class _TransformationContext extends BaseTransformationContext {
 
     packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
       print('requiredAbstractTransforms: ${from.name} -> ${to.name}');
+    });
+
+    packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
+      print('requiredAbstractTransforms: ${from.name} -> ${to.name}');
+      return;
 
       final providedTransforms = packageRelationHelper.providedTransforms;
       print('providedTransforms: $providedTransforms');
