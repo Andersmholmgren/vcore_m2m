@@ -256,9 +256,7 @@ class _PackageRelationHelper {
       abstractPropertyHelpers.map((h) => h.propertyRelation);
 
   BuiltSetMultimap<Classifier, Classifier> get requiredTransforms =>
-      _typeMapFor(allPropertyHelpers
-          .where((h) => h.converterRequired)
-          .map((h) => h.propertyRelation));
+      _typeMapFor2(allPropertyHelpers.where((h) => h.converterRequired));
 
   BuiltSetMultimap<Classifier, Classifier> get requiredAbstractTransforms =>
       _typeMapFor(abstractPropertyRelations);
@@ -290,6 +288,15 @@ class _PackageRelationHelper {
       b.addIterable(prs,
           key: (PropertyRelation pr) => pr.from.property.type,
           value: (PropertyRelation pr) => pr.to.property.type);
+    });
+  }
+
+  BuiltSetMultimap<Classifier, Classifier> _typeMapFor2(
+      Iterable<_PropertyRelationHelper> prs) {
+    return new BuiltSetMultimap<Classifier, Classifier>.build((b) {
+      b.addIterable(prs,
+          key: (_PropertyRelationHelper pr) => pr.from.singleType,
+          value: (_PropertyRelationHelper pr) => pr.to.singleType);
     });
   }
 }
@@ -340,9 +347,10 @@ class _PropertyRelationHelper {
   final _PropertyRelationEndHelper from;
   final _PropertyRelationEndHelper to;
 
-  String get fromName => from.simpleTypeName;
-  String get toName => to.simpleTypeName;
-  bool get converterRequired => to.end.property.type != from.end.property.type;
+  String get fromName => from.singleTypeName;
+  String get toName => to.singleTypeName;
+
+  bool get converterRequired => from.singleType != to.singleType;
 
   Option<_TransformDescriptor> _transformDescriptor;
 
@@ -374,14 +382,18 @@ class _PropertyRelationEndHelper {
 
   _PropertyRelationEndHelper(this.end);
 
-  String get simpleTypeName {
+  /// type for a single item. If in a collection then it is the type of a
+  /// single element
+  Classifier get singleType {
     final p = end.property;
     if (p.isCollection) {
       final gt = p.type as GenericType;
-      return gt.genericTypeValues.values.first.name;
+      return gt.genericTypeValues.values.first;
     }
-    return p.type.name;
+    return p.type;
   }
+
+  String get singleTypeName => singleType.name;
 
   bool get isBuilder {
     final p = end.property;
