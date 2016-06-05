@@ -186,6 +186,7 @@ class _TransformationContext extends BaseTransformationContext {
       print('matchedToTypes: ${matchedToTypes.map((t) => t.name)}');
 
       final validToTypes = matchedToTypes.where((c) => !c.isAbstract);
+      print('validToTypes: ${validToTypes.map((t) => t.name)}');
 
       if (validToTypes.isEmpty) {
         throw new StateError(
@@ -197,13 +198,23 @@ class _TransformationContext extends BaseTransformationContext {
             "Can currently only deal with one");
       } else {
         final nonAbstractToType = validToTypes.first;
+        // TODO: not sure why getting multiple instances of Schema etc
         final classHelper = classHelpers.firstWhere((h) =>
-            h.classRelation.from == from &&
-            h.classRelation.to == nonAbstractToType);
+            h.classRelation.from.name == from.name &&
+            h.classRelation.to.name == nonAbstractToType.name);
 
-        final propertyHelper = packageRelationHelper.abstractPropertyHelpers
-            .firstWhere((h) =>
-                h.propertyRelation.from == from && h.propertyRelation.to == to);
+        print('classHelper: $classHelper');
+
+        // TODO: not sure why getting multiple instances of Schema etc
+        final propertyHelper =
+            packageRelationHelper.abstractPropertyHelpers.firstWhere((h) {
+//          print(
+//              'from: ${h.from.singleTypeName}; ${h.propertyRelation.from.property.type.name}; ${from.name}');
+          return h.from.singleTypeName == from.name &&
+              h.to.singleTypeName == to.name;
+        });
+
+        print('propertyHelper: $propertyHelper');
 
         final transformDescriptor = propertyHelper.transformDescriptor.get();
 
