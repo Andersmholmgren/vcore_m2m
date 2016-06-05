@@ -126,11 +126,12 @@ class _TransformationContext extends BaseTransformationContext {
     ''');
 
     packageRelation.classifierRelations.forEach((cr) {
-      final fromName = cr.from.name;
-      final toName = cr.to.name;
+      final helper = new _ValueClassRelationHelper(cr as ValueClassRelation);
+      final fromName = helper.fromName;
+      final toName = helper.toName;
       sink.writeln('''
-    Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
-      return ($fromName ${_uncapitalise(fromName)}) => new ${fromName}To${toName}Transformation(
+    Transform<$fromName, $toName> ${helper.createTransformName}() {
+      return ($fromName ${_uncapitalise(fromName)}) => new ${helper.fromName}(
         ${_uncapitalise(fromName)}, this
 //        , _createSchemaToValueClassTransform()
         )
