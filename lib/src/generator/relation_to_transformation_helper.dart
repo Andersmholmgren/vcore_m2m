@@ -185,7 +185,9 @@ class _TransformationContext extends BaseTransformationContext {
 
 class _ValueClassRelationHelper {
   final ValueClassRelation classRelation;
-  final BuiltMap<PropertyRelation, _TransformDescriptor> descriptors;
+  final BuiltMap<PropertyRelation, _PropertyRelationHelper> properties;
+  Iterable<_TransformDescriptor> get descriptors =>
+      properties.values.expand((h) => h.transformDescriptor);
 
   bool get hasDependencies => descriptors.isNotEmpty;
 
@@ -194,66 +196,28 @@ class _ValueClassRelationHelper {
   String get className => '${fromName}To${toName}Transformation';
   String get createTransformName => '_create${fromName}To${toName}Transform';
 
-  String get transformerFields => descriptors.values
+  String get transformerFields => descriptors
       .map((d) => 'final ${d.typeString} ${d.variableName};')
       .join('\n');
 
   String get transformerParams =>
-      descriptors.values.map((d) => 'this.${d.variableName}').join(', ');
+      descriptors.map((d) => 'this.${d.variableName}').join(', ');
 
-  _ValueClassRelationHelper._(this.classRelation, this.descriptors);
+  _ValueClassRelationHelper._(this.classRelation, this.properties);
 
   _ValueClassRelationHelper(ValueClassRelation classRelation)
       : this._(classRelation,
-            new BuiltMap<PropertyRelation, _TransformDescriptor>.build(
+            new BuiltMap<PropertyRelation, _PropertyRelationHelper>.build(
                 (MapBuilder b) {
           classRelation.propertyRelations.forEach((pr) {
-            final desc = _getTransformDescriptor(pr);
-            if (desc is Some) {
-              b[pr] = desc.get();
-            }
+            b[pr] = new _PropertyRelationHelper(pr);
           });
         }));
 
   Option<_TransformDescriptor> getTransformDescriptor(PropertyRelation pr) =>
-      new Option<_TransformDescriptor>(descriptors[pr]);
-
-  static Option<_TransformDescriptor> _getTransformDescriptor(
-      PropertyRelation pr) {
-    final to = pr.to;
-    final from = pr.from;
-    final converterRequired = to.property.type != from.property.type;
-    if (!converterRequired) return const None();
-
-    String simpleTypeName(Property p) {
-//        print('simpleTypeName type: ${p.type.runtimeType} ${p.type.name} => ismulti: ${p.isMultiValued}');
-//        if (p.isMultiValued) { // not sure what to do with maps
-      if (p.isCollection) {
-        final gt = p.type as GenericType;
-        return gt.genericTypeValues.values.first.name;
-      }
-      return p.type.name;
-    }
-
-    bool isBuilder(Property p) {
-      if (p.isCollection) {
-        final gt = p.type as GenericType;
-        return gt.genericTypeValues.values.first is ValueClass;
-      }
-      return p.type is ValueClass;
-    }
-
-    final fromName = simpleTypeName(from.property);
-    final toName = simpleTypeName(to.property);
-
-    final variableName = '${_uncapitalise(fromName)}To'
-        '${toName}Transform';
-
-    final typeString = 'Transform<$fromName, $toName>';
-
-    return new Some<_TransformDescriptor>(new _TransformDescriptor(
-        typeString, variableName, isBuilder(to.property)));
-  }
+      new Option<_PropertyRelationHelper>(properties[pr])
+          .expand((_PropertyRelationHelper h) => h.transformDescriptor)
+      as Option<_TransformDescriptor>;
 }
 
 class _PropertyRelationHelper {
