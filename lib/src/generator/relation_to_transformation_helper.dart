@@ -264,7 +264,7 @@ class _PackageRelationHelper {
       _typeMapFor2(allPropertyHelpers.where((h) => h.converterRequired));
 
   BuiltSetMultimap<Classifier, Classifier> get requiredAbstractTransforms =>
-      _typeMapFor(abstractPropertyRelations);
+      _typeMapFor2(abstractPropertyHelpers);
 
   BuiltSetMultimap<Classifier, Classifier> get providedTransforms {
     return new BuiltSetMultimap<Classifier, Classifier>.build((b) {
