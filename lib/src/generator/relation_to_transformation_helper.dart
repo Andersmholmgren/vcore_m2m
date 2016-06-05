@@ -145,7 +145,7 @@ class _TransformationContext extends BaseTransformationContext {
     });
 
     packageRelationHelper.requiredTransforms.forEach((from, to) {
-      print('require: ${from.name} -> ${to.name}');
+      print('require: ${from.name} -> ${to.name} (${to.isAbstract})');
     });
 
     packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
@@ -250,7 +250,7 @@ class _PackageRelationHelper {
       classHelpers.expand((ch) => ch.properties.values);
 
   Iterable<_PropertyRelationHelper> get abstractPropertyHelpers =>
-      allPropertyHelpers.where((h) => h.to.end.property.type.isAbstract);
+      allPropertyHelpers.where((h) => h.to.singleType.isAbstract);
 
   Iterable<PropertyRelation> get abstractPropertyRelations =>
       abstractPropertyHelpers.map((h) => h.propertyRelation);
