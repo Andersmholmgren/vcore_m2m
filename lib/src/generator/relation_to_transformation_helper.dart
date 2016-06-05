@@ -144,6 +144,55 @@ class _TransformationContext extends BaseTransformationContext {
     ''');
     });
 
+    packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
+      print('requiredAbstractTransforms: ${from.name} -> ${to.name}');
+
+      final providedTransforms = packageRelationHelper.providedTransforms;
+      print('providedTransforms: $providedTransforms');
+      final possibleToTypes = providedTransforms.keys
+          .where((k) => k == from)
+          .expand((k) => providedTransforms[k]);
+
+      print('possibleToTypes: $possibleToTypes');
+
+      bool isSubTypeOfTo(Classifier c) {
+        if (c == to)
+          return true;
+        else if (c is ValueClass) {
+          return (c as ValueClass).superTypes.any(isSubTypeOfTo);
+        } else
+          return false;
+      }
+
+      final validToTypes =
+          possibleToTypes.where(isSubTypeOfTo).where((c) => !c.isAbstract);
+
+      if (validToTypes.isEmpty) {
+        throw new StateError(
+            "No non abstract matching transform from $from to $to");
+      } else if (validToTypes.length > 1) {
+        throw new StateError(
+            "Too many (${validToTypes.length}) matching transform from $from to $to. "
+            "Can currently only deal with one");
+      } else {
+        final nonAbstractToType = validToTypes.first;
+        final classHelper = classHelpers.firstWhere((h) =>
+            h.classRelation.from == from &&
+            h.classRelation.to == nonAbstractToType);
+
+        final propertyHelper = packageRelationHelper.abstractPropertyHelpers
+            .firstWhere((h) =>
+                h.propertyRelation.from == from && h.propertyRelation.to == to);
+
+        final transformDescriptor = propertyHelper.transformDescriptor.get();
+
+        sink.writeln('''
+  ${transformDescriptor.createMethodDeclaration} =>
+      ${classHelper.createTransformName}() as ${transformDescriptor.typeString};
+        ''');
+      }
+    });
+
     sink.writeln('''
 }
     ''');
@@ -190,23 +239,30 @@ class _TransformationContext extends BaseTransformationContext {
 class _PackageRelationHelper {
   final PackageRelation packageRelation;
   final BuiltMap<ValueClassRelation, _ValueClassRelationHelper> valueClasses;
+
   Iterable<_ValueClassRelationHelper> get classHelpers => valueClasses.values;
 
-  Iterable<PropertyRelation> get abstractPropertyRelations =>
-      valueClasses.keys.expand((cr) =>
-          cr.propertyRelations.where((pr) => pr.to.property.type.isAbstract));
+  Iterable<_PropertyRelationHelper> get allPropertyHelpers =>
+      classHelpers.expand((ch) => ch.properties.values);
 
-  Map<Classifier, Classifier> get requiredTransforms =>
+  Iterable<_PropertyRelationHelper> get abstractPropertyHelpers =>
+      allPropertyHelpers.where((h) => h.to.end.property.type.isAbstract);
+
+  Iterable<PropertyRelation> get abstractPropertyRelations =>
+      abstractPropertyHelpers.map((h) => h.propertyRelation);
+
+  BuiltSetMultimap<Classifier, Classifier> get requiredTransforms =>
       _typeMapFor(valueClasses.keys.expand((cr) => cr.propertyRelations));
 
-  Map<Classifier, Classifier> get requiredAbstractTransforms =>
+  BuiltSetMultimap<Classifier, Classifier> get requiredAbstractTransforms =>
       _typeMapFor(abstractPropertyRelations);
 
-  Map<Classifier, Classifier> get providedTransforms {
-    return new Map<Classifier, Classifier>.fromIterable(
-        packageRelation.classifierRelations,
-        key: (ClassifierRelation cr) => cr.from,
-        value: (ClassifierRelation cr) => cr.to);
+  BuiltSetMultimap<Classifier, Classifier> get providedTransforms {
+    return new BuiltSetMultimap<Classifier, Classifier>.build((b) {
+      b.addIterable(packageRelation.classifierRelations,
+          key: (ClassifierRelation cr) => cr.from,
+          value: (ClassifierRelation cr) => cr.to);
+    });
   }
 
   _PackageRelationHelper._(this.packageRelation, this.valueClasses);
@@ -222,10 +278,13 @@ class _PackageRelationHelper {
           });
         }));
 
-  Map<Classifier, Classifier> _typeMapFor(Iterable<PropertyRelation> prs) {
-    return new Map<Classifier, Classifier>.fromIterable(prs,
-        key: (PropertyRelation pr) => pr.from.property.type,
-        value: (PropertyRelation pr) => pr.to.property.type);
+  BuiltSetMultimap<Classifier, Classifier> _typeMapFor(
+      Iterable<PropertyRelation> prs) {
+    return new BuiltSetMultimap<Classifier, Classifier>.build((b) {
+      b.addIterable(prs,
+          key: (PropertyRelation pr) => pr.from.property.type,
+          value: (PropertyRelation pr) => pr.to.property.type);
+    });
   }
 }
 
@@ -331,6 +390,9 @@ class _PropertyRelationEndHelper {
 class _TransformDescriptor {
   final String typeString, variableName;
   final bool isBuilder;
+
+  String get createMethodDeclaration =>
+      '$typeString _create${_capitalise(variableName)}()';
 
   _TransformDescriptor(this.typeString, this.variableName, this.isBuilder);
 }
