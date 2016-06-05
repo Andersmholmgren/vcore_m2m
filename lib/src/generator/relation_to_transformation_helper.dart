@@ -234,6 +234,7 @@ class _PropertyRelationHelper {
 
   String get fromName => from.simpleTypeName;
   String get toName => to.simpleTypeName;
+  bool get converterRequired => to.end.property.type != from.end.property.type;
 
   Option<_TransformDescriptor> _transformDescriptor;
 
@@ -241,7 +242,6 @@ class _PropertyRelationHelper {
       _transformDescriptor ??= _createTransformDescriptor();
 
   Option<_TransformDescriptor> _createTransformDescriptor() {
-    final converterRequired = to.end.property.type != from.end.property.type;
     if (!converterRequired) return const None();
 
     final variableName = '${_uncapitalise(fromName)}To'
