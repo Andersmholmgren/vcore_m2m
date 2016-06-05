@@ -256,6 +256,64 @@ class _ValueClassRelationHelper {
   }
 }
 
+class _PropertyRelationHelper {
+  final PropertyRelation propertyRelation;
+  final _PropertyRelationEndHelper from;
+  final _PropertyRelationEndHelper to;
+
+  _PropertyRelationHelper._(this.propertyRelation, this.from, this.to);
+  _PropertyRelationHelper(PropertyRelation propertyRelation)
+      : this._(
+            propertyRelation,
+            new _PropertyRelationEndHelper(propertyRelation.from),
+            new _PropertyRelationEndHelper(propertyRelation.to));
+
+  String get fromName => from.simpleTypeName;
+  String get toName => to.simpleTypeName;
+
+  Option<_TransformDescriptor> _transformDescriptor;
+
+  Option<_TransformDescriptor> get transformDescriptor =>
+      _transformDescriptor ??= _createTransformDescriptor();
+
+  Option<_TransformDescriptor> _createTransformDescriptor() {
+    final converterRequired = to.end.property.type != from.end.property.type;
+    if (!converterRequired) return const None();
+
+    final variableName = '${_uncapitalise(fromName)}To'
+        '${toName}Transform';
+
+    final typeString = 'Transform<$fromName, $toName>';
+
+    return new Some<_TransformDescriptor>(
+        new _TransformDescriptor(typeString, variableName, to.isBuilder));
+  }
+}
+
+class _PropertyRelationEndHelper {
+  final PropertyRelationEnd end;
+
+  _PropertyRelationEndHelper(this.end);
+
+  String get simpleTypeName {
+    final p = end.property;
+    if (p.isCollection) {
+      final gt = p.type as GenericType;
+      return gt.genericTypeValues.values.first.name;
+    }
+    return p.type.name;
+  }
+
+  bool get isBuilder {
+    final p = end.property;
+    if (p.isCollection) {
+      final gt = p.type as GenericType;
+      return gt.genericTypeValues.values.first is ValueClass;
+    }
+    return p.type is ValueClass;
+  }
+}
+
 class _TransformDescriptor {
   final String typeString, variableName;
   final bool isBuilder;
