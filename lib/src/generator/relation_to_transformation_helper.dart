@@ -144,6 +144,10 @@ class _TransformationContext extends BaseTransformationContext {
     ''');
     });
 
+    packageRelationHelper.requiredTransforms.forEach((from, to) {
+      print('require: ${from.name} -> ${to.name}');
+    });
+
     packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
       print('requiredAbstractTransforms: ${from.name} -> ${to.name}');
 
