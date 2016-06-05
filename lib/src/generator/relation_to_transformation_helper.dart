@@ -135,7 +135,7 @@ class _TransformationContext extends BaseTransformationContext {
     Transform<$fromName, $toName> ${helper.createTransformName}() {
       return ($fromName ${_uncapitalise(fromName)}) => new ${helper.className}(
         ${_uncapitalise(fromName)}, this
-        $constructorParamExtra())
+        $constructorParamExtra)
         .transform();
     }
     ''');
@@ -205,7 +205,7 @@ class _ValueClassRelationHelper {
       descriptors.map((d) => 'this.${d.variableName}').join(', ');
 
   String get constructorParams => descriptors
-      .map((d) => '_create${_capitalise(d.variableName)}')
+      .map((d) => '_create${_capitalise(d.variableName)}()')
       .join(', ');
 
   _ValueClassRelationHelper._(this.classRelation, this.properties);
