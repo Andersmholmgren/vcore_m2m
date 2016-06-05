@@ -1,6 +1,7 @@
 import 'transform_api_impl.dart' as impl;
 import 'package:vcore_m2m/src/model/transform.dart';
 import 'package:vcore/vcore.dart';
+import 'dart:convert';
 
 PackageRelation relateModels(
         Package from,
@@ -31,5 +32,9 @@ abstract class PropertyRelationHelper2<F, T> {
 }
 
 abstract class PropertyRelationHelper3<F, T> {
+  /// TODO: not sure this makes sense. Maybe just codec
+  @deprecated
   withNameRelation(NameRelation nameRelation);
+
+  via/*<A,V>*/(Codec/*<A,V>*/ codec);
 }

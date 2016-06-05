@@ -75,6 +75,12 @@ typedef Option<Transform<F, T>> TransformLookup<F, T>(
 
 typedef Transform<F, T> TransformFactory<F, T>();
 
+// Just a codec I think
+//abstract class BidirectionalTransform<F, T> {
+//  Transform<F, T> get forwards;
+//  Transform<T, F> get backwards;
+//}
+
 abstract class ClassifierRelation<
         V extends Classifier<V, B>,
         B extends ClassifierBuilder<V, B>,
