@@ -184,6 +184,24 @@ class _TransformationContext extends BaseTransformationContext {
      */
 }
 
+class _PackageRelationHelper {
+  final PackageRelation packageRelation;
+  final BuiltMap<ValueClassRelation, _ValueClassRelationHelper> valueClasses;
+
+  _PackageRelationHelper._(this.packageRelation, this.valueClasses);
+
+  _PackageRelationHelper(PackageRelation packageRelation)
+      : this._(packageRelation,
+            new BuiltMap<ValueClassRelation, _ValueClassRelationHelper>.build(
+                (MapBuilder b) {
+          packageRelation.classifierRelations.forEach((cr) {
+            if (cr is ValueClassRelation) {
+              b[cr] = new _ValueClassRelationHelper(cr as ValueClassRelation);
+            }
+          });
+        }));
+}
+
 class _ValueClassRelationHelper {
   final ValueClassRelation classRelation;
   final BuiltMap<PropertyRelation, _PropertyRelationHelper> properties;
