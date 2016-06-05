@@ -198,6 +198,13 @@ class _PackageRelationHelper {
   Map<Classifier, Classifier> get requiredAbstractTransforms =>
       _typeMapFor(abstractPropertyRelations);
 
+  Map<Classifier, Classifier> get providedTransforms {
+    return new Map<Classifier, Classifier>.fromIterable(
+        packageRelation.classifierRelations,
+        key: (ClassifierRelation cr) => cr.from,
+        value: (ClassifierRelation cr) => cr.to);
+  }
+
   _PackageRelationHelper._(this.packageRelation, this.valueClasses);
 
   _PackageRelationHelper(PackageRelation packageRelation)
