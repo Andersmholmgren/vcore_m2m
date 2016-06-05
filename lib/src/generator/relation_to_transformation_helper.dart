@@ -188,6 +188,10 @@ class _PackageRelationHelper {
   final PackageRelation packageRelation;
   final BuiltMap<ValueClassRelation, _ValueClassRelationHelper> valueClasses;
 
+  Iterable<PropertyRelation> get abstractPropertyRelations =>
+      valueClasses.keys.expand((cr) =>
+          cr.propertyRelations.where((pr) => pr.to.property.type.isAbstract));
+
   _PackageRelationHelper._(this.packageRelation, this.valueClasses);
 
   _PackageRelationHelper(PackageRelation packageRelation)
