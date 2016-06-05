@@ -112,12 +112,11 @@ class _TransformationContext extends BaseTransformationContext {
     ''');
 
     packageRelation.classifierRelations.forEach((cr) {
-      final fromName = cr.from.name;
-      final toName = cr.to.name;
+      final helper = new _ValueClassRelationHelper(cr as ValueClassRelation);
       sink.writeln('''
       ..[new TransformKey((b) => b
-        ..from = $fromName
-        ..to = $toName)] = _create${fromName}To${toName}Transform
+        ..from = ${helper.fromName}
+        ..to = ${helper.toName})] = ${helper.createTransformName}
     ''');
     });
 
@@ -192,6 +191,7 @@ class _ValueClassRelationHelper {
   String get fromName => classRelation.from.name;
   String get toName => classRelation.to.name;
   String get className => '${fromName}To${toName}Transformation';
+  String get createTransformName => '_create${fromName}To${toName}Transform';
 
   String get transformerFields => descriptors.values
       .map((d) => 'final ${d.typeString} ${d.variableName};')
