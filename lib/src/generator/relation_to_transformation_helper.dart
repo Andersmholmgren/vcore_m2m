@@ -192,6 +192,12 @@ class _PackageRelationHelper {
       valueClasses.keys.expand((cr) =>
           cr.propertyRelations.where((pr) => pr.to.property.type.isAbstract));
 
+  Map<Classifier, Classifier> get requiredTransforms =>
+      _typeMapFor(valueClasses.keys.expand((cr) => cr.propertyRelations));
+
+  Map<Classifier, Classifier> get requiredAbstractTransforms =>
+      _typeMapFor(abstractPropertyRelations);
+
   _PackageRelationHelper._(this.packageRelation, this.valueClasses);
 
   _PackageRelationHelper(PackageRelation packageRelation)
@@ -204,6 +210,12 @@ class _PackageRelationHelper {
             }
           });
         }));
+
+  Map<Classifier, Classifier> _typeMapFor(Iterable<PropertyRelation> prs) {
+    return new Map<Classifier, Classifier>.fromIterable(prs,
+        key: (PropertyRelation pr) => pr.from.property.type,
+        value: (PropertyRelation pr) => pr.to.property.type);
+  }
 }
 
 class _ValueClassRelationHelper {
