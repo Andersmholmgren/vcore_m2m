@@ -129,12 +129,13 @@ class _TransformationContext extends BaseTransformationContext {
       final helper = new _ValueClassRelationHelper(cr as ValueClassRelation);
       final fromName = helper.fromName;
       final toName = helper.toName;
+      final constructorParamExtra =
+          helper.hasDependencies ? ', ${helper.constructorParams}' : '';
       sink.writeln('''
     Transform<$fromName, $toName> ${helper.createTransformName}() {
-      return ($fromName ${_uncapitalise(fromName)}) => new ${helper.fromName}(
+      return ($fromName ${_uncapitalise(fromName)}) => new ${helper.className}(
         ${_uncapitalise(fromName)}, this
-//        , _createSchemaToValueClassTransform()
-        )
+        $constructorParamExtra())
         .transform();
     }
     ''');
@@ -202,6 +203,10 @@ class _ValueClassRelationHelper {
 
   String get transformerParams =>
       descriptors.map((d) => 'this.${d.variableName}').join(', ');
+
+  String get constructorParams => descriptors
+      .map((d) => '_create${_capitalise(d.variableName)}')
+      .join(', ');
 
   _ValueClassRelationHelper._(this.classRelation, this.properties);
 
