@@ -44,6 +44,8 @@ abstract class PackageRelation
     return new PackageRelation((PackageRelationBuilder b) => b
       ..from = to
       ..to = from
+      ..reflectFrom = reflectTo
+      ..reflectTo = reflectFrom
       ..classifierRelations = (new SetBuilder<ClassifierRelation>()
         ..addAll(classifierRelations.map((pr) => pr.reversed()))));
   }
