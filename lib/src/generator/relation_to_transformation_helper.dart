@@ -19,13 +19,6 @@ class RelationToTransformationHelper {
   }
 
   void _generateClassifiers(_ValueClassRelationHelper helper) {
-//    final fromName = relation.from.name;
-//    final toName = relation.to.name;
-//    final className = '${fromName}To${toName}Transformation';
-//
-//    final transformers =
-//        relation.propertyRelations.expand(_getTransformDescriptor);
-
     final transformerParamExtra =
         helper.hasDependencies ? ', ${helper.transformerParams}' : '';
 
@@ -71,10 +64,6 @@ class ${helper.className} extends AbstractTransformation<${helper.fromName},
 
   void _generateProperty(
       PropertyRelation propertyRelation, _ValueClassRelationHelper helper) {
-    // TODO: damn need to know types at both ends of the relation here
-    // Do we reflect here or when we create the relation and store it on the relation?
-//    propertyRelation.
-
     final to = propertyRelation.to;
     final from = propertyRelation.from;
     final toPathExpression = 'toBuilder.${to.path.join('.')}';
@@ -108,42 +97,6 @@ class ${helper.className} extends AbstractTransformation<${helper.fromName},
           '${maybeConvertedValue(fromPathExpression)};');
     }
   }
-
-//  Option<_TransformDescriptor> _getTransformDescriptor(PropertyRelation pr) {
-//    final to = pr.to;
-//    final from = pr.from;
-//    final converterRequired = to.property.type != from.property.type;
-//    if (!converterRequired) return const None();
-//
-//    String simpleTypeName(Property p) {
-////        print('simpleTypeName type: ${p.type.runtimeType} ${p.type.name} => ismulti: ${p.isMultiValued}');
-////        if (p.isMultiValued) { // not sure what to do with maps
-//      if (p.isCollection) {
-//        final gt = p.type as GenericType;
-//        return gt.genericTypeValues.values.first.name;
-//      }
-//      return p.type.name;
-//    }
-//
-//    bool isBuilder(Property p) {
-//      if (p.isCollection) {
-//        final gt = p.type as GenericType;
-//        return gt.genericTypeValues.values.first is ValueClass;
-//      }
-//      return p.type is ValueClass;
-//    }
-//
-//    final fromName = simpleTypeName(from.property);
-//    final toName = simpleTypeName(to.property);
-//
-//    final variableName = '${_uncapitalise(fromName)}To'
-//        '${toName}Transform';
-//
-//    final typeString = 'Transform<$fromName, $toName>';
-//
-//    return new Some<_TransformDescriptor>(new _TransformDescriptor(
-//        typeString, variableName, isBuilder(to.property)));
-//  }
 
   void _generateTransformationContext() {
     sink.writeln('''
