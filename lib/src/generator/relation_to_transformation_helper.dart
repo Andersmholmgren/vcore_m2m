@@ -225,13 +225,6 @@ class _PropertyRelationHelper {
   final _PropertyRelationEndHelper from;
   final _PropertyRelationEndHelper to;
 
-  _PropertyRelationHelper._(this.propertyRelation, this.from, this.to);
-  _PropertyRelationHelper(PropertyRelation propertyRelation)
-      : this._(
-            propertyRelation,
-            new _PropertyRelationEndHelper(propertyRelation.from),
-            new _PropertyRelationEndHelper(propertyRelation.to));
-
   String get fromName => from.simpleTypeName;
   String get toName => to.simpleTypeName;
   bool get converterRequired => to.end.property.type != from.end.property.type;
@@ -252,6 +245,13 @@ class _PropertyRelationHelper {
     return new Some<_TransformDescriptor>(
         new _TransformDescriptor(typeString, variableName, to.isBuilder));
   }
+
+  _PropertyRelationHelper._(this.propertyRelation, this.from, this.to);
+  _PropertyRelationHelper(PropertyRelation propertyRelation)
+      : this._(
+            propertyRelation,
+            new _PropertyRelationEndHelper(propertyRelation.from),
+            new _PropertyRelationEndHelper(propertyRelation.to));
 }
 
 class _PropertyRelationEndHelper {
