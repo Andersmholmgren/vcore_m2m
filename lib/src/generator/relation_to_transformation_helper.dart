@@ -148,24 +148,33 @@ class _TransformationContext extends BaseTransformationContext {
       print('require: ${from.name} -> ${to.name} (${to.isAbstract})');
     });
 
-    packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
-      print('requiredAbstractTransforms: ${from.name} -> ${to.name}');
+    packageRelationHelper.providedTransforms.forEach((from, to) {
+      print('provided: ${from.name} -> ${to.name}');
     });
 
+//    packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
+//      print('requiredAbstractTransforms: ${from.name} -> ${to.name}');
+//    });
+
     packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
-      print('requiredAbstractTransforms: ${from.name} -> ${to.name}');
-      return;
+      final fromName = from.name;
+      final toName = to.name;
+      print('requiredAbstractTransforms: $fromName -> $toName');
 
       final providedTransforms = packageRelationHelper.providedTransforms;
-      print('providedTransforms: $providedTransforms');
-      final possibleToTypes = providedTransforms.keys
-          .where((k) => k == from)
-          .expand((k) => providedTransforms[k]);
+      final possibleToTypes = providedTransforms.keys.where((k) {
+//        print(
+//            '${k.name} (${identityHashCode(k)}) == ${from.name} (${identityHashCode(from)}) => ${k == from}');
+//        return k == from;
+        // TODO: not sure why getting multiple instances of Schema etc
+        return k.name == from.name;
+      }).expand((k) => providedTransforms[k]);
 
-      print('possibleToTypes: $possibleToTypes');
+      print('possibleToTypes: ${possibleToTypes.map((t) => t.name)}');
 
       bool isSubTypeOfTo(Classifier c) {
-        if (c == to)
+        // TODO: not sure why getting multiple instances of Schema etc
+        if (c.name == to.name)
           return true;
         else if (c is ValueClass) {
           return (c as ValueClass).superTypes.any(isSubTypeOfTo);
@@ -173,15 +182,18 @@ class _TransformationContext extends BaseTransformationContext {
           return false;
       }
 
-      final validToTypes =
-          possibleToTypes.where(isSubTypeOfTo).where((c) => !c.isAbstract);
+      final matchedToTypes = possibleToTypes.where(isSubTypeOfTo);
+      print('matchedToTypes: ${matchedToTypes.map((t) => t.name)}');
+
+      final validToTypes = matchedToTypes.where((c) => !c.isAbstract);
 
       if (validToTypes.isEmpty) {
         throw new StateError(
-            "No non abstract matching transform from $from to $to");
+            "No non abstract matching transform from $fromName to $toName");
       } else if (validToTypes.length > 1) {
         throw new StateError(
-            "Too many (${validToTypes.length}) matching transform from $from to $to. "
+            "Too many (${validToTypes.length}) matching transform from "
+            "$fromName to $toName. "
             "Can currently only deal with one");
       } else {
         final nonAbstractToType = validToTypes.first;
