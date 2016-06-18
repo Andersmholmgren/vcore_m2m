@@ -106,12 +106,14 @@ class ${helper.className} extends AbstractTransformation<${helper.fromName},
     sink.writeln('''
 Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
     Type fromType, Type toType) {
-  return new _TransformationContext()
+  return new _TransformationContext(relations.rootPackageRelation)
       .lookupTransform/*<F, T>*/(fromType, toType);
 }
 
 class _TransformationContext extends BaseTransformationContext {
-  _TransformationContext() {
+  final PackageRelation packageRelation;
+
+  _TransformationContext(this.packageRelation) {
     transformers = (new MapBuilder<TransformKey, TransformFactory>()
     ''');
 
@@ -351,7 +353,7 @@ class _ValueClassRelationHelper {
       descriptors.map((d) => 'this.${d.variableName}').join(', ');
 
   String get constructorParams => descriptors
-      .map((d) => '_create${_capitalise(d.variableName)}()')
+      .map((d) => d.createMethodDeclaration)
       .join(', ');
 
   _ValueClassRelationHelper._(this.classRelation, this.properties);
@@ -443,6 +445,17 @@ class _TransformDescriptor {
 
   _TransformDescriptor(this.typeString, this.variableName, this.isBuilder);
 }
+
+/*
+    final classRelation = packageRelation.classifierRelations.firstWhere(
+            (cr) => cr.from.name == 'Schema' && cr.to.name == 'Package')
+        as ValueClassRelation;
+
+    final pr = classRelation.propertyRelations
+        .firstWhere((pr) => pr.from.path == 'id' && pr.to.path == 'name');
+    final transform = pr.transform.forwards as Transform<Uri, String>;
+
+ */
 
 // TODO: these should be in a util
 String _capitalise(String s) =>
