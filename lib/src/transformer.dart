@@ -153,8 +153,11 @@ abstract class AbstractTransformation<
   void mapProperties();
 
   T transform() {
-    // create
+    _log.fine(() => 'transform for $runtimeType');
+
     mapProperties();
+
+    _log.fine(() => 'building $runtimeType');
 
     return toBuilder.build();
   }

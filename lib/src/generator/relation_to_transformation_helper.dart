@@ -2,6 +2,9 @@ import 'package:vcore_m2m/vcore_m2m.dart';
 import 'package:vcore/vcore.dart';
 import 'package:option/option.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:logging/logging.dart';
+
+final _log = new Logger('vcore.m2m.relation.transformation');
 
 class RelationToTransformationHelper {
   final PackageRelation packageRelation;
@@ -17,6 +20,12 @@ class RelationToTransformationHelper {
             packageRelation, sink, new _PackageRelationHelper(packageRelation));
 
   void generate() {
+    _log.info(() => 'generating transformer for ${packageRelationHelper.name}');
+
+    sink.writeln('''
+    final _log = new Logger('${packageRelationHelper.name}');
+    ''');
+
     packageRelationHelper.valueClasses.values.forEach(_generateClassifiers);
     _generateTransformationContext();
   }
@@ -37,6 +46,8 @@ class ${helper.className} extends AbstractTransformation<${helper.fromName},
 
   @override
   void mapProperties() {
+    _log.finer(() => 'mapProperties for ${helper.className}');
+
   ''');
     _generateProperties(helper);
     sink.writeln('''
@@ -294,6 +305,9 @@ class _PackageRelationHelper {
           value: (ClassifierRelation cr) => cr.to);
     });
   }
+
+  String get name =>
+      '${packageRelation.from.name}To${packageRelation.to.name}Relation';
 
   _PackageRelationHelper._(this.packageRelation, this.valueClasses);
 
