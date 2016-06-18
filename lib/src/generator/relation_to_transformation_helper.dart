@@ -69,6 +69,7 @@ class ${helper.className} extends AbstractTransformation<${helper.fromName},
       PropertyRelation propertyRelation, _ValueClassRelationHelper helper) {
     final to = propertyRelation.to;
     final from = propertyRelation.from;
+
     final toPathExpression = 'toBuilder.${to.path.join('.')}';
     final fromPathExpression = 'from.${from.path.join('?.')}';
 
