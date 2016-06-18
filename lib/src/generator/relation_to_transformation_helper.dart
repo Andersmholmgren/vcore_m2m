@@ -157,7 +157,34 @@ class _TransformationContext extends BaseTransformationContext {
 
   void _generateCustomTransformFactoryMethods(
       Iterable<_ValueClassRelationHelper> classHelpers) {
-    classHelpers.
+    classHelpers.forEach((ch) {
+      ch.properties.forEach((pr, ph) {
+        if (ph.hasCustomTransform) {
+/*
+          /*
+    final classRelation = packageRelation.classifierRelations.firstWhere(
+            (cr) => cr.from.name == 'Schema' && cr.to.name == 'Package')
+        as ValueClassRelation;
+
+    final pr = classRelation.propertyRelations
+        .firstWhere((pr) => pr.from.path == 'id' && pr.to.path == 'name');
+    final transform = pr.transform.forwards as Transform<Uri, String>;
+
+ */
+
+           */
+          sink.writeln('''
+          ${ph.transformDescriptor.get().createMethodDeclaration} {
+            final classRelation = ${ch.relationModelExpression('packageRelation')}
+
+            final propertyRelation = ${ph.relationModelExpression('classRelation')}
+
+            return propertyRelation.transform.forwards as Transform<${ph.fromName}, ${ph.toName}>;
+          }
+          ''');
+        }
+      });
+    });
   }
 
   void _generateAbstractToConcreteMethods(
@@ -369,12 +396,13 @@ class _ValueClassRelationHelper {
   String get transformerParams =>
       descriptors.map((d) => 'this.${d.variableName}').join(', ');
 
-  String get constructorParams =>
-      descriptors.map((d) => d.createMethodDeclaration).join(', ');
+  String get constructorParams => descriptors
+      .map((d) => '_create${_capitalise(d.variableName)}()')
+      .join(', ');
 
   /// How to find this relation in the model
   String relationModelExpression(String packageRelationName) =>
-    '''$packageRelationName.classifierRelations.firstWhere(
+      '''$packageRelationName.classifierRelations.firstWhere(
       (cr) => cr.from.name == '$fromName' && cr.to.name == '$toName')
     as ValueClassRelation;''';
 
@@ -404,6 +432,7 @@ class _PropertyRelationHelper {
   String get toName => to.singleTypeName;
 
   bool get converterRequired => from.singleType != to.singleType;
+  bool get hasCustomTransform => propertyRelation.transform != null;
 
   Option<_TransformDescriptor> _transformDescriptor;
 
@@ -412,7 +441,7 @@ class _PropertyRelationHelper {
 
   /// How to find this relation in the model
   String relationModelExpression(String classVariableName) =>
-    '''$classVariableName.propertyRelations
+      '''$classVariableName.propertyRelations
         .firstWhere((pr) => pr.from.path == '${from.end.path}'
         && pr.to.path == '${to.end.path}');
     ''';
