@@ -92,9 +92,11 @@ abstract class BidirectionalTransform<F, T>
       _$BidirectionalTransform;
 
   @override
-  BidirectionalTransform<T, F> reversed() {
-    // TODO: implement reversed
-  }
+  BidirectionalTransform<T, F> reversed() =>
+      new BidirectionalTransform<T, F>((b) {
+        b.backwards = forwards;
+        b.forwards = backwards;
+      });
 }
 
 abstract class BidirectionalTransformBuilder<F, T>
