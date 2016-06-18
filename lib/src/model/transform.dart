@@ -88,7 +88,8 @@ abstract class BidirectionalTransform<F, T>
 
   BidirectionalTransform._();
 
-  factory BidirectionalTransform([updates(BidirectionalTransformBuilder b)]) =
+  factory BidirectionalTransform(
+          [updates(BidirectionalTransformBuilder<F, T> b)]) =
       _$BidirectionalTransform;
 
   @override
@@ -202,7 +203,8 @@ abstract class PropertyRelation
   PropertyRelation reversed() {
     return new PropertyRelation((PropertyRelationBuilder b) => b
       ..to = from.toBuilder()
-      ..from = to.toBuilder());
+      ..from = to.toBuilder()
+      ..transform = transform?.reversed());
   }
 }
 

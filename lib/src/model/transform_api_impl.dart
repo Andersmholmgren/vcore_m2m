@@ -147,6 +147,11 @@ class _PropertyRelationHelper<F, T>
   withNameRelation(NameRelation nameRelation) {
     builder.nameRelation = nameRelation;
   }
+
+  via2/*<A,V>*/(updates(BidirectionalTransformBuilder/*<A,V>*/ b)) {
+
+  }
+
 }
 
 class PathExpressionCaptor {

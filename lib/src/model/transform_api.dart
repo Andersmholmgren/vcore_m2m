@@ -37,4 +37,6 @@ abstract class PropertyRelationHelper3<F, T> {
   withNameRelation(NameRelation nameRelation);
 
   via/*<A,V>*/(Codec/*<A,V>*/ codec);
+
+  via2/*<A,V>*/(updates(BidirectionalTransformBuilder/*<A,V>*/ b));
 }
