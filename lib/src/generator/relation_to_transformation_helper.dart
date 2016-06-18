@@ -155,6 +155,24 @@ class _TransformationContext extends BaseTransformationContext {
     ''');
   }
 
+  void _generateTransformFactoryMethods(
+      Iterable<_ValueClassRelationHelper> classHelpers) {
+    classHelpers.forEach((helper) {
+      final fromName = helper.fromName;
+      final toName = helper.toName;
+      final constructorParamExtra =
+          helper.hasDependencies ? ', ${helper.constructorParams}' : '';
+      sink.writeln('''
+    Transform<$fromName, $toName> ${helper.createTransformName}() {
+      return ($fromName ${_uncapitalise(fromName)}) => new ${helper.className}(
+        ${_uncapitalise(fromName)}, this
+        $constructorParamExtra)
+        .transform();
+    }
+    ''');
+    });
+  }
+
   void _generateCustomTransformFactoryMethods(
       Iterable<_ValueClassRelationHelper> classHelpers) {
     classHelpers.forEach((ch) {
@@ -246,25 +264,6 @@ class _TransformationContext extends BaseTransformationContext {
       }
     });
   }
-
-  void _generateTransformFactoryMethods(
-      Iterable<_ValueClassRelationHelper> classHelpers) {
-    classHelpers.forEach((helper) {
-      final fromName = helper.fromName;
-      final toName = helper.toName;
-      final constructorParamExtra =
-          helper.hasDependencies ? ', ${helper.constructorParams}' : '';
-      sink.writeln('''
-    Transform<$fromName, $toName> ${helper.createTransformName}() {
-      return ($fromName ${_uncapitalise(fromName)}) => new ${helper.className}(
-        ${_uncapitalise(fromName)}, this
-        $constructorParamExtra)
-        .transform();
-    }
-    ''');
-    });
-  }
-
 }
 
 class _PackageRelationHelper {
