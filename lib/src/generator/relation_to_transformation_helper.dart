@@ -160,21 +160,9 @@ class _TransformationContext extends BaseTransformationContext {
     classHelpers.forEach((ch) {
       ch.properties.forEach((pr, ph) {
         if (ph.hasCustomTransform) {
-/*
-          /*
-    final classRelation = packageRelation.classifierRelations.firstWhere(
-            (cr) => cr.from.name == 'Schema' && cr.to.name == 'Package')
-        as ValueClassRelation;
-
-    final pr = classRelation.propertyRelations
-        .firstWhere((pr) => pr.from.path == 'id' && pr.to.path == 'name');
-    final transform = pr.transform.forwards as Transform<Uri, String>;
-
- */
-
-           */
           sink.writeln('''
           ${ph.transformDescriptor.get().createMethodDeclaration} {
+          // TODO: should cache these lookups
             final classRelation = ${ch.relationModelExpression('packageRelation')}
 
             final propertyRelation = ${ph.relationModelExpression('classRelation')}
@@ -277,42 +265,6 @@ class _TransformationContext extends BaseTransformationContext {
     });
   }
 
-/*
-class _TransformationContext extends BaseTransformationContext {
-  _TransformationContext() {
-    transformers = (new MapBuilder<TransformKey, TransformFactory>()
-          ..[new TransformKey((b) => b
-            ..from = Schema
-            ..to = Package)] = _createSchemaToPackageTransform
-          ..[new TransformKey((b) => b
-            ..from = Schema
-            ..to = ValueClass)] = _createSchemaToValueClassTransform
-          ..[new TransformKey((b) => b
-            ..from = SchemaProperty
-            ..to = Property)] = _createSchemaPropertyToPropertyTransformation)
-        .build();
-  }
-
-  Transform<Schema, Package> _createSchemaToPackageTransform() {
-    return (Schema schema) => new SchemaToPackageTransformation(
-            schema, this, _createSchemaToValueClassTransform())
-        .transform();
-  }
-
-  Transform<Schema, ValueClass> _createSchemaToValueClassTransform() {
-    return (Schema schema) => new SchemaToValueClassTransformation(
-            schema, this, _createSchemaPropertyToPropertyTransformation())
-        .transform();
-  }
-
-  Transform<SchemaProperty, Property>
-      _createSchemaPropertyToPropertyTransformation() {
-    return (SchemaProperty schemaProperty) =>
-        new SchemaPropertyToPropertyTransformation(schemaProperty, this)
-            .transform();
-  }
-}
-     */
 }
 
 class _PackageRelationHelper {
@@ -439,11 +391,14 @@ class _PropertyRelationHelper {
   Option<_TransformDescriptor> get transformDescriptor =>
       _transformDescriptor ??= _createTransformDescriptor();
 
+  String pathExpression(BuiltList<String> path) =>
+      'new BuiltList<String>(${[path.map((s) => "'$s'").join(', ')]})';
+
   /// How to find this relation in the model
   String relationModelExpression(String classVariableName) =>
       '''$classVariableName.propertyRelations
-        .firstWhere((pr) => pr.from.path == '${from.end.path}'
-        && pr.to.path == '${to.end.path}');
+        .firstWhere((pr) => pr.from.path == ${pathExpression(from.end.path)}
+        && pr.to.path == ${pathExpression(to.end.path)});
     ''';
 
   Option<_TransformDescriptor> _createTransformDescriptor() {
