@@ -149,7 +149,9 @@ class _PropertyRelationHelper<F, T>
   }
 
   via2/*<A,V>*/(updates(BidirectionalTransformBuilder/*<A,V>*/ b)) {
-
+    final tb = new BidirectionalTransformBuilder/*<A,V>*/();
+    updates(tb);
+    builder.transform = tb.build();
   }
 
 }
