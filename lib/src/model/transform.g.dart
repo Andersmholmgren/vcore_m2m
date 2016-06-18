@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-05-28T01:26:01.900824Z
+// 2016-06-18T01:18:42.744576Z
 
 part of transform;
 
@@ -171,6 +171,9 @@ class _$PropertyRelationSerializer
       'nameRelation',
       serializers.serialize(object.nameRelation,
           specifiedType: const FullType(NameRelation)),
+      'transform',
+      serializers.serialize(object.transform,
+          specifiedType: const FullType(BidirectionalTransform)),
     ];
   }
 
@@ -202,6 +205,10 @@ class _$PropertyRelationSerializer
           case 'nameRelation':
             result.nameRelation = serializers.deserialize(value,
                 specifiedType: const FullType(NameRelation));
+            break;
+          case 'transform':
+            result.transform = serializers.deserialize(value,
+                specifiedType: const FullType(BidirectionalTransform));
             break;
         }
       }
@@ -351,6 +358,61 @@ class _$PackageRelationBuilder extends PackageRelationBuilder {
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
+// Target: abstract class BidirectionalTransform
+// **************************************************************************
+
+class _$BidirectionalTransform extends BidirectionalTransform {
+  final Transform forwards;
+  final Transform backwards;
+  _$BidirectionalTransform._({this.forwards, this.backwards}) : super._() {
+    if (forwards == null) throw new ArgumentError('null forwards');
+    if (backwards == null) throw new ArgumentError('null backwards');
+  }
+  factory _$BidirectionalTransform(
+          [updates(BidirectionalTransformBuilder b)]) =>
+      (new BidirectionalTransformBuilder()..update(updates)).build();
+  BidirectionalTransform rebuild(updates(BidirectionalTransformBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$BidirectionalTransformBuilder toBuilder() =>
+      new _$BidirectionalTransformBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! BidirectionalTransform) return false;
+    return forwards == other.forwards && backwards == other.backwards;
+  }
+
+  int get hashCode {
+    return hashObjects([forwards, backwards]);
+  }
+
+  String toString() {
+    return 'BidirectionalTransform {'
+        'forwards=${forwards.toString()}\n'
+        'backwards=${backwards.toString()}\n'
+        '}';
+  }
+}
+
+class _$BidirectionalTransformBuilder extends BidirectionalTransformBuilder {
+  _$BidirectionalTransformBuilder() : super._();
+  void replace(BidirectionalTransform other) {
+    super.forwards = other.forwards;
+    super.backwards = other.backwards;
+  }
+
+  void update(updates(BidirectionalTransformBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  BidirectionalTransform build() {
+    if (forwards == null) throw new ArgumentError('null forwards');
+    if (backwards == null) throw new ArgumentError('null backwards');
+    return new _$BidirectionalTransform._(
+        forwards: forwards, backwards: backwards);
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
 // Target: abstract class ValueClassRelation
 // **************************************************************************
 
@@ -422,7 +484,9 @@ class _$PropertyRelation extends PropertyRelation {
   final PropertyRelationEnd from;
   final PropertyRelationEnd to;
   final NameRelation nameRelation;
-  _$PropertyRelation._({this.from, this.to, this.nameRelation}) : super._() {
+  final BidirectionalTransform transform;
+  _$PropertyRelation._({this.from, this.to, this.nameRelation, this.transform})
+      : super._() {
     if (from == null) throw new ArgumentError('null from');
     if (to == null) throw new ArgumentError('null to');
   }
@@ -436,11 +500,12 @@ class _$PropertyRelation extends PropertyRelation {
     if (other is! PropertyRelation) return false;
     return from == other.from &&
         to == other.to &&
-        nameRelation == other.nameRelation;
+        nameRelation == other.nameRelation &&
+        transform == other.transform;
   }
 
   int get hashCode {
-    return hashObjects([from, to, nameRelation]);
+    return hashObjects([from, to, nameRelation, transform]);
   }
 
   String toString() {
@@ -448,6 +513,7 @@ class _$PropertyRelation extends PropertyRelation {
         'from=${from.toString()}\n'
         'to=${to.toString()}\n'
         'nameRelation=${nameRelation.toString()}\n'
+        'transform=${transform.toString()}\n'
         '}';
   }
 }
@@ -458,6 +524,7 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
     super.from = other.from?.toBuilder();
     super.to = other.to?.toBuilder();
     super.nameRelation = other.nameRelation;
+    super.transform = other.transform;
   }
 
   void update(updates(PropertyRelationBuilder b)) {
@@ -468,7 +535,10 @@ class _$PropertyRelationBuilder extends PropertyRelationBuilder {
     if (from == null) throw new ArgumentError('null from');
     if (to == null) throw new ArgumentError('null to');
     return new _$PropertyRelation._(
-        from: from?.build(), to: to?.build(), nameRelation: nameRelation);
+        from: from?.build(),
+        to: to?.build(),
+        nameRelation: nameRelation,
+        transform: transform);
   }
 }
 

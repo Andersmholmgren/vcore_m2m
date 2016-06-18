@@ -75,11 +75,38 @@ typedef Option<Transform<F, T>> TransformLookup<F, T>(
 
 typedef Transform<F, T> TransformFactory<F, T>();
 
-// Just a codec I think
-//abstract class BidirectionalTransform<F, T> {
-//  Transform<F, T> get forwards;
-//  Transform<T, F> get backwards;
-//}
+// Like a codec
+
+abstract class BidirectionalTransform<F, T>
+    implements
+        Built<BidirectionalTransform<F, T>,
+            BidirectionalTransformBuilder<F, T>>,
+        Relation<F, T, BidirectionalTransform<F, T>,
+            BidirectionalTransform<T, F>> {
+  Transform<F, T> get forwards;
+  Transform<T, F> get backwards;
+
+  BidirectionalTransform._();
+
+  factory BidirectionalTransform([updates(BidirectionalTransformBuilder b)]) =
+      _$BidirectionalTransform;
+
+  @override
+  BidirectionalTransform<T, F> reversed() {
+    // TODO: implement reversed
+  }
+}
+
+abstract class BidirectionalTransformBuilder<F, T>
+    implements
+        Builder<BidirectionalTransform<F, T>,
+            BidirectionalTransformBuilder<F, T>> {
+  BidirectionalTransformBuilder._();
+  Transform<F, T> forwards;
+  Transform<T, F> backwards;
+
+  factory BidirectionalTransformBuilder() = _$BidirectionalTransformBuilder;
+}
 
 abstract class ClassifierRelation<
         V extends Classifier<V, B>,
@@ -157,7 +184,12 @@ abstract class PropertyRelation
   PropertyRelationEnd get from;
   PropertyRelationEnd get to;
   @nullable
+  @deprecated
   NameRelation get nameRelation;
+
+  /// Optional explicit transform pair
+  @nullable
+  BidirectionalTransform get transform;
 
   PropertyRelation._();
 
@@ -181,6 +213,9 @@ abstract class PropertyRelationBuilder
 
   @nullable
   NameRelation nameRelation;
+
+  @nullable
+  BidirectionalTransform transform;
 
   factory PropertyRelationBuilder() = _$PropertyRelationBuilder;
 }
