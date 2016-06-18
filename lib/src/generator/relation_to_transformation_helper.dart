@@ -217,6 +217,7 @@ class _TransformationContext extends BaseTransformationContext {
         //            '${k.name} (${identityHashCode(k)}) == ${from.name} (${identityHashCode(from)}) => ${k == from}');
         //        return k == from;
         // TODO: not sure why getting multiple instances of Schema etc
+        print('checking ${k.name} == ${from.name} => ${k.name == from.name}');
         return k.name == from.name;
       }).expand((k) => providedTransforms[k]);
 
