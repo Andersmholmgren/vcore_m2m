@@ -132,20 +132,7 @@ class _TransformationContext extends BaseTransformationContext {
   }
     ''');
 
-    classHelpers.forEach((helper) {
-      final fromName = helper.fromName;
-      final toName = helper.toName;
-      final constructorParamExtra =
-          helper.hasDependencies ? ', ${helper.constructorParams}' : '';
-      sink.writeln('''
-    Transform<$fromName, $toName> ${helper.createTransformName}() {
-      return ($fromName ${_uncapitalise(fromName)}) => new ${helper.className}(
-        ${_uncapitalise(fromName)}, this
-        $constructorParamExtra)
-        .transform();
-    }
-    ''');
-    });
+    _generateTransformFactoryMethods(classHelpers);
 
     packageRelationHelper.requiredTransforms.forEach((from, to) {
       print('require: ${from.name} -> ${to.name} (${to.isAbstract})');
@@ -159,6 +146,15 @@ class _TransformationContext extends BaseTransformationContext {
 //      print('requiredAbstractTransforms: ${from.name} -> ${to.name}');
 //    });
 
+    _generateAbstractToConcreteMethods(classHelpers);
+
+    sink.writeln('''
+}
+    ''');
+  }
+
+  void _generateAbstractToConcreteMethods(
+      Iterable<_ValueClassRelationHelper> classHelpers) {
     packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
       final fromName = from.name;
       final toName = to.name;
@@ -166,9 +162,9 @@ class _TransformationContext extends BaseTransformationContext {
 
       final providedTransforms = packageRelationHelper.providedTransforms;
       final possibleToTypes = providedTransforms.keys.where((k) {
-//        print(
-//            '${k.name} (${identityHashCode(k)}) == ${from.name} (${identityHashCode(from)}) => ${k == from}');
-//        return k == from;
+        //        print(
+        //            '${k.name} (${identityHashCode(k)}) == ${from.name} (${identityHashCode(from)}) => ${k == from}');
+        //        return k == from;
         // TODO: not sure why getting multiple instances of Schema etc
         return k.name == from.name;
       }).expand((k) => providedTransforms[k]);
@@ -211,8 +207,8 @@ class _TransformationContext extends BaseTransformationContext {
         // TODO: not sure why getting multiple instances of Schema etc
         final propertyHelper =
             packageRelationHelper.abstractPropertyHelpers.firstWhere((h) {
-//          print(
-//              'from: ${h.from.singleTypeName}; ${h.propertyRelation.from.property.type.name}; ${from.name}');
+          //          print(
+          //              'from: ${h.from.singleTypeName}; ${h.propertyRelation.from.property.type.name}; ${from.name}');
           return h.from.singleTypeName == from.name &&
               h.to.singleTypeName == to.name;
         });
@@ -222,15 +218,29 @@ class _TransformationContext extends BaseTransformationContext {
         final transformDescriptor = propertyHelper.transformDescriptor.get();
 
         sink.writeln('''
-  ${transformDescriptor.createMethodDeclaration} =>
+      ${transformDescriptor.createMethodDeclaration} =>
       ${classHelper.createTransformName}() as ${transformDescriptor.typeString};
         ''');
       }
     });
+  }
 
-    sink.writeln('''
-}
+  void _generateTransformFactoryMethods(
+      Iterable<_ValueClassRelationHelper> classHelpers) {
+    classHelpers.forEach((helper) {
+      final fromName = helper.fromName;
+      final toName = helper.toName;
+      final constructorParamExtra =
+          helper.hasDependencies ? ', ${helper.constructorParams}' : '';
+      sink.writeln('''
+    Transform<$fromName, $toName> ${helper.createTransformName}() {
+      return ($fromName ${_uncapitalise(fromName)}) => new ${helper.className}(
+        ${_uncapitalise(fromName)}, this
+        $constructorParamExtra)
+        .transform();
+    }
     ''');
+    });
   }
 
 /*
@@ -352,9 +362,8 @@ class _ValueClassRelationHelper {
   String get transformerParams =>
       descriptors.map((d) => 'this.${d.variableName}').join(', ');
 
-  String get constructorParams => descriptors
-      .map((d) => d.createMethodDeclaration)
-      .join(', ');
+  String get constructorParams =>
+      descriptors.map((d) => d.createMethodDeclaration).join(', ');
 
   _ValueClassRelationHelper._(this.classRelation, this.properties);
 
