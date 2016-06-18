@@ -148,9 +148,16 @@ class _TransformationContext extends BaseTransformationContext {
 
     _generateAbstractToConcreteMethods(classHelpers);
 
+    _generateCustomTransformFactoryMethods(classHelpers);
+
     sink.writeln('''
 }
     ''');
+  }
+
+  void _generateCustomTransformFactoryMethods(
+      Iterable<_ValueClassRelationHelper> classHelpers) {
+    classHelpers.
   }
 
   void _generateAbstractToConcreteMethods(
@@ -365,6 +372,12 @@ class _ValueClassRelationHelper {
   String get constructorParams =>
       descriptors.map((d) => d.createMethodDeclaration).join(', ');
 
+  /// How to find this relation in the model
+  String relationModelExpression(String packageRelationName) =>
+    '''$packageRelationName.classifierRelations.firstWhere(
+      (cr) => cr.from.name == '$fromName' && cr.to.name == '$toName')
+    as ValueClassRelation;''';
+
   _ValueClassRelationHelper._(this.classRelation, this.properties);
 
   _ValueClassRelationHelper(ValueClassRelation classRelation)
@@ -396,6 +409,13 @@ class _PropertyRelationHelper {
 
   Option<_TransformDescriptor> get transformDescriptor =>
       _transformDescriptor ??= _createTransformDescriptor();
+
+  /// How to find this relation in the model
+  String relationModelExpression(String classVariableName) =>
+    '''$classVariableName.propertyRelations
+        .firstWhere((pr) => pr.from.path == '${from.end.path}'
+        && pr.to.path == '${to.end.path}');
+    ''';
 
   Option<_TransformDescriptor> _createTransformDescriptor() {
     if (!converterRequired) return const None();
