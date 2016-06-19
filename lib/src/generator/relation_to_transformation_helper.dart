@@ -295,10 +295,10 @@ class _PackageRelationHelper {
       abstractPropertyHelpers.map((h) => h.propertyRelation);
 
   BuiltSetMultimap<Classifier, Classifier> get requiredTransforms =>
-      _typeMapFor2(allPropertyHelpers.where((h) => h.converterRequired));
+      _typeMapFor(allPropertyHelpers.where((h) => h.converterRequired));
 
   BuiltSetMultimap<Classifier, Classifier> get requiredAbstractTransforms =>
-      _typeMapFor2(abstractPropertyHelpers);
+      _typeMapFor(abstractPropertyHelpers);
 
   BuiltSetMultimap<Classifier, Classifier> get providedTransforms {
     return new BuiltSetMultimap<Classifier, Classifier>.build((b) {
@@ -324,16 +324,16 @@ class _PackageRelationHelper {
           });
         }));
 
-  BuiltSetMultimap<Classifier, Classifier> _typeMapFor(
-      Iterable<PropertyRelation> prs) {
-    return new BuiltSetMultimap<Classifier, Classifier>.build((b) {
-      b.addIterable(prs,
-          key: (PropertyRelation pr) => pr.from.property.type,
-          value: (PropertyRelation pr) => pr.to.property.type);
-    });
-  }
+//  BuiltSetMultimap<Classifier, Classifier> _typeMapFor(
+//      Iterable<PropertyRelation> prs) {
+//    return new BuiltSetMultimap<Classifier, Classifier>.build((b) {
+//      b.addIterable(prs,
+//          key: (PropertyRelation pr) => pr.from.property.type,
+//          value: (PropertyRelation pr) => pr.to.property.type);
+//    });
+//  }
 
-  BuiltSetMultimap<Classifier, Classifier> _typeMapFor2(
+  BuiltSetMultimap<Classifier, Classifier> _typeMapFor(
       Iterable<_PropertyRelationHelper> prs) {
     return new BuiltSetMultimap<Classifier, Classifier>.build((b) {
       b.addIterable(prs,

@@ -160,8 +160,14 @@ abstract class ValueClassRelation
         ..addAll(propertyRelations.map((pr) => pr.reversed()))));
   }
 
+  /// When transforming from [from] to [to] is [this] relation applicable
   bool isApplicableTo(ValueClass from, ValueClass to) =>
       from.isSubTypeOf(this.from) && to.isSubTypeOf(this.to);
+
+  /// ??
+  bool isSubTypeTo(ValueClass from, ValueClass to) =>
+    this.from.isSubTypeOf(from) && this.to.isSubTypeOf(to);
+
 }
 
 abstract class ValueClassRelationBuilder
