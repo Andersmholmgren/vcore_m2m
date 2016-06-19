@@ -288,7 +288,8 @@ class _PackageRelationHelper {
       classHelpers.expand((ch) => ch.properties.values);
 
   Iterable<_PropertyRelationHelper> get abstractPropertyHelpers =>
-      allPropertyHelpers.where((h) => h.to.singleType.isAbstract);
+      allPropertyHelpers.where(
+          (h) => h.to.singleType.isAbstract || h.from.singleType.isAbstract);
 
   Iterable<PropertyRelation> get abstractPropertyRelations =>
       abstractPropertyHelpers.map((h) => h.propertyRelation);
