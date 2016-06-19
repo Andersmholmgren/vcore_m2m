@@ -212,76 +212,154 @@ class _TransformationContext extends BaseTransformationContext {
       print('requiredAbstractTransforms: $fromName -> $toName');
 
       if (from is ValueClass && to is ValueClass) {
-        packageRelationHelper.subTypesOf(from, to).forEach((vr) {
-          print("have value class relation: ${vr.from.name} -> ${vr.to.name}");
-        });
-
+        _generateAbstractToConcreteMethod(
+            fromName, toName, packageRelationHelper.subTypesOf(from, to));
       }
-
-      final providedTransforms = packageRelationHelper.providedTransforms;
-      final possibleToTypes = providedTransforms.keys.where((k) {
-        //        print(
-        //            '${k.name} (${identityHashCode(k)}) == ${from.name} (${identityHashCode(from)}) => ${k == from}');
-        //        return k == from;
-        // TODO: not sure why getting multiple instances of Schema etc
-        print('checking ${k.name} == ${from.name} => ${k.name == from.name}');
-        return k.name == from.name;
-      }).expand((k) => providedTransforms[k]);
-
-      print('possibleToTypes: ${possibleToTypes.map((t) => t.name)}');
-
-      bool isSubTypeOfTo(Classifier c) {
-        // TODO: not sure why getting multiple instances of Schema etc
-        if (c.name == to.name)
-          return true;
-        else if (c is ValueClass) {
-          return (c as ValueClass).superTypes.any(isSubTypeOfTo);
-        } else
-          return false;
-      }
-
-      final matchedToTypes = possibleToTypes.where(isSubTypeOfTo);
-      print('matchedToTypes: ${matchedToTypes.map((t) => t.name)}');
-
-      final validToTypes = matchedToTypes.where((c) => !c.isAbstract);
-      print('validToTypes: ${validToTypes.map((t) => t.name)}');
-
-      if (validToTypes.isEmpty) {
-        throw new StateError(
-            "No non abstract matching transform from $fromName to $toName");
-      } else if (validToTypes.length > 1) {
-        throw new StateError(
-            "Too many (${validToTypes.length}) matching transform from "
-            "$fromName to $toName. "
-            "Can currently only deal with one");
-      } else {
-        final nonAbstractToType = validToTypes.first;
-        // TODO: not sure why getting multiple instances of Schema etc
-        final classHelper = classHelpers.firstWhere((h) =>
-            h.classRelation.from.name == from.name &&
-            h.classRelation.to.name == nonAbstractToType.name);
-
-        print('classHelper: $classHelper');
-
-        // TODO: not sure why getting multiple instances of Schema etc
-        final propertyHelper =
-            packageRelationHelper.abstractPropertyHelpers.firstWhere((h) {
-          //          print(
-          //              'from: ${h.from.singleTypeName}; ${h.propertyRelation.from.property.type.name}; ${from.name}');
-          return h.from.singleTypeName == from.name &&
-              h.to.singleTypeName == to.name;
-        });
-
-        print('propertyHelper: $propertyHelper');
-
-        final transformDescriptor = propertyHelper.transformDescriptor.get();
-
-        sink.writeln('''
-      ${transformDescriptor.createMethodDeclaration} =>
-      ${classHelper.createTransformName}() as ${transformDescriptor.typeString};
-        ''');
-      }
+//
+//
+//      final providedTransforms = packageRelationHelper.providedTransforms;
+//      final possibleToTypes = providedTransforms.keys.where((k) {
+//        //        print(
+//        //            '${k.name} (${identityHashCode(k)}) == ${from.name} (${identityHashCode(from)}) => ${k == from}');
+//        //        return k == from;
+//        // TODO: not sure why getting multiple instances of Schema etc
+//        print('checking ${k.name} == ${from.name} => ${k.name == from.name}');
+//        return k.name == from.name;
+//      }).expand((k) => providedTransforms[k]);
+//
+//      print('possibleToTypes: ${possibleToTypes.map((t) => t.name)}');
+//
+//      bool isSubTypeOfTo(Classifier c) {
+//        // TODO: not sure why getting multiple instances of Schema etc
+//        if (c.name == to.name)
+//          return true;
+//        else if (c is ValueClass) {
+//          return (c as ValueClass).superTypes.any(isSubTypeOfTo);
+//        } else
+//          return false;
+//      }
+//
+//      final matchedToTypes = possibleToTypes.where(isSubTypeOfTo);
+//      print('matchedToTypes: ${matchedToTypes.map((t) => t.name)}');
+//
+//      final validToTypes = matchedToTypes.where((c) => !c.isAbstract);
+//      print('validToTypes: ${validToTypes.map((t) => t.name)}');
+//
+//      if (validToTypes.isEmpty) {
+//        throw new StateError(
+//            "No non abstract matching transform from $fromName to $toName");
+//      } else if (validToTypes.length > 1) {
+//        throw new StateError(
+//            "Too many (${validToTypes.length}) matching transform from "
+//            "$fromName to $toName. "
+//            "Can currently only deal with one");
+//      } else {
+//        final nonAbstractToType = validToTypes.first;
+//        // TODO: not sure why getting multiple instances of Schema etc
+//        final classHelper = classHelpers.firstWhere((h) =>
+//            h.classRelation.from.name == from.name &&
+//            h.classRelation.to.name == nonAbstractToType.name);
+//
+//        print('classHelper: $classHelper');
+//
+//        // TODO: not sure why getting multiple instances of Schema etc
+//        final propertyHelper =
+//            packageRelationHelper.abstractPropertyHelpers.firstWhere((h) {
+//          //          print(
+//          //              'from: ${h.from.singleTypeName}; ${h.propertyRelation.from.property.type.name}; ${from.name}');
+//          return h.from.singleTypeName == from.name &&
+//              h.to.singleTypeName == to.name;
+//        });
+//
+//        print('propertyHelper: $propertyHelper');
+//
+//        final transformDescriptor = propertyHelper.transformDescriptor.get();
+//
+//        sink.writeln('''
+//      ${transformDescriptor.createMethodDeclaration} =>
+//      ${classHelper.createTransformName}() as ${transformDescriptor.typeString};
+//        ''');
+//      }
     });
+  }
+
+  void _generateAbstractToConcreteMethod(
+      String requiredFromName,
+      String requiredToName,
+      BuiltSet<_ValueClassRelationHelper> subTypeRelations) {
+    final propertyHelper =
+        packageRelationHelper.abstractPropertyHelpers.firstWhere((h) {
+      //          print(
+      //              'from: ${h.from.singleTypeName}; ${h.propertyRelation.from.property.type.name}; ${from.name}');
+      return h.from.singleTypeName == requiredFromName &&
+          h.to.singleTypeName == requiredToName;
+    });
+
+    print('propertyHelper: $propertyHelper');
+
+    final transformDescriptor = propertyHelper.transformDescriptor.get();
+
+    sink.writeln('''
+      ${transformDescriptor.createMethodDeclaration} {
+    ''');
+
+    // create local Transform objects
+    subTypeRelations.forEach((vh) {
+      sink.writeln('''
+        final ${_uncapitalise(vh.className)} = ${vh.createTransformName}();
+      ''');
+    });
+
+    final requiredFromVariableName = _uncapitalise(requiredFromName);
+    sink.writeln('''
+      return ($requiredFromName $requiredFromVariableName) {
+    ''');
+
+    sink.writeln('''
+        // TODO: delete
+        if (1 == 2) {
+          return null;
+        }
+      ''');
+
+    subTypeRelations.forEach((vh) {
+      sink.writeln('''
+        if ($requiredFromVariableName is ${vh.fromName}) {
+          return ${_uncapitalise(vh.className)}($requiredFromVariableName as ${vh.fromName});
+        }
+      ''');
+    });
+
+    sink.writeln('''
+      else {
+        throw new StateError(
+            "No transform from \${$requiredFromVariableName.runtimeType} to $requiredToName");
+      }
+    };
+    ''');
+
+    sink.writeln('''
+      }
+    ''');
+
+/*
+      ${classHelper.createTransformName}() as ${transformDescriptor.typeString};
+
+
+  Transform<SchemaReference, Classifier>
+      _createSchemaReferenceToClassifierTransform() {
+    final schemaToValueClassTransform = _createSchemaToValueClassTransform();
+    return (SchemaReference schemaReference) {
+      if (schemaReference is Schema) {
+        return schemaToValueClassTransform(schemaReference as Schema);
+      } else {
+        throw new StateError(
+            "No transform from ${schemaReference.runtimeType} to Classifier");
+      }
+    };
+  }
+
+     */
   }
 }
 
@@ -331,11 +409,10 @@ class _PackageRelationHelper {
           });
         }));
 
-  BuiltSet<ValueClassRelation> subTypesOf(ValueClass from, ValueClass to) =>
-      new BuiltSet<ValueClassRelation>(packageRelation.classifierRelations
-          .where((cr) =>
-              cr is ValueClassRelation &&
-              (cr as ValueClassRelation).isSubTypeOf(from, to)));
+  BuiltSet<_ValueClassRelationHelper> subTypesOf(
+          ValueClass from, ValueClass to) =>
+      new BuiltSet<_ValueClassRelationHelper>(
+          classHelpers.where((ch) => ch.classRelation.isSubTypeOf(from, to)));
 
 //  BuiltSetMultimap<Classifier, Classifier> _typeMapFor(
 //      Iterable<PropertyRelation> prs) {
