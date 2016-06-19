@@ -211,6 +211,13 @@ class _TransformationContext extends BaseTransformationContext {
       final toName = to.name;
       print('requiredAbstractTransforms: $fromName -> $toName');
 
+      if (from is ValueClass && to is ValueClass) {
+        packageRelationHelper.subTypesOf(from, to).forEach((vr) {
+          print("have value class relation: ${vr.from.name} -> ${vr.to.name}");
+        });
+
+      }
+
       final providedTransforms = packageRelationHelper.providedTransforms;
       final possibleToTypes = providedTransforms.keys.where((k) {
         //        print(
@@ -323,6 +330,12 @@ class _PackageRelationHelper {
             }
           });
         }));
+
+  BuiltSet<ValueClassRelation> subTypesOf(ValueClass from, ValueClass to) =>
+      new BuiltSet<ValueClassRelation>(packageRelation.classifierRelations
+          .where((cr) =>
+              cr is ValueClassRelation &&
+              (cr as ValueClassRelation).isSubTypeOf(from, to)));
 
 //  BuiltSetMultimap<Classifier, Classifier> _typeMapFor(
 //      Iterable<PropertyRelation> prs) {

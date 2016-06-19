@@ -165,7 +165,7 @@ abstract class ValueClassRelation
       from.isSubTypeOf(this.from) && to.isSubTypeOf(this.to);
 
   /// ??
-  bool isSubTypeTo(ValueClass from, ValueClass to) =>
+  bool isSubTypeOf(ValueClass from, ValueClass to) =>
     this.from.isSubTypeOf(from) && this.to.isSubTypeOf(to);
 
 }
