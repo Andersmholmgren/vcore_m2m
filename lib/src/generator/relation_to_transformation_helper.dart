@@ -250,12 +250,12 @@ class _TransformationContext extends BaseTransformationContext {
       return ($requiredFromName $requiredFromVariableName) {
     ''');
 
-    sink.writeln('''
-        // TODO: delete
-        if (1 == 2) {
-          return null;
-        }
-      ''');
+//    sink.writeln('''
+//        // TODO: delete
+//        if (1 == 2) {
+//          return null;
+//        }
+//      ''');
 
     subTypeRelations.forEach((vh) {
       sink.writeln('''
