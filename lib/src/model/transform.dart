@@ -159,6 +159,9 @@ abstract class ValueClassRelation
       ..propertyRelations = (new SetBuilder<PropertyRelation>()
         ..addAll(propertyRelations.map((pr) => pr.reversed()))));
   }
+
+  bool isApplicableTo(ValueClass from, ValueClass to) =>
+      from.isSubTypeOf(this.from) && to.isSubTypeOf(this.to);
 }
 
 abstract class ValueClassRelationBuilder
