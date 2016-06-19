@@ -13,6 +13,24 @@ class StaticGenerator implements SourceGenerator {
   }
 }
 
+class VariableGenerator implements SourceGenerator {
+  final SourceGenerator typeGenerator, nameGenerator;
+  final bool includeFinal;
+
+  VariableGenerator(this.typeGenerator, this.nameGenerator,
+      {this.includeFinal: true});
+
+  @override
+  void generate(StringSink sink) {
+    if (includeFinal) sink.write('final ');
+
+    typeGenerator.generate(sink);
+    sink.write(' ');
+    nameGenerator.generate(sink);
+    sink.write(';');
+  }
+}
+
 class FunctionGenerator extends SourceGenerator {
   final SourceGenerator returnTypeGenerator,
       bodyGenerator,
