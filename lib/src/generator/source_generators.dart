@@ -13,6 +13,17 @@ class StaticGenerator implements SourceGenerator {
   }
 }
 
+class GenericTypeGenerator implements SourceGenerator {
+  final SourceGenerator typeGenerator;
+
+  GenericTypeGenerator(this.typeGenerator);
+
+  @override
+  void generate(StringSink sink) {
+    sink..write('<')..write(typeGenerator)..write('>');
+  }
+}
+
 class VariableGenerator implements SourceGenerator {
   final SourceGenerator typeGenerator, nameGenerator;
   final bool includeFinal;
