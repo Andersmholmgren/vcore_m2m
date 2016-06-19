@@ -54,9 +54,11 @@ class FunctionGenerator extends _SourceGenerator {
       bodyGenerator,
       functionNameGenerator;
   final Iterable<SourceGenerator> parameterGenerators;
+  final bool useArrow;
 
   FunctionGenerator(this.returnTypeGenerator, this.functionNameGenerator,
-      this.parameterGenerators, this.bodyGenerator);
+      this.parameterGenerators, this.bodyGenerator,
+      {this.useArrow: false});
 
   FunctionGenerator.std(
       SourceGenerator returnTypeGenerator,
@@ -74,7 +76,12 @@ class FunctionGenerator extends _SourceGenerator {
     final sb = new StringBuffer();
     final params = parameterGenerators.map((pg) => pg(sb)).join(', ');
     sink.write(params);
-    sink.writeln(') {');
+    sink.write(') ');
+    if (useArrow)
+      sink.writeln('=>');
+    else
+      sink.writeln('{');
+
     bodyGenerator(sink);
     sink.writeln('}');
   }
