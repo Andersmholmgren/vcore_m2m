@@ -9,6 +9,18 @@ abstract class _SourceGenerator {
   }
 }
 
+void commaSeparated(Iterable<SourceGenerator> generators, StringSink sink) {
+  final sb = new StringBuffer();
+  final joined = generators.map((pg) => pg(sb)).join(', ');
+  sink.write(joined);
+}
+
+SourceGenerator commaSeparatedGenerator(Iterable<SourceGenerator> generators) {
+  return (StringSink sink) {
+    commaSeparated(generators, sink);
+  };
+}
+
 class StaticGenerator extends _SourceGenerator {
   final String content;
 
