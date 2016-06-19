@@ -1,3 +1,5 @@
+import 'package:option/option.dart';
+
 abstract class SourceGenerator {
   void generate(StringSink sink);
 }
@@ -69,6 +71,68 @@ class FunctionGenerator extends SourceGenerator {
     sink.write(params);
     sink.writeln(') {');
     bodyGenerator.generate(sink);
+    sink.writeln('}');
+  }
+}
+
+class ClassGenerator extends SourceGenerator {
+  final SourceGenerator nameGenerator;
+  final bool isAbstract;
+
+  final Option<SourceGenerator> superClassGenerator;
+
+  final Iterable<SourceGenerator> interfaceGenerators,
+      propertyGenerators,
+      constructorGenerators,
+      methodGenerators;
+
+  ClassGenerator(
+      this.nameGenerator,
+      this.superClassGenerator,
+      this.interfaceGenerators,
+      this.propertyGenerators,
+      this.constructorGenerators,
+      this.methodGenerators,
+      {this.isAbstract: false});
+
+  @override
+  void generate(StringSink sink) {
+    if (isAbstract) sink.write('abstract ');
+
+    sink.write('class ');
+    nameGenerator.generate(sink);
+
+    if (superClassGenerator is Some) {
+      sink.write('extends ');
+      superClassGenerator.get().generate(sink);
+      sink.write(' ');
+    }
+
+    if (interfaceGenerators.isNotEmpty) {
+      sink.write('implements ');
+
+      final sb = new StringBuffer();
+      final interfaces =
+          interfaceGenerators.map((ig) => ig.generate(sb)).join(', ');
+      sink.write(interfaces);
+    }
+    sink.writeln(' {');
+
+    propertyGenerators.forEach((g) {
+      g.generate(sink);
+      sink.writeln(';');
+    });
+
+    constructorGenerators.forEach((g) {
+      g.generate(sink);
+      sink.writeln('');
+    });
+
+    methodGenerators.forEach((g) {
+      g.generate(sink);
+      sink.writeln('');
+    });
+
     sink.writeln('}');
   }
 }
