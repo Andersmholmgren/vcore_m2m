@@ -1,10 +1,15 @@
 import 'package:option/option.dart';
 
-abstract class SourceGenerator {
+typedef void SourceGenerator(StringSink sink);
+
+abstract class _SourceGenerator {
   void generate(StringSink sink);
+  void call(StringSink sink) {
+    generate(sink);
+  }
 }
 
-class StaticGenerator implements SourceGenerator {
+class StaticGenerator extends _SourceGenerator {
   final String content;
 
   StaticGenerator(this.content);
@@ -15,7 +20,7 @@ class StaticGenerator implements SourceGenerator {
   }
 }
 
-class GenericTypeGenerator implements SourceGenerator {
+class GenericTypeGenerator extends _SourceGenerator {
   final SourceGenerator typeGenerator;
 
   GenericTypeGenerator(this.typeGenerator);
@@ -26,7 +31,7 @@ class GenericTypeGenerator implements SourceGenerator {
   }
 }
 
-class VariableGenerator implements SourceGenerator {
+class VariableGenerator extends _SourceGenerator {
   final SourceGenerator typeGenerator, nameGenerator;
   final bool includeFinal;
 
@@ -37,14 +42,14 @@ class VariableGenerator implements SourceGenerator {
   void generate(StringSink sink) {
     if (includeFinal) sink.write('final ');
 
-    typeGenerator.generate(sink);
+    typeGenerator(sink);
     sink.write(' ');
-    nameGenerator.generate(sink);
+    nameGenerator(sink);
     sink.write(';');
   }
 }
 
-class FunctionGenerator extends SourceGenerator {
+class FunctionGenerator extends _SourceGenerator {
   final SourceGenerator returnTypeGenerator,
       bodyGenerator,
       functionNameGenerator;
@@ -62,15 +67,15 @@ class FunctionGenerator extends SourceGenerator {
             parameterGenerators, bodyGenerator);
 
   void generate(StringSink sink) {
-    returnTypeGenerator.generate(sink);
+    returnTypeGenerator(sink);
     sink.write(' ');
-    functionNameGenerator.generate(sink);
+    functionNameGenerator(sink);
     sink.write('(');
     final sb = new StringBuffer();
-    final params = parameterGenerators.map((pg) => pg.generate(sb)).join(', ');
+    final params = parameterGenerators.map((pg) => pg(sb)).join(', ');
     sink.write(params);
     sink.writeln(') {');
-    bodyGenerator.generate(sink);
+    bodyGenerator(sink);
     sink.writeln('}');
   }
 }
@@ -100,11 +105,11 @@ class ClassGenerator extends SourceGenerator {
     if (isAbstract) sink.write('abstract ');
 
     sink.write('class ');
-    nameGenerator.generate(sink);
+    nameGenerator(sink);
 
     if (superClassGenerator is Some) {
       sink.write('extends ');
-      superClassGenerator.get().generate(sink);
+      superClassGenerator.get()(sink);
       sink.write(' ');
     }
 
@@ -112,24 +117,23 @@ class ClassGenerator extends SourceGenerator {
       sink.write('implements ');
 
       final sb = new StringBuffer();
-      final interfaces =
-          interfaceGenerators.map((ig) => ig.generate(sb)).join(', ');
+      final interfaces = interfaceGenerators.map((ig) => ig(sb)).join(', ');
       sink.write(interfaces);
     }
     sink.writeln(' {');
 
     propertyGenerators.forEach((g) {
-      g.generate(sink);
+      g(sink);
       sink.writeln(';');
     });
 
     constructorGenerators.forEach((g) {
-      g.generate(sink);
+      g(sink);
       sink.writeln('');
     });
 
     methodGenerators.forEach((g) {
-      g.generate(sink);
+      g(sink);
       sink.writeln('');
     });
 
