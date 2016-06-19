@@ -1,20 +1,45 @@
 abstract class SourceGenerator {
-  final StringSink sink;
+  void generate(StringSink sink);
+}
 
-  SourceGenerator(this.sink);
+class StaticGenerator implements SourceGenerator {
+  final String content;
 
-  void generate();
+  StaticGenerator(this.content);
+
+  @override
+  void generate(StringSink sink) {
+    sink.write(content);
+  }
 }
 
 class FunctionGenerator extends SourceGenerator {
-  final SourceGenerator returnTypeGenerator, bodyGenerator;
+  final SourceGenerator returnTypeGenerator,
+      bodyGenerator,
+      functionNameGenerator;
   final Iterable<SourceGenerator> parameterGenerators;
 
-  FunctionGenerator(StringSink sink, this.returnTypeGenerator,
-      this.bodyGenerator, this.parameterGenerators)
-      : super(sink);
+  FunctionGenerator(this.returnTypeGenerator, this.functionNameGenerator,
+      this.parameterGenerators, this.bodyGenerator);
 
-  void generate() {
+  FunctionGenerator.std(
+      SourceGenerator returnTypeGenerator,
+      String functionName,
+      Iterable<SourceGenerator> parameterGenerators,
+      SourceGenerator bodyGenerator)
+      : this(returnTypeGenerator, new StaticGenerator(functionName),
+            parameterGenerators, bodyGenerator);
 
+  void generate(StringSink sink) {
+    returnTypeGenerator.generate(sink);
+    sink.write(' ');
+    functionNameGenerator.generate(sink);
+    sink.write('(');
+    final sb = new StringBuffer();
+    final params = parameterGenerators.map((pg) => pg.generate(sb)).join(', ');
+    sink.write(params);
+    sink.writeln(') {');
+    bodyGenerator.generate(sink);
+    sink.writeln('}');
   }
 }
