@@ -80,7 +80,7 @@ class FunctionGenerator extends _SourceGenerator {
   }
 }
 
-class ClassGenerator extends SourceGenerator {
+class ClassGenerator extends _SourceGenerator {
   final SourceGenerator nameGenerator;
   final bool isAbstract;
 
