@@ -1,31 +1,24 @@
-name: vcore_m2m
-description: A starting point for Dart libraries or applications.
-version: 0.0.1
-#author: Your Name <email@example.com>
-#homepage: https://www.example.com
-
-environment:
-  sdk: '>=1.0.0 <2.0.0'
-
-dependencies:
-  vcore:
-    path: ../vcore
-  vcore_generator:
-    path: ../vcore_generator
-  built_value:
-    path: ../built_value.dart/built_value
-  xml: '>=2.4.3 <3.0.0'
+description: "A starting point for Dart libraries or applications."
+name: "vcore_m2m"
+version: "0.0.1"
+dependencies: 
   built_collection: "^1.0.0"
   built_json: "^0.0.5"
-#  built_value: "^0.0.6"
-  quiver: '>=0.20.0 <0.23.0'
-  option: '>=1.2.0 <2.0.0'
-dev_dependencies:
-  test: '>=0.12.0 <0.13.0'
-  built_json_generator: '^0.0.5'
-  built_value_generator:
-    path: ../built_value.dart/built_value_generator
-  vcore_ecore:
-    path: ../vcore_ecore
-
-
+  option: ">=1.2.0 <2.0.0"
+  quiver: ">=0.20.0 <0.23.0"
+  xml: ">=2.4.3 <3.0.0"
+  built_value: 
+    path: "../built_value.dart/built_value"
+  vcore: 
+    path: "../vcore"
+  vcore_generator: 
+    path: "../vcore_generator"
+dev_dependencies: 
+  built_json_generator: "^0.0.5"
+  test: ">=0.12.0 <0.13.0"
+  built_value_generator: 
+    path: "../built_value.dart/built_value_generator"
+  vcore_ecore: 
+    path: "../vcore_ecore"
+environment: 
+  sdk: ">=1.0.0 <2.0.0"
