@@ -77,12 +77,13 @@ class RelationToTransformationHelper {
       });
 
       generateFunctionDefinition(
-          new MethodMetadata('mapProperties', new TypeMetadata('void')), buffer,
-          (_, __) {
+          new MethodMetadata('mapProperties', new TypeMetadata('void'),
+              annotations: [override]),
+          buffer, (_, __) {
         buffer.writeln(
             '''_log.finer(() => 'mapProperties for ${helper.className}');''');
         _generateProperties(helper, buffer);
-      });
+      }, annotationGenerators: [generateOverrideAnnotation]);
 
 //      generateFields(metadata.fields, buffer,
 //        annotationGenerators: [generateOverrideAnnotation]);
