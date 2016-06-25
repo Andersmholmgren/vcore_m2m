@@ -88,6 +88,13 @@ class RelationToTransformationHelper {
 //          generateConstructorCall()
       });
 
+      generateFunctionDefinition(
+          new MethodMetadata('mapProperties', new TypeMetadata('void')), buffer,
+          (_, __) {
+        buffer.writeln(
+            '''_log.finer(() => 'mapProperties for ${helper.className}');''');
+      });
+
 //      generateFields(metadata.fields, buffer,
 //        annotationGenerators: [generateOverrideAnnotation]);
     };
