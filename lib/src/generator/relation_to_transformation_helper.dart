@@ -4,6 +4,9 @@ import 'package:option/option.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:logging/logging.dart';
 
+import 'package:dogma_codegen/codegen.dart';
+import 'package:dogma_source_analyzer/metadata.dart';
+
 final _log = new Logger('vcore.m2m.relation.transformation');
 
 class RelationToTransformationHelper {
@@ -26,13 +29,46 @@ class RelationToTransformationHelper {
     final _log = new Logger('${packageRelationHelper.name}');
     ''');
 
-    packageRelationHelper.valueClasses.values.forEach(_generateClassifiers);
+    packageRelationHelper.valueClasses.values.forEach(_generateClassifier);
     _generateTransformationContext();
   }
 
-  void _generateClassifiers(_ValueClassRelationHelper helper) {
+  void _generateClassifier(_ValueClassRelationHelper helper) {
     final transformerParamExtra =
         helper.hasDependencies ? ', ${helper.transformerParams}' : '';
+
+    helper.transformerParameters.map((n) => new );
+
+    new ClassMetadata(helper.className,
+        supertype: new TypeMetadata("AbstractTransformation", arguments: [
+          new TypeMetadata(helper.fromName),
+          new TypeMetadata("${helper.fromName}Builder"),
+          new TypeMetadata(helper.toName),
+          new TypeMetadata("${helper.toName}Builder")
+        ]),
+        constructors: [
+          new ConstructorMetadata(new TypeMetadata(helper.className),
+              parameters: [
+                new ParameterMetadata(
+                    "from", new TypeMetadata(helper.fromName)),
+                new ParameterMetadata(
+                    "context", new TypeMetadata("TransformationContext")),
+              ])
+        ]);
+
+//    ClassGenerator classGenerator =
+//        (ClassMetadata metadata, StringBuffer buffer) {
+//      var annotationGenerators = <AnnotationGenerator>[
+//        generateOverrideAnnotation
+//      ];
+//
+//      if (view.isExplicit) {
+//        annotationGenerators.add(generateFieldAnnotation);
+//      }
+//
+//      generateFields(metadata.fields, buffer,
+//          annotationGenerators: annotationGenerators);
+//    };
 
     sink.writeln('''
 class ${helper.className} extends AbstractTransformation<${helper.fromName},
@@ -276,7 +312,6 @@ class _TransformationContext extends BaseTransformationContext {
     sink.writeln('''
       }
     ''');
-
   }
 }
 
@@ -347,6 +382,12 @@ class _ValueClassRelationHelper {
   Iterable<_TransformDescriptor> get descriptors =>
       properties.values.expand((h) => h.transformDescriptor);
 
+  Iterable<FieldMetadata> get fields =>
+    properties.values.expand((h) => h.transformDescriptor).map((td) =>
+    new FieldMetadata.field(td.variableName, new TypeMetadata(td.typeString),
+      isFinal: true));
+
+
   bool get hasDependencies => descriptors.isNotEmpty;
 
   String get fromName => classRelation.from.name;
@@ -357,6 +398,9 @@ class _ValueClassRelationHelper {
   String get transformerFields => descriptors
       .map((d) => 'final ${d.typeString} ${d.variableName};')
       .join('\n');
+
+  Iterable<String> get transformerParameters =>
+    descriptors.map((d) => 'this.${d.variableName}');
 
   String get transformerParams =>
       descriptors.map((d) => 'this.${d.variableName}').join(', ');
