@@ -93,6 +93,7 @@ class RelationToTransformationHelper {
           (_, __) {
         buffer.writeln(
             '''_log.finer(() => 'mapProperties for ${helper.className}');''');
+        _generateProperties(helper, buffer);
       });
 
 //      generateFields(metadata.fields, buffer,
@@ -121,35 +122,20 @@ class ${helper.className} extends AbstractTransformation<${helper.fromName},
     _log.finer(() => 'mapProperties for ${helper.className}');
 
   ''');
-    _generateProperties(helper);
+    _generateProperties(helper, sink);
     sink.writeln('''
   }
 }
 ''');
   }
 
-  void _generateProperties(_ValueClassRelationHelper helper) {
+  void _generateProperties(_ValueClassRelationHelper helper, StringSink sink) {
     helper.classRelation.propertyRelations
-        .forEach((p) => _generateProperty(p, helper));
-/*
-    toBuilder.name = from?.id?.toString(); // TODO: name to id transform
-
-//    b.relate((f) => f.definitions).to((t) => t.classifiers);
-    if (from.definitions != null) {
-      from.definitions.forEach((d) {
-        final classifier = schemaToValueClassTransform(d);
-        toBuilder.classifiers.add(classifier);
-      });
-    }
-
-//    b.relate((f) => f).to((t) => t.classifiers);
-    toBuilder.classifiers.add(schemaToValueClassTransform(from));
-
-*/
+        .forEach((p) => _generateProperty(p, helper, sink));
   }
 
-  void _generateProperty(
-      PropertyRelation propertyRelation, _ValueClassRelationHelper helper) {
+  void _generateProperty(PropertyRelation propertyRelation,
+      _ValueClassRelationHelper helper, StringSink sink) {
     final to = propertyRelation.to;
     final from = propertyRelation.from;
 
