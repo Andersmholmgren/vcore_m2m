@@ -85,9 +85,7 @@ class FunctionGenerator extends _SourceGenerator {
     sink.write(' ');
     functionNameGenerator(sink);
     sink.write('(');
-    final sb = new StringBuffer();
-    final params = parameterGenerators.map((pg) => pg(sb)).join(', ');
-    sink.write(params);
+    commaSeparated(parameterGenerators, sink);
     sink.write(') ');
     if (useArrow)
       sink.writeln('=>');
@@ -134,10 +132,7 @@ class ClassGenerator extends _SourceGenerator {
 
     if (interfaceGenerators.isNotEmpty) {
       sink.write('implements ');
-
-      final sb = new StringBuffer();
-      final interfaces = interfaceGenerators.map((ig) => ig(sb)).join(', ');
-      sink.write(interfaces);
+      commaSeparated(interfaceGenerators, sink);
     }
     sink.writeln(' {');
 
