@@ -67,6 +67,8 @@ class RelationToTransformationHelper {
         (ClassMetadata metadata, StringBuffer buffer) {
       generateFields(helper.transformerFields, buffer);
 
+      buffer.writeln();
+
       generateConstructorDefinition(
           new ConstructorMetadata(new TypeMetadata(helper.className),
               parameters:
@@ -76,12 +78,15 @@ class RelationToTransformationHelper {
 //          generateConstructorCall()
       });
 
+      buffer.writeln();
+
       generateFunctionDefinition(
           new MethodMetadata('mapProperties', new TypeMetadata('void'),
               annotations: [override]),
           buffer, (_, __) {
         buffer.writeln(
             '''_log.finer(() => 'mapProperties for ${helper.className}');''');
+        buffer.writeln();
         _generateProperties(helper, buffer);
       }, annotationGenerators: [generateOverrideAnnotation]);
 
@@ -96,26 +101,28 @@ class RelationToTransformationHelper {
     print(buffer);
     print('-----');
 
-    sink.writeln('''
-class ${helper.className} extends AbstractTransformation<${helper.fromName},
-    ${helper.fromName}Builder, ${helper.toName}, ${helper.toName}Builder> {
-  ${helper.transformerFieldsOld}
+    sink.write(buffer);
 
-  ${helper.className}(${helper.fromName} from, TransformationContext context
-  $transformerParamExtra
-      )
-      : super(from, context, new ${helper.toName}Builder());
-
-  @override
-  void mapProperties() {
-    _log.finer(() => 'mapProperties for ${helper.className}');
-
-  ''');
-    _generateProperties(helper, sink);
-    sink.writeln('''
-  }
-}
-''');
+//    sink.writeln('''
+//class ${helper.className} extends AbstractTransformation<${helper.fromName},
+//    ${helper.fromName}Builder, ${helper.toName}, ${helper.toName}Builder> {
+//  ${helper.transformerFieldsOld}
+//
+//  ${helper.className}(${helper.fromName} from, TransformationContext context
+//  $transformerParamExtra
+//      )
+//      : super(from, context, new ${helper.toName}Builder());
+//
+//  @override
+//  void mapProperties() {
+//    _log.finer(() => 'mapProperties for ${helper.className}');
+//
+//  ''');
+//    _generateProperties(helper, sink);
+//    sink.writeln('''
+//  }
+//}
+//''');
   }
 
   void _generateProperties(_ValueClassRelationHelper helper, StringSink sink) {
