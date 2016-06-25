@@ -35,9 +35,6 @@ class RelationToTransformationHelper {
   }
 
   void _generateClassifier(_ValueClassRelationHelper helper) {
-    final transformerParamExtra =
-        helper.hasDependencies ? ', ${helper.transformerParams}' : '';
-
     final transformerCtrParams = helper.transformerFields.map(
         (fm) => new ParameterMetadata(fm.name, fm.type, isInitializer: true));
 
@@ -47,7 +44,6 @@ class RelationToTransformationHelper {
           "context", new TypeMetadata("TransformationContext"))
     ];
 
-//    new ${helper.toName}Builder()
     final superCallParams = concat([
       superCtrParams.map((p) => p.name),
       ['new ${helper.toName}Builder()']
@@ -55,16 +51,17 @@ class RelationToTransformationHelper {
 
     final superCtrCall = 'super(${superCallParams.join(', ')})';
 
-    final classMetaData = new ClassMetadata(helper.className,
-        supertype: new TypeMetadata("AbstractTransformation", arguments: [
-          new TypeMetadata(helper.fromName),
-          new TypeMetadata("${helper.fromName}Builder"),
-          new TypeMetadata(helper.toName),
-          new TypeMetadata("${helper.toName}Builder")
-        ]));
+    final StringBuffer buffer = new StringBuffer();
 
-    ClassGenerator classGenerator =
-        (ClassMetadata metadata, StringBuffer buffer) {
+    generateClassDefinition(
+        new ClassMetadata(helper.className,
+            supertype: new TypeMetadata("AbstractTransformation", arguments: [
+              new TypeMetadata(helper.fromName),
+              new TypeMetadata("${helper.fromName}Builder"),
+              new TypeMetadata(helper.toName),
+              new TypeMetadata("${helper.toName}Builder")
+            ])),
+        buffer, (_, __) {
       generateFields(helper.transformerFields, buffer);
 
       buffer.writeln();
@@ -75,7 +72,6 @@ class RelationToTransformationHelper {
                   concat([superCtrParams, transformerCtrParams]).toList()),
           buffer, initializerListGenerator: (_, __) {
         buffer.write(superCtrCall);
-//          generateConstructorCall()
       });
 
       buffer.writeln();
@@ -89,17 +85,7 @@ class RelationToTransformationHelper {
         buffer.writeln();
         _generateProperties(helper, buffer);
       }, annotationGenerators: [generateOverrideAnnotation]);
-
-//      generateFields(metadata.fields, buffer,
-//        annotationGenerators: [generateOverrideAnnotation]);
-    };
-
-    final StringBuffer buffer = new StringBuffer();
-    generateClassDefinition(classMetaData, buffer, classGenerator);
-//    classGenerator(classMetaData, buffer);
-    print('xxx');
-    print(buffer);
-    print('-----');
+    });
 
     sink.write(buffer);
 
