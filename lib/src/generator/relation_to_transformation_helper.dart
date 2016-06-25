@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 
 import 'package:dogma_codegen/codegen.dart';
 import 'package:dogma_source_analyzer/metadata.dart';
+import 'package:quiver/iterables.dart';
 
 final _log = new Logger('vcore.m2m.relation.transformation');
 
@@ -40,37 +41,63 @@ class RelationToTransformationHelper {
     final transformerCtrParams = helper.transformerFields
         .map((fm) => new ParameterMetadata(fm.name, fm.type));
 
+    final superCtrParams = [
+      new ParameterMetadata("from", new TypeMetadata(helper.fromName)),
+      new ParameterMetadata(
+          "context", new TypeMetadata("TransformationContext"))
+    ];
+
+//    new ${helper.toName}Builder()
+    final superCallParams = concat([
+      superCtrParams.map((p) => p.name),
+      ['new ${helper.toName}Builder()']
+    ]);
+
+    final superCtrCall = 'super(${superCallParams.join(', ')})';
+
     final classMetaData = new ClassMetadata(helper.className,
         supertype: new TypeMetadata("AbstractTransformation", arguments: [
           new TypeMetadata(helper.fromName),
           new TypeMetadata("${helper.fromName}Builder"),
           new TypeMetadata(helper.toName),
           new TypeMetadata("${helper.toName}Builder")
-        ]),
-        fields: helper.transformerFields,
-        constructors: [
-          new ConstructorMetadata(new TypeMetadata(helper.className),
-              parameters: [
-                new ParameterMetadata(
-                    "from", new TypeMetadata(helper.fromName)),
-                new ParameterMetadata(
-                    "context", new TypeMetadata("TransformationContext")),
-              ]..addAll(transformerCtrParams))
-        ]);
+        ])
+//    ,
+//        fields: helper.transformerFields,
+//        constructors: [
+//          new ConstructorMetadata(new TypeMetadata(helper.className),
+//              parameters: [
+//                new ParameterMetadata(
+//                    "from", new TypeMetadata(helper.fromName)),
+//                new ParameterMetadata(
+//                    "context", new TypeMetadata("TransformationContext")),
+//              ]..addAll(transformerCtrParams))
+//        ]
+        );
 
-//    ClassGenerator classGenerator =
-//        (ClassMetadata metadata, StringBuffer buffer) {
-//      var annotationGenerators = <AnnotationGenerator>[
-//        generateOverrideAnnotation
-//      ];
-//
-//      if (view.isExplicit) {
-//        annotationGenerators.add(generateFieldAnnotation);
-//      }
-//
+    ClassGenerator classGenerator =
+        (ClassMetadata metadata, StringBuffer buffer) {
+      generateFields(helper.transformerFields, buffer);
+
+      generateConstructorDefinition(
+          new ConstructorMetadata(new TypeMetadata(helper.className),
+              parameters:
+                  concat([superCtrParams, transformerCtrParams]).toList()),
+          buffer, initializerListGenerator: (_, __) {
+        buffer.write(superCtrCall);
+//          generateConstructorCall()
+      });
+
 //      generateFields(metadata.fields, buffer,
-//          annotationGenerators: annotationGenerators);
-//    };
+//        annotationGenerators: [generateOverrideAnnotation]);
+    };
+
+    final StringBuffer buffer = new StringBuffer();
+    generateClassDefinition(classMetaData, buffer, classGenerator);
+//    classGenerator(classMetaData, buffer);
+    print('xxx');
+    print(buffer);
+    print('-----');
 
     sink.writeln('''
 class ${helper.className} extends AbstractTransformation<${helper.fromName},
@@ -80,7 +107,7 @@ class ${helper.className} extends AbstractTransformation<${helper.fromName},
   ${helper.className}(${helper.fromName} from, TransformationContext context
   $transformerParamExtra
       )
-      : super(from, new ${helper.toName}Builder(), context);
+      : super(from, context, new ${helper.toName}Builder());
 
   @override
   void mapProperties() {
