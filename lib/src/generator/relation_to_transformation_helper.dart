@@ -37,15 +37,17 @@ class RelationToTransformationHelper {
     final transformerParamExtra =
         helper.hasDependencies ? ', ${helper.transformerParams}' : '';
 
-    helper.transformerParameters.map((n) => new );
+    final transformerCtrParams = helper.transformerFields
+        .map((fm) => new ParameterMetadata(fm.name, fm.type));
 
-    new ClassMetadata(helper.className,
+    final classMetaData = new ClassMetadata(helper.className,
         supertype: new TypeMetadata("AbstractTransformation", arguments: [
           new TypeMetadata(helper.fromName),
           new TypeMetadata("${helper.fromName}Builder"),
           new TypeMetadata(helper.toName),
           new TypeMetadata("${helper.toName}Builder")
         ]),
+        fields: helper.transformerFields,
         constructors: [
           new ConstructorMetadata(new TypeMetadata(helper.className),
               parameters: [
@@ -53,7 +55,7 @@ class RelationToTransformationHelper {
                     "from", new TypeMetadata(helper.fromName)),
                 new ParameterMetadata(
                     "context", new TypeMetadata("TransformationContext")),
-              ])
+              ]..addAll(transformerCtrParams))
         ]);
 
 //    ClassGenerator classGenerator =
@@ -73,7 +75,7 @@ class RelationToTransformationHelper {
     sink.writeln('''
 class ${helper.className} extends AbstractTransformation<${helper.fromName},
     ${helper.fromName}Builder, ${helper.toName}, ${helper.toName}Builder> {
-  ${helper.transformerFields}
+  ${helper.transformerFieldsOld}
 
   ${helper.className}(${helper.fromName} from, TransformationContext context
   $transformerParamExtra
@@ -382,11 +384,11 @@ class _ValueClassRelationHelper {
   Iterable<_TransformDescriptor> get descriptors =>
       properties.values.expand((h) => h.transformDescriptor);
 
-  Iterable<FieldMetadata> get fields =>
-    properties.values.expand((h) => h.transformDescriptor).map((td) =>
-    new FieldMetadata.field(td.variableName, new TypeMetadata(td.typeString),
-      isFinal: true));
-
+  Iterable<FieldMetadata> get transformerFields => properties.values
+      .expand((h) => h.transformDescriptor)
+      .map((td) => new FieldMetadata.field(
+          td.variableName, new TypeMetadata(td.typeString),
+          isFinal: true));
 
   bool get hasDependencies => descriptors.isNotEmpty;
 
@@ -395,12 +397,13 @@ class _ValueClassRelationHelper {
   String get className => '${fromName}To${toName}Transformation';
   String get createTransformName => '_create${fromName}To${toName}Transform';
 
-  String get transformerFields => descriptors
+  @deprecated
+  String get transformerFieldsOld => descriptors
       .map((d) => 'final ${d.typeString} ${d.variableName};')
       .join('\n');
 
   Iterable<String> get transformerParameters =>
-    descriptors.map((d) => 'this.${d.variableName}');
+      descriptors.map((d) => 'this.${d.variableName}');
 
   String get transformerParams =>
       descriptors.map((d) => 'this.${d.variableName}').join(', ');
