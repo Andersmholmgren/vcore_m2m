@@ -38,8 +38,8 @@ class RelationToTransformationHelper {
     final transformerParamExtra =
         helper.hasDependencies ? ', ${helper.transformerParams}' : '';
 
-    final transformerCtrParams = helper.transformerFields
-        .map((fm) => new ParameterMetadata(fm.name, fm.type));
+    final transformerCtrParams = helper.transformerFields.map(
+        (fm) => new ParameterMetadata(fm.name, fm.type, isInitializer: true));
 
     final superCtrParams = [
       new ParameterMetadata("from", new TypeMetadata(helper.fromName)),
@@ -61,19 +61,7 @@ class RelationToTransformationHelper {
           new TypeMetadata("${helper.fromName}Builder"),
           new TypeMetadata(helper.toName),
           new TypeMetadata("${helper.toName}Builder")
-        ])
-//    ,
-//        fields: helper.transformerFields,
-//        constructors: [
-//          new ConstructorMetadata(new TypeMetadata(helper.className),
-//              parameters: [
-//                new ParameterMetadata(
-//                    "from", new TypeMetadata(helper.fromName)),
-//                new ParameterMetadata(
-//                    "context", new TypeMetadata("TransformationContext")),
-//              ]..addAll(transformerCtrParams))
-//        ]
-        );
+        ]));
 
     ClassGenerator classGenerator =
         (ClassMetadata metadata, StringBuffer buffer) {
