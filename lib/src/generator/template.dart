@@ -63,11 +63,20 @@ ${perClassRelation((String fromName, String toName) =>
         .build();
   }
 
-  Transform<Schema, Package> _createSchemaToPackageTransform() {
-    return (Schema schema) => new SchemaToPackageTransformation(schema, this,
-            _createUriToStringTransform(), _createSchemaToClassifierTransform())
+${perClassRelation((String fromName, String toName) =>
+    '''
+          ..[new TransformKey((b) => b
+            ..from = $fromName
+            ..to = $toName)] = _create${fromName}To${toName}Transform
+
+  Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
+    return ($fromName ${lower(fromName)}) => new ${fromName}To${toName}Transformation(${lower(fromName)}, this,
+            _createUriToStringTransform(),
+            _createSchemaToClassifierTransform())
         .transform();
   }
+''')})
+
 
   Transform<Schema, ValueClass> _createSchemaToValueClassTransform() {
     return (Schema schema) => new SchemaToValueClassTransformation(
