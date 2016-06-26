@@ -31,7 +31,7 @@ class $className extends AbstractTransformation<$fromName,
   ''')}
   $className($fromName from, TransformationContext context
   ${transformCtrParam((f, t) => '''
-      , this.${lower(f)}To${t}Transform)''')}
+      , this.${lower(f)}To${t}Transform''')})
       : super(from, context, new ${toName}Builder());
 
   @override

@@ -32,19 +32,21 @@ class RelationToTransformationHelper {
             String className,
             String fromName,
             String toName,
-            void transformField(String b(String f, String t)),
-            void transformCtrParam(String b(String f, String t)),
-            void mapProperties())) {
+            String transformField(String b(String f, String t)),
+            String transformCtrParam(String b(String f, String t)),
+            String mapProperties())) {
       packageRelationHelper.valueClasses.values.forEach((h) {
-        void transformField(String b(String f, String t)) {
-          h.convertingProperties
-              .forEach((f) => sink.writeln(b(f.fromName, f.toName)));
-        }
-        void transformCtrParam(String b(String f, String t)) {
-          h.convertingProperties
-              .forEach((f) => sink.writeln(b(f.fromName, f.toName)));
-        }
-        void mapProperties() {}
+        String transformField(String b(String f, String t)) =>
+            h.convertingProperties
+                .map((f) => b(f.fromName, f.toName))
+                .join('\n');
+
+        String transformCtrParam(String b(String f, String t)) =>
+            h.convertingProperties
+                .map((f) => b(f.fromName, f.toName))
+                .join('\n');
+
+        String mapProperties() => "// props here";
 
         sink.writeln(b(h.className, h.fromName, h.toName, transformField,
             transformCtrParam, mapProperties));
