@@ -42,7 +42,7 @@ class RelationToTransformationHelper {
                 .map((f) => b(f.fromName, f.toName))
                 .join('\n');
 
-        String mapProperties() => "// props here";
+        String mapProperties() => _generateProperties(h);
 
         return b(
             h.className, h.fromName, h.toName, transformField, mapProperties);
@@ -50,14 +50,14 @@ class RelationToTransformationHelper {
     }
 
     sink.writeln(template(_uncapitalise, transformClass));
-    if (true) return;
-
-    sink.writeln('''
-    final _log = new Logger('${packageRelationHelper.name}');
-    ''');
-
-    packageRelationHelper.valueClasses.values.forEach(_generateClassifier);
-    _generateTransformationContext();
+//    if (true) return;
+//
+//    sink.writeln('''
+//    final _log = new Logger('${packageRelationHelper.name}');
+//    ''');
+//
+//    packageRelationHelper.valueClasses.values.forEach(_generateClassifier);
+//    _generateTransformationContext();
   }
 
   void _generateClassifier(_ValueClassRelationHelper helper) {
@@ -115,13 +115,15 @@ class RelationToTransformationHelper {
     sink.write(buffer);
   }
 
-  void _generateProperties(_ValueClassRelationHelper helper, StringSink sink) {
-    helper.classRelation.propertyRelations
-        .forEach((p) => _generateProperty(p, helper, sink));
+  String _generateProperties(_ValueClassRelationHelper helper) {
+    return helper.classRelation.propertyRelations
+        .map((p) => _generateProperty(p, helper))
+        .join('\n');
   }
 
-  void _generateProperty(PropertyRelation propertyRelation,
-      _ValueClassRelationHelper helper, StringSink sink) {
+  String _generateProperty(
+      PropertyRelation propertyRelation, _ValueClassRelationHelper helper) {
+    final StringBuffer buffer = new StringBuffer();
     final to = propertyRelation.to;
     final from = propertyRelation.from;
 
@@ -144,7 +146,7 @@ class RelationToTransformationHelper {
           'only support relationships between properties of the same arity');
     }
     if (from.property.isCollection) {
-      sink.writeln('''
+      buffer.writeln('''
     if ($fromPathExpression != null) {
       $fromPathExpression.forEach((e) {
         $toPathExpression.add(${maybeConvertedValue('e')});
@@ -152,9 +154,10 @@ class RelationToTransformationHelper {
     }
       ''');
     } else {
-      sink.writeln('$toPathExpression = '
+      buffer.writeln('$toPathExpression = '
           '${maybeConvertedValue(fromPathExpression)};');
     }
+    return buffer.toString();
   }
 
   void _generateTransformationContext() {

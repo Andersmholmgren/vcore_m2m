@@ -37,12 +37,6 @@ class $className extends AbstractTransformation<$fromName,
     _log.finer(() => 'mapProperties for $fromName');
 
     ${mapProperties()}
-//    toBuilder.name = uriToStringTransform(from.id);
-//    if (from.definitions != null) {
-//      from.definitions.forEach((e) {
-//        toBuilder.classifiers.add(schemaToClassifierTransform(e)?.toBuilder());
-//      });
-//    }
   }
 }
 ''')}
