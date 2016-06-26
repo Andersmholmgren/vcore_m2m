@@ -109,18 +109,6 @@ ${perAvailableTransform((String f, String t) =>
     return propertyRelation.transform.forwards as Transform<Uri, String>;
   }
 
-  Transform<Uri, String> _createUriToStringTransform() {
-    // TODO: should cache these lookups
-    final classRelation = packageRelation.classifierRelations.firstWhere(
-            (cr) => cr.from.name == 'Schema' && cr.to.name == 'ValueClass')
-        as ValueClassRelation;
-
-    final propertyRelation = classRelation.propertyRelations.firstWhere((pr) =>
-        pr.from.path == new BuiltList<String>(['id']) &&
-        pr.to.path == new BuiltList<String>(['name']));
-
-    return propertyRelation.transform.forwards as Transform<Uri, String>;
-  }
 }
 
 ''';
