@@ -36,8 +36,6 @@ class RelationToTransformationHelper {
   void generate() {
     _log.info(() => 'generating transformer for ${packageRelationHelper.name}');
 
-    sink.writeln('// starts here');
-
     String perClassRelation(
         String b(String className, String fromName, String toName,
             [String transformField(String b(String f, String t)),
