@@ -1,5 +1,13 @@
-
-final template = '''
+void template(
+    String lower(String s),
+    void transformClass(
+        b(
+            String className,
+            String fromName,
+            String toName,
+            void transformField(String b(String f, String t)),
+            void transformCtrParam(String b(String f, String t))))) {
+  '''
 import 'package:jason_schemer/src/models/schema.dart';
 import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/vcore_m2m.dart';
@@ -10,18 +18,23 @@ import 'package:jason_schemer/src/m2m/schema_to_vcore.dart' as relations;
 
 final _log = new Logger('schemaTovcoreRelation');
 
-class SchemaToPackageTransformation extends AbstractTransformation<Schema,
-    SchemaBuilder, Package, PackageBuilder> {
-  final Transform<Uri, String> uriToStringTransform;
-  final Transform<Schema, Classifier> schemaToClassifierTransform;
-
-  SchemaToPackageTransformation(Schema from, TransformationContext context,
-      this.uriToStringTransform, this.schemaToClassifierTransform)
-      : super(from, context, new PackageBuilder());
+${transformClass((String className, String fromName, String toName,
+  void transformField(String b(String f, String t)),
+    void transformCtrParam(String b(String f, String t))) =>
+  '''
+class $className extends AbstractTransformation<$fromName,
+    ${fromName}Builder, $toName, ${toName}Builder> {
+  ${transformField((f, t) => '''
+  final Transform<$f, $t> ${lower(f)}To${t}Transform;
+  ''')}
+  $className($fromName from, TransformationContext context
+  ${transformCtrParam((f, t) => '''
+      , this.${lower(f)}To${t}Transform)''')}
+      : super(from, context, new ${toName}Builder());
 
   @override
   void mapProperties() {
-    _log.finer(() => 'mapProperties for SchemaToPackageTransformation');
+    _log.finer(() => 'mapProperties for $fromName');
 
     toBuilder.name = uriToStringTransform(from.id);
     if (from.definitions != null) {
@@ -31,49 +44,8 @@ class SchemaToPackageTransformation extends AbstractTransformation<Schema,
     }
   }
 }
+''')}
 
-class SchemaToValueClassTransformation extends AbstractTransformation<Schema,
-    SchemaBuilder, ValueClass, ValueClassBuilder> {
-  final Transform<Uri, String> uriToStringTransform;
-  final Transform<SchemaProperty, Property> schemaPropertyToPropertyTransform;
-
-  SchemaToValueClassTransformation(Schema from, TransformationContext context,
-      this.uriToStringTransform, this.schemaPropertyToPropertyTransform)
-      : super(from, context, new ValueClassBuilder());
-
-  @override
-  void mapProperties() {
-    _log.finer(() => 'mapProperties for SchemaToValueClassTransformation');
-
-    toBuilder.name = uriToStringTransform(from.id);
-    if (from.properties != null) {
-      from.properties.forEach((e) {
-        toBuilder.properties
-            .add(schemaPropertyToPropertyTransform(e)?.toBuilder());
-      });
-    }
-  }
-}
-
-class SchemaPropertyToPropertyTransformation extends AbstractTransformation<
-    SchemaProperty, SchemaPropertyBuilder, Property, PropertyBuilder> {
-  final Transform<SchemaReference, Classifier>
-      schemaReferenceToClassifierTransform;
-
-  SchemaPropertyToPropertyTransformation(SchemaProperty from,
-      TransformationContext context, this.schemaReferenceToClassifierTransform)
-      : super(from, context, new PropertyBuilder());
-
-  @override
-  void mapProperties() {
-    _log.finer(
-        () => 'mapProperties for SchemaPropertyToPropertyTransformation');
-
-    toBuilder.name = from.name;
-    toBuilder.type =
-        schemaReferenceToClassifierTransform(from.schemaRef)?.toBuilder();
-  }
-}
 
 Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
     Type fromType, Type toType) {
@@ -178,3 +150,4 @@ class _TransformationContext extends BaseTransformationContext {
 }
 
 ''';
+}
