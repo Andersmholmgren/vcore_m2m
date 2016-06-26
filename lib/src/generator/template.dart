@@ -3,7 +3,10 @@ String template(
         String perClassRelation(
             String b(String className, String fromName, String toName,
                 [String transformField(String b(String f, String t)),
-                String mapProperties()]))) =>
+                String mapProperties()])),
+        String perRequiredAbstractToConcreteTransform(
+            String b(String fromName, String toName,
+                String perAvailableTransform(String b(String f, String t))))) =>
     '''
 import 'package:jason_schemer/src/models/schema.dart';
 import 'package:vcore/vcore.dart';
@@ -70,34 +73,28 @@ ${perClassRelation((String className, String fromName, String toName,
   }
 ''')}
 
-  Transform<Schema, Classifier> _createSchemaToClassifierTransform() {
-    final schemaToValueClassTransformation =
-        _createSchemaToValueClassTransform();
-
-    return (Schema schema) {
-      if (schema is Schema) {
-        return schemaToValueClassTransformation(schema as Schema);
-      } else {
+${perRequiredAbstractToConcreteTransform((String fromName, String toName,
+      String perAvailableTransform(String b(String f, String t))) =>
+'''
+  Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
+${perAvailableTransform((String f, String t) =>
+'''
+    final ${lower(f)}To${t}Transformation =
+        _create${f}To${t}Transform();
+''')}
+    return ($fromName ${lower(fromName)}) {
+${perAvailableTransform((String f, String t) =>
+'''
+      if (${lower(fromName)} is $f) {
+        return ${lower(f)}To${t}Transformation(${lower(fromName)} as $f);
+      }''')}
+ else {
         throw new StateError(
-            "No transform from %{ schema.runtimeType} to Classifier");
+            "No transform from \${$fromName.runtimeType} to $toName");
       }
     };
   }
-
-  Transform<SchemaReference, Classifier>
-      _createSchemaReferenceToClassifierTransform() {
-    final schemaToValueClassTransformation =
-        _createSchemaToValueClassTransform();
-
-    return (SchemaReference schemaReference) {
-      if (schemaReference is Schema) {
-        return schemaToValueClassTransformation(schemaReference as Schema);
-      } else {
-        throw new StateError(
-            "No transform from %{schemaReference.runtimeType} to Classifier");
-      }
-    };
-  }
+''')}
 
   Transform<Uri, String> _createUriToStringTransform() {
     // TODO: should cache these lookups

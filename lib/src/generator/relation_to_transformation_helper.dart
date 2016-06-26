@@ -30,10 +30,7 @@ class RelationToTransformationHelper {
     sink.writeln('// starts here');
 
     String perClassRelation(
-        String b(
-            String className,
-            String fromName,
-            String toName,
+        String b(String className, String fromName, String toName,
             [String transformField(String b(String f, String t)),
             String mapProperties()])) {
       return packageRelationHelper.valueClasses.values.map((h) {
@@ -49,7 +46,34 @@ class RelationToTransformationHelper {
       }).join('\n');
     }
 
-    sink.writeln(template(_uncapitalise, perClassRelation));
+    String perRequiredAbstractToConcreteTransform(
+        String b(String fromName, String toName,
+            String perAvailableTransform(String b(String f, String t)))) {
+      final StringBuffer buffer = new StringBuffer();
+      packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
+        final fromName = from.name;
+        final toName = to.name;
+        print('requiredAbstractTransforms: $fromName -> $toName');
+
+        if (from is ValueClass && to is ValueClass) {
+          String perAvailableTransform(String b(String f, String t)) {
+            return packageRelationHelper
+                .subTypesOf(from, to)
+                .map((h) => b(h.fromName, h.toName))
+                .join('\n');
+          }
+//          _generateAbstractToConcreteMethod(
+//            fromName, toName, packageRelationHelper.subTypesOf(from, to));
+
+          buffer.writeln(b(fromName, toName, perAvailableTransform));
+        }
+      });
+
+      return buffer.toString();
+    }
+
+    sink.writeln(template(_uncapitalise, perClassRelation,
+        perRequiredAbstractToConcreteTransform));
 //    if (true) return;
 //
 //    sink.writeln('''
