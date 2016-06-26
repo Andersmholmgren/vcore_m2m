@@ -1,7 +1,6 @@
 String template(
         String lower(String s),
-        String perClassRelation(String b(String fromName, String toName)),
-        String transformClass(
+        String perClassRelation(
             String b(String className, String fromName, String toName,
                 [String transformField(String b(String f, String t)),
                 String mapProperties()]))) =>
@@ -16,7 +15,7 @@ import 'package:jason_schemer/src/m2m/schema_to_vcore.dart' as relations;
 
 final _log = new Logger('schemaTovcoreRelation');
 
-${transformClass((String className, String fromName, String toName,
+${perClassRelation((String className, String fromName, String toName,
       [String transformField(String b(String f, String t)),
       String mapProperties()]) =>
   '''
@@ -51,7 +50,7 @@ class _TransformationContext extends BaseTransformationContext {
 
   _TransformationContext(this.packageRelation) {
     transformers = (new MapBuilder<TransformKey, TransformFactory>()
-${transformClass((String className, String fromName, String toName, _, __) =>
+${perClassRelation((String className, String fromName, String toName, _, __) =>
 '''
           ..[new TransformKey((b) => b
             ..from = $fromName
@@ -60,7 +59,7 @@ ${transformClass((String className, String fromName, String toName, _, __) =>
         .build();
   }
 
-${transformClass((String className, String fromName, String toName,
+${perClassRelation((String className, String fromName, String toName,
       [String transformField(String b(String f, String t)), __]) =>
     '''
   Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {

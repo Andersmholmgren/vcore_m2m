@@ -29,7 +29,7 @@ class RelationToTransformationHelper {
 
     sink.writeln('// starts here');
 
-    String transformClass(
+    String perClassRelation(
         String b(
             String className,
             String fromName,
@@ -49,13 +49,7 @@ class RelationToTransformationHelper {
       }).join('\n');
     }
 
-    String perClassRelation(String b(String fromName, String toName)) {
-      return packageRelationHelper.valueClasses.values
-          .map((h) => b(h.fromName, h.toName))
-          .join('\n');
-    }
-
-    sink.writeln(template(_uncapitalise, perClassRelation, transformClass));
+    sink.writeln(template(_uncapitalise, perClassRelation));
 //    if (true) return;
 //
 //    sink.writeln('''
