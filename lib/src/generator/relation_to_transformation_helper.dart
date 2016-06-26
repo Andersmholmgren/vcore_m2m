@@ -74,15 +74,13 @@ class RelationToTransformationHelper {
     String perCustomTransform(
         String b(String fromName, String toName, String fromPathSegments,
             String toPathSegments)) {
-      return packageRelationHelper.valueClasses.values.map((h) {
-        final StringBuffer buffer = new StringBuffer();
-        h.properties.forEach((pr, ph) {
-          if (ph.hasCustomTransform) {
-            buffer.writeln(b(ph.fromName, ph.toName, ph.fromPathExpression,
-                ph.toPathExpression));
-          }
+      return packageRelationHelper.valueClasses.values.expand((h) {
+        return h.properties.values.map((ph) {
+          return ph.hasCustomTransform
+              ? b(ph.fromName, ph.toName, ph.fromPathExpression,
+                  ph.toPathExpression)
+              : "";
         });
-        return buffer.toString();
       }).join('\n');
     }
 
