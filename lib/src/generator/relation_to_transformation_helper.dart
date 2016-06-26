@@ -50,6 +50,7 @@ class RelationToTransformationHelper {
         String b(String fromName, String toName,
             String perAvailableTransform(String b(String f, String t)))) {
       final StringBuffer buffer = new StringBuffer();
+
       packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
         final fromName = from.name;
         final toName = to.name;
@@ -70,8 +71,23 @@ class RelationToTransformationHelper {
       return buffer.toString();
     }
 
+    String perCustomTransform(
+        String b(String fromName, String toName, String fromPathSegments,
+            String toPathSegments)) {
+      return packageRelationHelper.valueClasses.values.map((h) {
+        final StringBuffer buffer = new StringBuffer();
+        h.properties.forEach((pr, ph) {
+          if (ph.hasCustomTransform) {
+            buffer.writeln(b(ph.fromName, ph.toName, ph.fromPathExpression,
+                ph.toPathExpression));
+          }
+        });
+        return buffer.toString();
+      }).join('\n');
+    }
+
     sink.writeln(template(_uncapitalise, perClassRelation,
-        perRequiredAbstractToConcreteTransform));
+        perRequiredAbstractToConcreteTransform, perCustomTransform));
 //    if (true) return;
 //
 //    sink.writeln('''
@@ -549,6 +565,9 @@ class _PropertyRelationHelper {
 
   String pathExpression(BuiltList<String> path) =>
       'new BuiltList<String>(${[path.map((s) => "'$s'").join(', ')]})';
+
+  String get fromPathExpression => pathExpression(from.end.path);
+  String get toPathExpression => pathExpression(to.end.path);
 
   /// How to find this relation in the model
   String relationModelExpression(String classVariableName) =>

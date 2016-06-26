@@ -6,7 +6,10 @@ String template(
                 String mapProperties()])),
         String perRequiredAbstractToConcreteTransform(
             String b(String fromName, String toName,
-                String perSubTypeTransform(String b(String f, String t))))) =>
+                String perSubTypeTransform(String b(String f, String t)))),
+        String perCustomTransform(
+            String b(String fromName, String toName, String fromPathSegments,
+                String toPathSegments))) =>
     '''
 import 'package:jason_schemer/src/models/schema.dart';
 import 'package:vcore/vcore.dart';
@@ -90,25 +93,29 @@ ${perSubTypeTransform((String f, String t) =>
       }''')}
  else {
         throw new StateError(
-            "No transform from \${$fromName.runtimeType} to $toName");
+            "No transform from \${${lower(fromName)}.runtimeType} to $toName");
       }
     };
   }
 ''')}
 
-  Transform<Uri, String> _createUriToStringTransform() {
+${perCustomTransform((String fromName, String toName,
+      String fromPathSegments,String toPathSegments) =>
+'''
+  Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
     // TODO: should cache these lookups
     final classRelation = packageRelation.classifierRelations.firstWhere(
-            (cr) => cr.from.name == 'Schema' && cr.to.name == 'Package')
+            (cr) => cr.from.name == '$fromName' && cr.to.name == '$toName')
         as ValueClassRelation;
 
     final propertyRelation = classRelation.propertyRelations.firstWhere((pr) =>
-        pr.from.path == new BuiltList<String>(['id']) &&
-        pr.to.path == new BuiltList<String>(['name']));
+        pr.from.path == new BuiltList<String>($fromPathSegments) &&
+        pr.to.path == new BuiltList<String>($toPathSegments));
 
-    return propertyRelation.transform.forwards as Transform<Uri, String>;
+    return propertyRelation.transform.forwards as Transform<$fromName, $toName>;
   }
 
-}
+''')}
 
+}
 ''';
