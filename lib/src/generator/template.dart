@@ -1,4 +1,5 @@
 String template(
+        String sourceModelPackage,
         String packageRelationPackage,
         String fromPackageName,
         String toPackageName,
@@ -19,7 +20,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:option/option.dart';
 import 'package:logging/logging.dart';
 
-import 'package:jason_schemer/src/models/schema.dart';
+import '$sourceModelPackage';
 import '$packageRelationPackage' as relations;
 
 final _log = new Logger('${_uncapitalise(fromPackageName)}To${_capitalise(toPackageName)}Relation');
