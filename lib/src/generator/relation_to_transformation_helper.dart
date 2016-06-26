@@ -35,7 +35,6 @@ class RelationToTransformationHelper {
             String fromName,
             String toName,
             String transformField(String b(String f, String t)),
-            String transformCtrParam(String b(String f, String t)),
             String mapProperties())) {
       return packageRelationHelper.valueClasses.values.map((h) {
         String transformField(String b(String f, String t)) =>
@@ -43,15 +42,10 @@ class RelationToTransformationHelper {
                 .map((f) => b(f.fromName, f.toName))
                 .join('\n');
 
-        String transformCtrParam(String b(String f, String t)) =>
-            h.convertingProperties
-                .map((f) => b(f.fromName, f.toName))
-                .join('\n');
-
         String mapProperties() => "// props here";
 
-        return b(h.className, h.fromName, h.toName, transformField,
-            transformCtrParam, mapProperties);
+        return b(
+            h.className, h.fromName, h.toName, transformField, mapProperties);
       }).join('\n');
     }
 

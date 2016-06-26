@@ -6,7 +6,6 @@ String template(
                 String fromName,
                 String toName,
                 String transformField(String b(String f, String t)),
-                String transformCtrParam(String b(String f, String t)),
                 String mapProperties()))) =>
     '''
 import 'package:jason_schemer/src/models/schema.dart';
@@ -21,7 +20,6 @@ final _log = new Logger('schemaTovcoreRelation');
 
 ${transformClass((String className, String fromName, String toName,
       String transformField(String b(String f, String t)),
-      String transformCtrParam(String b(String f, String t)),
       String mapProperties()) =>
   '''
 class $className extends AbstractTransformation<$fromName,
@@ -30,7 +28,7 @@ class $className extends AbstractTransformation<$fromName,
   final Transform<$f, $t> ${lower(f)}To${t}Transform;
   ''')}
   $className($fromName from, TransformationContext context
-  ${transformCtrParam((f, t) => '''
+  ${transformField((f, t) => '''
       , this.${lower(f)}To${t}Transform''')})
       : super(from, context, new ${toName}Builder());
 
