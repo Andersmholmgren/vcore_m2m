@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-06-26T23:27:22.792451Z
+// 2016-06-26T23:30:07.901474Z
 
 part of transformer_meta;
 
@@ -9,7 +9,13 @@ part of transformer_meta;
 // **************************************************************************
 
 class _$TransformationMetaModel extends TransformationMetaModel {
-  _$TransformationMetaModel._() : super._() {}
+  final String fromTypeName;
+  final String toTypeName;
+  _$TransformationMetaModel._({this.fromTypeName, this.toTypeName})
+      : super._() {
+    if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
+    if (toTypeName == null) throw new ArgumentError('null toTypeName');
+  }
   factory _$TransformationMetaModel(
           [updates(TransformationMetaModelBuilder b)]) =>
       (new TransformationMetaModelBuilder()..update(updates)).build();
@@ -19,26 +25,36 @@ class _$TransformationMetaModel extends TransformationMetaModel {
       new _$TransformationMetaModelBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! TransformationMetaModel) return false;
-    return true;
+    return fromTypeName == other.fromTypeName && toTypeName == other.toTypeName;
   }
 
   int get hashCode {
-    return 837574995;
+    return hashObjects([fromTypeName, toTypeName]);
   }
 
   String toString() {
-    return 'TransformationMetaModel {}';
+    return 'TransformationMetaModel {'
+        'fromTypeName=${fromTypeName.toString()}\n'
+        'toTypeName=${toTypeName.toString()}\n'
+        '}';
   }
 }
 
 class _$TransformationMetaModelBuilder extends TransformationMetaModelBuilder {
   _$TransformationMetaModelBuilder() : super._();
-  void replace(TransformationMetaModel other) {}
+  void replace(TransformationMetaModel other) {
+    super.fromTypeName = other.fromTypeName;
+    super.toTypeName = other.toTypeName;
+  }
+
   void update(updates(TransformationMetaModelBuilder b)) {
     if (updates != null) updates(this);
   }
 
   TransformationMetaModel build() {
-    return new _$TransformationMetaModel._();
+    if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
+    if (toTypeName == null) throw new ArgumentError('null toTypeName');
+    return new _$TransformationMetaModel._(
+        fromTypeName: fromTypeName, toTypeName: toTypeName);
   }
 }

@@ -123,6 +123,7 @@ ${perCustomTransform((String fromName, String toName,
 
 }
 ''';
+
 // TODO: these should be in a util
 String _capitalise(String s) =>
     s.substring(0, 1).toUpperCase() + s.substring(1);
