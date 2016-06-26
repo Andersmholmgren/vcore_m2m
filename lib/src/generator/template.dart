@@ -1,14 +1,14 @@
-void template(
-    String lower(String s),
-    void transformClass(
-        b(
-            String className,
-            String fromName,
-            String toName,
-            void transformField(String b(String f, String t)),
-            void transformCtrParam(String b(String f, String t)),
-            void mapProperties()))) {
-  '''
+String template(
+        String lower(String s),
+        String transformClass(
+            String b(
+                String className,
+                String fromName,
+                String toName,
+                String transformField(String b(String f, String t)),
+                String transformCtrParam(String b(String f, String t)),
+                String mapProperties()))) =>
+    '''
 import 'package:jason_schemer/src/models/schema.dart';
 import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/vcore_m2m.dart';
@@ -20,9 +20,9 @@ import 'package:jason_schemer/src/m2m/schema_to_vcore.dart' as relations;
 final _log = new Logger('schemaTovcoreRelation');
 
 ${transformClass((String className, String fromName, String toName,
-  void transformField(String b(String f, String t)),
-  void transformCtrParam(String b(String f, String t)),
-  void mapProperties()) =>
+      String transformField(String b(String f, String t)),
+      String transformCtrParam(String b(String f, String t)),
+      String mapProperties()) =>
   '''
 class $className extends AbstractTransformation<$fromName,
     ${fromName}Builder, $toName, ${toName}Builder> {
@@ -105,7 +105,7 @@ class _TransformationContext extends BaseTransformationContext {
         return schemaToValueClassTransformation(schema as Schema);
       } else {
         throw new StateError(
-            "No transform from ${schema.runtimeType} to Classifier");
+            "No transform from %{ schema.runtimeType} to Classifier");
       }
     };
   }
@@ -120,7 +120,7 @@ class _TransformationContext extends BaseTransformationContext {
         return schemaToValueClassTransformation(schemaReference as Schema);
       } else {
         throw new StateError(
-            "No transform from ${schemaReference.runtimeType} to Classifier");
+            "No transform from %{schemaReference.runtimeType} to Classifier");
       }
     };
   }
@@ -153,4 +153,3 @@ class _TransformationContext extends BaseTransformationContext {
 }
 
 ''';
-}

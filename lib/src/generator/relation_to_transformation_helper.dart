@@ -7,6 +7,7 @@ import 'package:logging/logging.dart';
 import 'package:dogma_codegen/codegen.dart';
 import 'package:dogma_source_analyzer/metadata.dart';
 import 'package:quiver/iterables.dart';
+import 'template.dart';
 
 final _log = new Logger('vcore.m2m.relation.transformation');
 
@@ -25,6 +26,33 @@ class RelationToTransformationHelper {
 
   void generate() {
     _log.info(() => 'generating transformer for ${packageRelationHelper.name}');
+
+    String transformClass(
+        b(
+            String className,
+            String fromName,
+            String toName,
+            void transformField(String b(String f, String t)),
+            void transformCtrParam(String b(String f, String t)),
+            void mapProperties())) {
+      packageRelationHelper.valueClasses.values.forEach((h) {
+        void transformField(String b(String f, String t)) {
+          h.convertingProperties
+              .forEach((f) => sink.writeln(b(f.fromName, f.toName)));
+        }
+        void transformCtrParam(String b(String f, String t)) {
+          h.convertingProperties
+              .forEach((f) => sink.writeln(b(f.fromName, f.toName)));
+        }
+        void mapProperties() {}
+
+        sink.writeln(b(h.className, h.fromName, h.toName, transformField,
+            transformCtrParam, mapProperties));
+      });
+    }
+
+    sink.writeln(template(_uncapitalise, transformClass));
+    if (true) return;
 
     sink.writeln('''
     final _log = new Logger('${packageRelationHelper.name}');
@@ -176,7 +204,6 @@ Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
     .build();
   }
     ''');
-
       });
 
       buffer.writeln();
@@ -189,7 +216,7 @@ Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
     transformers = (new MapBuilder<TransformKey, TransformFactory>()
             ''');
         buffer.writeln();
-        _generateProperties(helper, buffer);
+//        _generateProperties(helper, buffer);
       }, annotationGenerators: [generateOverrideAnnotation]);
     });
 
@@ -424,16 +451,19 @@ class _PackageRelationHelper {
 class _ValueClassRelationHelper {
   final ValueClassRelation classRelation;
   final BuiltMap<PropertyRelation, _PropertyRelationHelper> properties;
-  Iterable<_TransformDescriptor> get descriptors =>
+
+  Iterable<_PropertyRelationHelper> get convertingProperties =>
+      properties.values.where((p) => p.converterRequired);
+
+  Iterable<_TransformDescriptor> get transformerFields2 =>
       properties.values.expand((h) => h.transformDescriptor);
 
-  Iterable<FieldMetadata> get transformerFields => properties.values
-      .expand((h) => h.transformDescriptor)
-      .map((td) => new FieldMetadata.field(
+  Iterable<FieldMetadata> get transformerFields =>
+      transformerFields2.map((td) => new FieldMetadata.field(
           td.variableName, new TypeMetadata(td.typeString),
           isFinal: true));
 
-  bool get hasDependencies => descriptors.isNotEmpty;
+  bool get hasDependencies => transformerFields2.isNotEmpty;
 
   String get fromName => classRelation.from.name;
   String get toName => classRelation.to.name;
@@ -441,17 +471,17 @@ class _ValueClassRelationHelper {
   String get createTransformName => '_create${fromName}To${toName}Transform';
 
   @deprecated
-  String get transformerFieldsOld => descriptors
+  String get transformerFieldsOld => transformerFields2
       .map((d) => 'final ${d.typeString} ${d.variableName};')
       .join('\n');
 
   Iterable<String> get transformerParameters =>
-      descriptors.map((d) => 'this.${d.variableName}');
+      transformerFields2.map((d) => 'this.${d.variableName}');
 
   String get transformerParams =>
-      descriptors.map((d) => 'this.${d.variableName}').join(', ');
+      transformerFields2.map((d) => 'this.${d.variableName}').join(', ');
 
-  String get constructorParams => descriptors
+  String get constructorParams => transformerFields2
       .map((d) => '_create${_capitalise(d.variableName)}()')
       .join(', ');
 
