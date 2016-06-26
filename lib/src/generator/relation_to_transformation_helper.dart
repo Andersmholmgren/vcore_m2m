@@ -36,6 +36,16 @@ class RelationToTransformationHelper {
   void generate() {
     _log.info(() => 'generating transformer for ${packageRelationHelper.name}');
 
+    /**
+     * Another approach is to create models for each part of this
+     * - TransformationClasses
+     * - context
+     *   - transformKeys
+     *   - factory methods (3 sorts)
+     *
+     * - then have a more direct serialisation of these
+     */
+
     String perClassRelation(
         String b(String className, String fromName, String toName,
             [String transformField(String b(String f, String t)),
