@@ -84,8 +84,12 @@ class RelationToTransformationHelper {
       }).join('\n');
     }
 
-    sink.writeln(template(_uncapitalise, perClassRelation,
-        perRequiredAbstractToConcreteTransform, perCustomTransform));
+    sink.writeln(template(
+        packageRelationHelper.fromName,
+        packageRelationHelper.toName,
+        perClassRelation,
+        perRequiredAbstractToConcreteTransform,
+        perCustomTransform));
   }
 
   String _generateProperties(_ValueClassRelationHelper helper) {
@@ -137,6 +141,9 @@ class RelationToTransformationHelper {
 class _PackageRelationHelper {
   final PackageRelation packageRelation;
   final BuiltMap<ValueClassRelation, _ValueClassRelationHelper> valueClasses;
+
+  String get fromName => packageRelation.from.name;
+  String get toName => packageRelation.to.name;
 
   Iterable<_ValueClassRelationHelper> get classHelpers => valueClasses.values;
 
@@ -368,4 +375,3 @@ String _capitalise(String s) =>
 
 String _uncapitalise(String s) =>
     s.substring(0, 1).toLowerCase() + s.substring(1);
-
