@@ -6,7 +6,8 @@ void template(
             String fromName,
             String toName,
             void transformField(String b(String f, String t)),
-            void transformCtrParam(String b(String f, String t))))) {
+            void transformCtrParam(String b(String f, String t)),
+            void mapProperties()))) {
   '''
 import 'package:jason_schemer/src/models/schema.dart';
 import 'package:vcore/vcore.dart';
@@ -20,7 +21,8 @@ final _log = new Logger('schemaTovcoreRelation');
 
 ${transformClass((String className, String fromName, String toName,
   void transformField(String b(String f, String t)),
-    void transformCtrParam(String b(String f, String t))) =>
+  void transformCtrParam(String b(String f, String t)),
+  void mapProperties()) =>
   '''
 class $className extends AbstractTransformation<$fromName,
     ${fromName}Builder, $toName, ${toName}Builder> {
@@ -36,12 +38,13 @@ class $className extends AbstractTransformation<$fromName,
   void mapProperties() {
     _log.finer(() => 'mapProperties for $fromName');
 
-    toBuilder.name = uriToStringTransform(from.id);
-    if (from.definitions != null) {
-      from.definitions.forEach((e) {
-        toBuilder.classifiers.add(schemaToClassifierTransform(e)?.toBuilder());
-      });
-    }
+    ${mapProperties()}
+//    toBuilder.name = uriToStringTransform(from.id);
+//    if (from.definitions != null) {
+//      from.definitions.forEach((e) {
+//        toBuilder.classifiers.add(schemaToClassifierTransform(e)?.toBuilder());
+//      });
+//    }
   }
 }
 ''')}
