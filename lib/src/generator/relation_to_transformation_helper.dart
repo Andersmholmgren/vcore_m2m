@@ -8,6 +8,7 @@ import 'package:dogma_codegen/codegen.dart';
 import 'package:dogma_source_analyzer/metadata.dart';
 import 'package:quiver/iterables.dart';
 import 'template.dart';
+import 'package:quiver/core.dart';
 
 final _log = new Logger('vcore.m2m.relation.transformation');
 
@@ -74,13 +75,14 @@ class RelationToTransformationHelper {
     String perCustomTransform(
         String b(String fromName, String toName, String fromPathSegments,
             String toPathSegments)) {
-      return packageRelationHelper.valueClasses.values.expand((h) {
-        return h.properties.values.map((ph) {
-          return ph.hasCustomTransform
-              ? b(ph.fromName, ph.toName, ph.fromPathExpression,
-                  ph.toPathExpression)
-              : "";
-        });
+      final propertyHelpers = packageRelationHelper.valueClasses.values
+          .expand((h) => h.properties.values)
+          .toSet();
+      return propertyHelpers.map((ph) {
+        return ph.hasCustomTransform
+            ? b(ph.fromName, ph.toName, ph.fromPathExpression,
+                ph.toPathExpression)
+            : "";
       }).join('\n');
     }
 
@@ -552,6 +554,15 @@ class _PropertyRelationHelper {
 
   String get fromName => from.singleTypeName;
   String get toName => to.singleTypeName;
+
+  @override
+  bool operator ==(other) =>
+      other is _PropertyRelationHelper &&
+      other.fromName == fromName &&
+      other.toName == toName;
+
+  @override
+  int get hashCode => hash2(fromName, toName);
 
   bool get converterRequired => from.singleType != to.singleType;
   bool get hasCustomTransform => propertyRelation.transform != null;
