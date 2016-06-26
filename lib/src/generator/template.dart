@@ -1,5 +1,6 @@
 String template(
         String lower(String s),
+        String perClassRelation(String b(String fromName, String toName)),
         String transformClass(
             String b(
                 String className,
@@ -53,15 +54,12 @@ class _TransformationContext extends BaseTransformationContext {
 
   _TransformationContext(this.packageRelation) {
     transformers = (new MapBuilder<TransformKey, TransformFactory>()
+${perClassRelation((String fromName, String toName) =>
+'''
           ..[new TransformKey((b) => b
-            ..from = Schema
-            ..to = Package)] = _createSchemaToPackageTransform
-          ..[new TransformKey((b) => b
-            ..from = Schema
-            ..to = ValueClass)] = _createSchemaToValueClassTransform
-          ..[new TransformKey((b) => b
-            ..from = SchemaProperty
-            ..to = Property)] = _createSchemaPropertyToPropertyTransform)
+            ..from = $fromName
+            ..to = $toName)] = _create${fromName}To${toName}Transform
+''')})
         .build();
   }
 
