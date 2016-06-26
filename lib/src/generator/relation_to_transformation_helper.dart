@@ -34,8 +34,8 @@ class RelationToTransformationHelper {
             String className,
             String fromName,
             String toName,
-            String transformField(String b(String f, String t)),
-            String mapProperties())) {
+            [String transformField(String b(String f, String t)),
+            String mapProperties()])) {
       return packageRelationHelper.valueClasses.values.map((h) {
         String transformField(String b(String f, String t)) =>
             h.convertingProperties

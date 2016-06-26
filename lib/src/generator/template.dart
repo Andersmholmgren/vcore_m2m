@@ -2,12 +2,9 @@ String template(
         String lower(String s),
         String perClassRelation(String b(String fromName, String toName)),
         String transformClass(
-            String b(
-                String className,
-                String fromName,
-                String toName,
-                String transformField(String b(String f, String t)),
-                String mapProperties()))) =>
+            String b(String className, String fromName, String toName,
+                [String transformField(String b(String f, String t)),
+                String mapProperties()]))) =>
     '''
 import 'package:jason_schemer/src/models/schema.dart';
 import 'package:vcore/vcore.dart';
@@ -20,8 +17,8 @@ import 'package:jason_schemer/src/m2m/schema_to_vcore.dart' as relations;
 final _log = new Logger('schemaTovcoreRelation');
 
 ${transformClass((String className, String fromName, String toName,
-      String transformField(String b(String f, String t)),
-      String mapProperties()) =>
+      [String transformField(String b(String f, String t)),
+      String mapProperties()]) =>
   '''
 class $className extends AbstractTransformation<$fromName,
     ${fromName}Builder, $toName, ${toName}Builder> {
@@ -54,7 +51,7 @@ class _TransformationContext extends BaseTransformationContext {
 
   _TransformationContext(this.packageRelation) {
     transformers = (new MapBuilder<TransformKey, TransformFactory>()
-${perClassRelation((String fromName, String toName) =>
+${transformClass((String className, String fromName, String toName, _, __) =>
 '''
           ..[new TransformKey((b) => b
             ..from = $fromName
@@ -63,37 +60,16 @@ ${perClassRelation((String fromName, String toName) =>
         .build();
   }
 
-${perClassRelation((String fromName, String toName) =>
+${transformClass((String className, String fromName, String toName,
+      [String transformField(String b(String f, String t)), __]) =>
     '''
-          ..[new TransformKey((b) => b
-            ..from = $fromName
-            ..to = $toName)] = _create${fromName}To${toName}Transform
-
   Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
-    return ($fromName ${lower(fromName)}) => new ${fromName}To${toName}Transformation(${lower(fromName)}, this,
-            _createUriToStringTransform(),
-            _createSchemaToClassifierTransform())
+    return ($fromName ${lower(fromName)}) => new ${fromName}To${toName}Transformation(${lower(fromName)}, this
+  ${transformField((f, t) => '''
+      , _create${f}To${t}Transform()''')})
         .transform();
   }
-''')})
-
-
-  Transform<Schema, ValueClass> _createSchemaToValueClassTransform() {
-    return (Schema schema) => new SchemaToValueClassTransformation(
-            schema,
-            this,
-            _createUriToStringTransform(),
-            _createSchemaPropertyToPropertyTransform())
-        .transform();
-  }
-
-  Transform<SchemaProperty, Property>
-      _createSchemaPropertyToPropertyTransform() {
-    return (SchemaProperty schemaProperty) =>
-        new SchemaPropertyToPropertyTransformation(schemaProperty, this,
-                _createSchemaReferenceToClassifierTransform())
-            .transform();
-  }
+''')}
 
   Transform<Schema, Classifier> _createSchemaToClassifierTransform() {
     final schemaToValueClassTransformation =
