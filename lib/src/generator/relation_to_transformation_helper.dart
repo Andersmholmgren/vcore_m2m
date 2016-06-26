@@ -39,9 +39,8 @@ class RelationToTransformationHelper {
         (fm) => new ParameterMetadata(fm.name, fm.type, isInitializer: true));
 
     final superCtrParams = [
-      new ParameterMetadata("from", new TypeMetadata(helper.fromName)),
-      new ParameterMetadata(
-          "context", new TypeMetadata("TransformationContext"))
+      new ParameterMetadata("from", type(helper.fromName)),
+      new ParameterMetadata("context", type("TransformationContext"))
     ];
 
     final superCallParams = concat([
@@ -56,10 +55,10 @@ class RelationToTransformationHelper {
     generateClassDefinition(
         new ClassMetadata(helper.className,
             supertype: new TypeMetadata("AbstractTransformation", arguments: [
-              new TypeMetadata(helper.fromName),
-              new TypeMetadata("${helper.fromName}Builder"),
-              new TypeMetadata(helper.toName),
-              new TypeMetadata("${helper.toName}Builder")
+              type(helper.fromName),
+              type("${helper.fromName}Builder"),
+              type(helper.toName),
+              type("${helper.toName}Builder")
             ])),
         buffer, (_, __) {
       generateFields(helper.transformerFields, buffer);
@@ -67,7 +66,7 @@ class RelationToTransformationHelper {
       buffer.writeln();
 
       generateConstructorDefinition(
-          new ConstructorMetadata(new TypeMetadata(helper.className),
+          new ConstructorMetadata(type(helper.className),
               parameters:
                   concat([superCtrParams, transformerCtrParams]).toList()),
           buffer, initializerListGenerator: (_, __) {
@@ -77,7 +76,7 @@ class RelationToTransformationHelper {
       buffer.writeln();
 
       generateFunctionDefinition(
-          new MethodMetadata('mapProperties', new TypeMetadata('void'),
+          new MethodMetadata('mapProperties', type('void'),
               annotations: [override]),
           buffer, (_, __) {
         buffer.writeln(
@@ -88,27 +87,6 @@ class RelationToTransformationHelper {
     });
 
     sink.write(buffer);
-
-//    sink.writeln('''
-//class ${helper.className} extends AbstractTransformation<${helper.fromName},
-//    ${helper.fromName}Builder, ${helper.toName}, ${helper.toName}Builder> {
-//  ${helper.transformerFieldsOld}
-//
-//  ${helper.className}(${helper.fromName} from, TransformationContext context
-//  $transformerParamExtra
-//      )
-//      : super(from, context, new ${helper.toName}Builder());
-//
-//  @override
-//  void mapProperties() {
-//    _log.finer(() => 'mapProperties for ${helper.className}');
-//
-//  ''');
-//    _generateProperties(helper, sink);
-//    sink.writeln('''
-//  }
-//}
-//''');
   }
 
   void _generateProperties(_ValueClassRelationHelper helper, StringSink sink) {
@@ -154,6 +132,69 @@ class RelationToTransformationHelper {
   }
 
   void _generateTransformationContext() {
+    final StringBuffer buffer = new StringBuffer();
+
+    buffer.writeln('''
+Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
+    Type fromType, Type toType) {
+  return new _TransformationContext(relations.rootPackageRelation)
+      .lookupTransform/*<F, T>*/(fromType, toType);
+}
+''');
+
+    const String contextClassname = '_TransformationContext';
+    generateClassDefinition(
+        new ClassMetadata(contextClassname,
+            supertype: type("BaseTransformationContext")),
+        buffer, (_, __) {
+      final packageRelationField = new FieldMetadata.field(
+          'packageRelation', type('PackageRelation'),
+          isFinal: true);
+
+      generateFields([packageRelationField], buffer);
+
+      buffer.writeln();
+
+      generateConstructorDefinition(
+          new ConstructorMetadata(type(contextClassname), parameters: [
+            new ParameterMetadata.forField(packageRelationField)
+          ]),
+          buffer, generator: (_, __) {
+//        buffer.write(superCtrCall);
+
+        final classHelpers = packageRelationHelper.classHelpers;
+
+        classHelpers.forEach((helper) {
+          buffer.writeln('''
+      ..[new TransformKey((b) => b
+        ..from = ${helper.fromName}
+        ..to = ${helper.toName})] = ${helper.createTransformName}
+    ''');
+        });
+
+        buffer.writeln(''')
+    .build();
+  }
+    ''');
+
+      });
+
+      buffer.writeln();
+
+      generateFunctionDefinition(
+          new MethodMetadata('mapProperties', type('void'),
+              annotations: [override]),
+          buffer, (_, __) {
+        buffer.writeln('''
+    transformers = (new MapBuilder<TransformKey, TransformFactory>()
+            ''');
+        buffer.writeln();
+        _generateProperties(helper, buffer);
+      }, annotationGenerators: [generateOverrideAnnotation]);
+    });
+
+    sink.write(buffer);
+
     sink.writeln('''
 Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
     Type fromType, Type toType) {
@@ -538,3 +579,5 @@ String _capitalise(String s) =>
 
 String _uncapitalise(String s) =>
     s.substring(0, 1).toLowerCase() + s.substring(1);
+
+TypeMetadata type(String name) => new TypeMetadata(name);
