@@ -61,6 +61,57 @@ class VariableGenerator extends _SourceGenerator {
   }
 }
 
+class VariableBuilder {
+  SourceGenerator _name, _type;
+  bool includeFinal = true;
+
+  void set name(String name) {
+    _name = new StaticGenerator(name);
+  }
+
+  void set genName(SourceGenerator name) {
+    _name = name;
+  }
+
+  void set type(String type) {
+    _type = new StaticGenerator(type);
+  }
+
+  void set genType(SourceGenerator type) {
+    _type = type;
+  }
+
+  VariableGenerator build() =>
+      new VariableGenerator(_type, _name, includeFinal: includeFinal);
+}
+
+foo() {
+  VariableBuilder vb;
+  (vb
+        ..name = 'foo'
+        ..type = 'String')
+      .build();
+
+  dynamic fb;
+  fb
+    ..name = 'convert'
+    ..returnType.name = 'String'
+    ..parameters.add((b) {
+      b
+        ..name = 'num'
+        ..type = 'int';
+    })
+    ..body((b) {
+      b.writeln('_log.info("hola);');
+
+      b.local((vb) {
+        vb
+          ..name = 'foo'
+          ..type = 'num';
+      });
+    });
+}
+
 class FunctionGenerator extends _SourceGenerator {
   final SourceGenerator returnTypeGenerator,
       bodyGenerator,
@@ -108,14 +159,15 @@ class ClassGenerator extends _SourceGenerator {
       constructorGenerators,
       methodGenerators;
 
-  ClassGenerator(
-      this.nameGenerator,
-      this.superClassGenerator,
-      this.interfaceGenerators,
-      this.propertyGenerators,
-      this.constructorGenerators,
-      this.methodGenerators,
-      {this.isAbstract: false});
+  ClassGenerator(this.nameGenerator,
+      {this.isAbstract: false,
+      this.interfaceGenerators: const [],
+      this.propertyGenerators: const [],
+      this.constructorGenerators: const [],
+      this.methodGenerators: const [],
+      SourceGenerator superClassGenerator})
+      : this.superClassGenerator =
+            new Option<SourceGenerator>(superClassGenerator);
 
   @override
   void generate(StringSink sink) {
