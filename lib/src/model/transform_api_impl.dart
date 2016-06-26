@@ -5,6 +5,8 @@ import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/src/model/transform.dart';
 import 'package:vcore_m2m/src/model/transform_api.dart';
 import 'package:vcore_m2m/vcore_m2m.dart';
+import 'package:vcore_m2m/src/model/relation.dart';
+import 'dart:convert';
 
 PackageRelation relateModels(
     Package from,
@@ -154,6 +156,11 @@ class _PropertyRelationHelper<F, T>
     builder.transform = tb.build();
   }
 
+
+  @override
+  via(Codec codec) {
+    // TODO: implement via
+  }
 }
 
 class PathExpressionCaptor {

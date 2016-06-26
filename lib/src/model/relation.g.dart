@@ -1,7 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // 2016-06-26T23:20:11.891803Z
 
-part of transform;
+part of relation;
 
 // **************************************************************************
 // Generator: BuiltJsonGenerator
