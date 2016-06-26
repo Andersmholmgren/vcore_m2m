@@ -1,11 +1,11 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-06-26T23:20:11.891803Z
+// 2016-06-26T23:27:22.758906Z
 
 part of relation;
 
 // **************************************************************************
 // Generator: BuiltJsonGenerator
-// Target: library transform
+// Target: library relation
 // **************************************************************************
 
 Serializer<PackageRelation> _$packageRelationSerializer =

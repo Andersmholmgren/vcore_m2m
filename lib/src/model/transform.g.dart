@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-06-26T23:21:44.765104Z
+// 2016-06-26T23:27:22.780030Z
 
 part of transform;
 
@@ -8,55 +8,8 @@ part of transform;
 // Target: abstract class BidirectionalTransform
 // **************************************************************************
 
-class _$BidirectionalTransform extends BidirectionalTransform {
-  final Transform forwards;
-  final Transform backwards;
-  _$BidirectionalTransform._({this.forwards, this.backwards}) : super._() {
-    if (forwards == null) throw new ArgumentError('null forwards');
-    if (backwards == null) throw new ArgumentError('null backwards');
-  }
-  factory _$BidirectionalTransform(
-          [updates(BidirectionalTransformBuilder b)]) =>
-      (new BidirectionalTransformBuilder()..update(updates)).build();
-  BidirectionalTransform rebuild(updates(BidirectionalTransformBuilder b)) =>
-      (toBuilder()..update(updates)).build();
-  _$BidirectionalTransformBuilder toBuilder() =>
-      new _$BidirectionalTransformBuilder()..replace(this);
-  bool operator ==(other) {
-    if (other is! BidirectionalTransform) return false;
-    return forwards == other.forwards && backwards == other.backwards;
-  }
-
-  int get hashCode {
-    return hashObjects([forwards, backwards]);
-  }
-
-  String toString() {
-    return 'BidirectionalTransform {'
-        'forwards=${forwards.toString()}\n'
-        'backwards=${backwards.toString()}\n'
-        '}';
-  }
-}
-
-class _$BidirectionalTransformBuilder extends BidirectionalTransformBuilder {
-  _$BidirectionalTransformBuilder() : super._();
-  void replace(BidirectionalTransform other) {
-    super.forwards = other.forwards;
-    super.backwards = other.backwards;
-  }
-
-  void update(updates(BidirectionalTransformBuilder b)) {
-    if (updates != null) updates(this);
-  }
-
-  BidirectionalTransform build() {
-    if (forwards == null) throw new ArgumentError('null forwards');
-    if (backwards == null) throw new ArgumentError('null backwards');
-    return new _$BidirectionalTransform._(
-        forwards: forwards, backwards: backwards);
-  }
-}
+// Error: Please make changes to use built_value.
+// TODO: Make class have factory: factory BidirectionalTransform([updates(BidirectionalTransformBuilder b)]) = _$BidirectionalTransform;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
