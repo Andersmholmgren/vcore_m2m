@@ -27,15 +27,17 @@ class RelationToTransformationHelper {
   void generate() {
     _log.info(() => 'generating transformer for ${packageRelationHelper.name}');
 
+    sink.writeln('// starts here');
+
     String transformClass(
-        b(
+        String b(
             String className,
             String fromName,
             String toName,
             String transformField(String b(String f, String t)),
             String transformCtrParam(String b(String f, String t)),
             String mapProperties())) {
-      packageRelationHelper.valueClasses.values.forEach((h) {
+      return packageRelationHelper.valueClasses.values.map((h) {
         String transformField(String b(String f, String t)) =>
             h.convertingProperties
                 .map((f) => b(f.fromName, f.toName))
@@ -48,9 +50,9 @@ class RelationToTransformationHelper {
 
         String mapProperties() => "// props here";
 
-        sink.writeln(b(h.className, h.fromName, h.toName, transformField,
-            transformCtrParam, mapProperties));
-      });
+        return b(h.className, h.fromName, h.toName, transformField,
+            transformCtrParam, mapProperties);
+      }).join('\n');
     }
 
     sink.writeln(template(_uncapitalise, transformClass));
