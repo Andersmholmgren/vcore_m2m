@@ -1,7 +1,6 @@
 String template(
         String fromPackageName,
         String toPackageName,
-        String lower(String s),
         String perClassRelation(
             String b(String className, String fromName, String toName,
                 [String transformField(String b(String f, String t)),
@@ -13,15 +12,16 @@ String template(
             String b(String fromName, String toName, String fromPathSegments,
                 String toPathSegments))) =>
     '''
-import 'package:jason_schemer/src/models/schema.dart';
 import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/vcore_m2m.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:option/option.dart';
 import 'package:logging/logging.dart';
+
+import 'package:jason_schemer/src/models/schema.dart';
 import 'package:jason_schemer/src/m2m/schema_to_vcore.dart' as relations;
 
-final _log = new Logger('${lower(fromPackageName)}To${toPackageName}Relation');
+final _log = new Logger('${_uncapitalise(fromPackageName)}To${_capitalise(toPackageName)}Relation');
 
 ${perClassRelation((String className, String fromName, String toName,
       [String transformField(String b(String f, String t)),
@@ -30,11 +30,11 @@ ${perClassRelation((String className, String fromName, String toName,
 class $className extends AbstractTransformation<$fromName,
     ${fromName}Builder, $toName, ${toName}Builder> {
   ${transformField((f, t) => '''
-  final Transform<$f, $t> ${lower(f)}To${t}Transform;
+  final Transform<$f, $t> ${_uncapitalise(f)}To${t}Transform;
   ''')}
   $className($fromName from, TransformationContext context
   ${transformField((f, t) => '''
-      , this.${lower(f)}To${t}Transform''')})
+      , this.${_uncapitalise(f)}To${t}Transform''')})
       : super(from, context, new ${toName}Builder());
 
   @override
@@ -71,7 +71,7 @@ ${perClassRelation((String className, String fromName, String toName,
       [String transformField(String b(String f, String t)), __]) =>
     '''
   Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
-    return ($fromName ${lower(fromName)}) => new ${fromName}To${toName}Transformation(${lower(fromName)}, this
+    return ($fromName ${_uncapitalise(fromName)}) => new ${fromName}To${toName}Transformation(${_uncapitalise(fromName)}, this
   ${transformField((f, t) => '''
       , _create${f}To${t}Transform()''')})
         .transform();
@@ -84,18 +84,18 @@ ${perRequiredAbstractToConcreteTransform((String fromName, String toName,
   Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
 ${perSubTypeTransform((String f, String t) =>
 '''
-    final ${lower(f)}To${t}Transformation =
+    final ${_uncapitalise(f)}To${t}Transformation =
         _create${f}To${t}Transform();
 ''')}
-    return ($fromName ${lower(fromName)}) {
+    return ($fromName ${_uncapitalise(fromName)}) {
 ${perSubTypeTransform((String f, String t) =>
 '''
-      if (${lower(fromName)} is $f) {
-        return ${lower(f)}To${t}Transformation(${lower(fromName)} as $f);
+      if (${_uncapitalise(fromName)} is $f) {
+        return ${_uncapitalise(f)}To${t}Transformation(${_uncapitalise(fromName)} as $f);
       }''')}
  else {
         throw new StateError(
-            "No transform from \${${lower(fromName)}.runtimeType} to $toName");
+            "No transform from \${${_uncapitalise(fromName)}.runtimeType} to $toName");
       }
     };
   }
@@ -121,3 +121,9 @@ ${perCustomTransform((String fromName, String toName,
 
 }
 ''';
+// TODO: these should be in a util
+String _capitalise(String s) =>
+    s.substring(0, 1).toUpperCase() + s.substring(1);
+
+String _uncapitalise(String s) =>
+    s.substring(0, 1).toLowerCase() + s.substring(1);
