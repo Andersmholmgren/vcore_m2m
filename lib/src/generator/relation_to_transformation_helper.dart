@@ -1,14 +1,12 @@
-import 'package:vcore_m2m/vcore_m2m.dart';
-import 'package:vcore/vcore.dart';
-import 'package:option/option.dart';
 import 'package:built_collection/built_collection.dart';
-import 'package:logging/logging.dart';
-
-import 'package:dogma_codegen/codegen.dart';
 import 'package:dogma_source_analyzer/metadata.dart';
-import 'package:quiver/iterables.dart';
-import 'template.dart';
+import 'package:logging/logging.dart';
+import 'package:option/option.dart';
 import 'package:quiver/core.dart';
+import 'package:vcore/vcore.dart';
+import 'package:vcore_m2m/vcore_m2m.dart';
+
+import 'template.dart';
 
 final _log = new Logger('vcore.m2m.relation.transformation');
 
@@ -371,4 +369,3 @@ String _capitalise(String s) =>
 String _uncapitalise(String s) =>
     s.substring(0, 1).toLowerCase() + s.substring(1);
 
-TypeMetadata type(String name) => new TypeMetadata(name);

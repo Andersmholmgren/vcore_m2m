@@ -1,4 +1,6 @@
 String template(
+        String fromPackageName,
+        String toPackageName,
         String lower(String s),
         String perClassRelation(
             String b(String className, String fromName, String toName,
@@ -19,7 +21,7 @@ import 'package:option/option.dart';
 import 'package:logging/logging.dart';
 import 'package:jason_schemer/src/m2m/schema_to_vcore.dart' as relations;
 
-final _log = new Logger('schemaTovcoreRelation');
+final _log = new Logger('${lower(fromPackageName)}To${toPackageName}Relation');
 
 ${perClassRelation((String className, String fromName, String toName,
       [String transformField(String b(String f, String t)),
