@@ -56,16 +56,14 @@ class RelationToTransformationHelper {
         print('requiredAbstractTransforms: $fromName -> $toName');
 
         if (from is ValueClass && to is ValueClass) {
-          String perAvailableTransform(String b(String f, String t)) {
+          String perSubTypeTransform(String b(String f, String t)) {
             return packageRelationHelper
                 .subTypesOf(from, to)
                 .map((h) => b(h.fromName, h.toName))
                 .join('\n');
           }
-//          _generateAbstractToConcreteMethod(
-//            fromName, toName, packageRelationHelper.subTypesOf(from, to));
 
-          buffer.writeln(b(fromName, toName, perAvailableTransform));
+          buffer.writeln(b(fromName, toName, perSubTypeTransform));
         }
       });
 

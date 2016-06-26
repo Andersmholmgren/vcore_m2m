@@ -6,7 +6,7 @@ String template(
                 String mapProperties()])),
         String perRequiredAbstractToConcreteTransform(
             String b(String fromName, String toName,
-                String perAvailableTransform(String b(String f, String t))))) =>
+                String perSubTypeTransform(String b(String f, String t))))) =>
     '''
 import 'package:jason_schemer/src/models/schema.dart';
 import 'package:vcore/vcore.dart';
@@ -74,16 +74,16 @@ ${perClassRelation((String className, String fromName, String toName,
 ''')}
 
 ${perRequiredAbstractToConcreteTransform((String fromName, String toName,
-      String perAvailableTransform(String b(String f, String t))) =>
+      String perSubTypeTransform(String b(String f, String t))) =>
 '''
   Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
-${perAvailableTransform((String f, String t) =>
+${perSubTypeTransform((String f, String t) =>
 '''
     final ${lower(f)}To${t}Transformation =
         _create${f}To${t}Transform();
 ''')}
     return ($fromName ${lower(fromName)}) {
-${perAvailableTransform((String f, String t) =>
+${perSubTypeTransform((String f, String t) =>
 '''
       if (${lower(fromName)} is $f) {
         return ${lower(f)}To${t}Transformation(${lower(fromName)} as $f);
