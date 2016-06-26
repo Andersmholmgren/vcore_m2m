@@ -14,14 +14,15 @@ class RelationToTransformationHelper {
   final PackageRelation packageRelation;
   final StringSink sink;
   final _PackageRelationHelper packageRelationHelper;
+  final Uri packageRelationPackageUri;
 
-  RelationToTransformationHelper._(
-      this.packageRelation, this.sink, this.packageRelationHelper);
+  RelationToTransformationHelper._(this.packageRelation,
+      this.packageRelationPackageUri, this.sink, this.packageRelationHelper);
 
-  RelationToTransformationHelper(
-      PackageRelation packageRelation, StringSink sink)
-      : this._(
-            packageRelation, sink, new _PackageRelationHelper(packageRelation));
+  RelationToTransformationHelper(PackageRelation packageRelation,
+      Uri packageRelationPackageUri, StringSink sink)
+      : this._(packageRelation, packageRelationPackageUri, sink,
+            new _PackageRelationHelper(packageRelation));
 
   void generate() {
     _log.info(() => 'generating transformer for ${packageRelationHelper.name}');
@@ -85,6 +86,7 @@ class RelationToTransformationHelper {
     }
 
     sink.writeln(template(
+        packageRelationPackageUri.toString(),
         packageRelationHelper.fromName,
         packageRelationHelper.toName,
         perClassRelation,
