@@ -2,6 +2,7 @@ import 'transform_api_impl.dart' as impl;
 import 'package:vcore_m2m/src/model/transform.dart';
 import 'package:vcore/vcore.dart';
 import 'dart:convert';
+import 'package:vcore_m2m/src/model/relation.dart';
 
 PackageRelation relateModels(
         Package from,
