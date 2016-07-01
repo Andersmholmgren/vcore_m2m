@@ -1,6 +1,7 @@
 library transformer_meta;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_collection/built_collection.dart';
 
 part 'transformer_meta.g.dart';
 
@@ -9,6 +10,7 @@ abstract class TransformationMetaModel
     implements Built<TransformationMetaModel, TransformationMetaModelBuilder> {
   String get fromTypeName;
   String get toTypeName;
+  BuiltList<TransformMetaModel> get requiredTransforms;
 
   TransformationMetaModel._();
 
@@ -37,6 +39,9 @@ class $className extends AbstractTransformation<$fromTypeName,
 }
 ''');
   }
+
+  String transformField(String b(String f, String t)) =>
+      requiredTransforms.map((f) => b(f.fromName, f.toName)).join('\n');
 }
 
 abstract class TransformationMetaModelBuilder
@@ -44,9 +49,33 @@ abstract class TransformationMetaModelBuilder
         Builder<TransformationMetaModel, TransformationMetaModelBuilder> {
   String fromTypeName;
   String toTypeName;
+  ListBuilder<TransformMetaModelBuilder> requiredTransforms =
+      new ListBuilder<TransformMetaModelBuilder>();
+
   TransformationMetaModelBuilder._();
 
   factory TransformationMetaModelBuilder() = _$TransformationMetaModelBuilder;
+}
+
+abstract class TransformMetaModel
+    implements Built<TransformMetaModel, TransformMetaModelBuilder> {
+  String get fromName;
+  String get toName;
+
+  TransformMetaModel._();
+
+  factory TransformMetaModel([updates(TransformMetaModelBuilder b)]) =
+      _$TransformMetaModel;
+}
+
+abstract class TransformMetaModelBuilder
+    implements Builder<TransformMetaModel, TransformMetaModelBuilder> {
+  String fromName;
+  String toName;
+
+  TransformMetaModelBuilder._();
+
+  factory TransformMetaModelBuilder() = _$TransformMetaModelBuilder;
 }
 
 // TODO: these should be in a util
