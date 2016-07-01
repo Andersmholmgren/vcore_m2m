@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-07-01T22:29:14.435303Z
+// 2016-07-01T23:13:47.971594Z
 
 part of transformer_meta;
 
@@ -233,5 +233,47 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
         transformName: transformName,
         isCollection: isCollection,
         requiresToBuilder: requiresToBuilder);
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class TransformationContextMetaModel
+// **************************************************************************
+
+class _$TransformationContextMetaModel extends TransformationContextMetaModel {
+  _$TransformationContextMetaModel._() : super._() {}
+  factory _$TransformationContextMetaModel(
+          [updates(TransformationContextMetaModelBuilder b)]) =>
+      (new TransformationContextMetaModelBuilder()..update(updates)).build();
+  TransformationContextMetaModel rebuild(
+          updates(TransformationContextMetaModelBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$TransformationContextMetaModelBuilder toBuilder() =>
+      new _$TransformationContextMetaModelBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! TransformationContextMetaModel) return false;
+    return true;
+  }
+
+  int get hashCode {
+    return 200256111;
+  }
+
+  String toString() {
+    return 'TransformationContextMetaModel {}';
+  }
+}
+
+class _$TransformationContextMetaModelBuilder
+    extends TransformationContextMetaModelBuilder {
+  _$TransformationContextMetaModelBuilder() : super._();
+  void replace(TransformationContextMetaModel other) {}
+  void update(updates(TransformationContextMetaModelBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  TransformationContextMetaModel build() {
+    return new _$TransformationContextMetaModel._();
   }
 }

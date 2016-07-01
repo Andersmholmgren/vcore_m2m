@@ -185,7 +185,7 @@ ${_perClassRelation((String fromName, String toName,
   }
 ''')}
 
-${perRequiredAbstractToConcreteTransform((String fromName, String toName,
+${_perRequiredAbstractToConcreteTransform((String fromName, String toName,
       String perSubTypeTransform(String b(String f, String t))) =>
     '''
   Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
@@ -249,6 +249,32 @@ ${_perCustomTransform((String fromName, String toName,
           : "";
     }).join('\n');
   }
+
+  String _perRequiredAbstractToConcreteTransform(
+    String b(String fromName, String toName,
+      String perAvailableTransform(String b(String f, String t)))) {
+    final StringBuffer buffer = new StringBuffer();
+
+    packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
+      final fromName = from.name;
+      final toName = to.name;
+      print('requiredAbstractTransforms: $fromName -> $toName');
+
+      if (from is ValueClass && to is ValueClass) {
+        String perSubTypeTransform(String b(String f, String t)) {
+          return packageRelationHelper
+            .subTypesOf(from, to)
+            .map((h) => b(h.fromName, h.toName))
+            .join('\n');
+        }
+
+        buffer.writeln(b(fromName, toName, perSubTypeTransform));
+      }
+    });
+
+    return buffer.toString();
+  }
+
 }
 
 abstract class TransformationContextMetaModelBuilder
