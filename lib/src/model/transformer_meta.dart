@@ -87,9 +87,12 @@ abstract class TransformMetaModelBuilder
 
 abstract class PropertyTransform
     implements Built<PropertyTransform, PropertyTransformBuilder> {
+  String get fromTypeName;
+  String get toTypeName;
   BuiltList<String> get fromPathSegments;
   BuiltList<String> get toPathSegments;
   Option<String> get transformName;
+  bool get hasCustomTransform;
   bool get isCollection;
   bool get requiresToBuilder;
 
@@ -123,9 +126,12 @@ abstract class PropertyTransform
 
 abstract class PropertyTransformBuilder
     implements Builder<PropertyTransform, PropertyTransformBuilder> {
+  String fromTypeName;
+  String toTypeName;
   BuiltList<String> fromPathSegments;
   BuiltList<String> toPathSegments;
   Option<String> transformName;
+  bool hasCustomTransform;
   bool isCollection;
   bool requiresToBuilder = false;
 
@@ -146,14 +152,6 @@ abstract class TransformationContextMetaModel
           [updates(TransformationContextMetaModelBuilder b)]) =
       _$TransformationContextMetaModel;
 
-  String perClassRelation(
-      String b(String fromName, String toName,
-          [String transformField(String b(String f, String t))])) {
-    return transformations.map((h) {
-      return b(h.fromTypeName, h.toTypeName, h._transformField);
-    }).join('\n');
-  }
-
   void generate(StringSink sink) {
     sink.writeln('''
 Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
@@ -167,7 +165,7 @@ class _TransformationContext extends BaseTransformationContext {
 
   _TransformationContext(this.packageRelation) {
     transformers = (new MapBuilder<TransformKey, TransformFactory>()
-${perClassRelation((String fromName, String toName, _) =>
+${_perClassRelation((String fromName, String toName, _) =>
     '''
           ..[new TransformKey((b) => b
             ..from = $fromName
@@ -176,7 +174,7 @@ ${perClassRelation((String fromName, String toName, _) =>
         .build();
   }
 
-${perClassRelation((String fromName, String toName,
+${_perClassRelation((String fromName, String toName,
       [String transformField(String b(String f, String t))]) =>
     '''
   Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
@@ -210,7 +208,7 @@ ${perSubTypeTransform((String f, String t) =>
   }
 ''')}
 
-${perCustomTransform((String fromName, String toName,
+${_perCustomTransform((String fromName, String toName,
       String fromPathSegments,String toPathSegments) =>
     '''
   Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
@@ -230,6 +228,26 @@ ${perCustomTransform((String fromName, String toName,
 
 }
 ''');
+  }
+
+  String _perClassRelation(
+      String b(String fromName, String toName,
+          [String transformField(String b(String f, String t))])) {
+    return transformations.map((h) {
+      return b(h.fromTypeName, h.toTypeName, h._transformField);
+    }).join('\n');
+  }
+
+  String _perCustomTransform(
+      String b(String fromName, String toName, String fromPathSegments,
+          String toPathSegments)) {
+    final propertyHelpers =
+        transformations.expand((h) => h.propertyTransforms).toSet();
+    return propertyHelpers.map((ph) {
+      return ph.hasCustomTransform
+          ? b(ph.fromTypeName, ph.toTypeName, ph._fromPath, ph._toPath)
+          : "";
+    }).join('\n');
   }
 }
 
