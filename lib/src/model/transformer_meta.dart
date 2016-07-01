@@ -2,6 +2,7 @@ library transformer_meta;
 
 import 'package:built_value/built_value.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:option/option.dart';
 
 part 'transformer_meta.g.dart';
 
@@ -11,6 +12,7 @@ abstract class TransformationMetaModel
   String get fromTypeName;
   String get toTypeName;
   BuiltList<TransformMetaModel> get requiredTransforms;
+  BuiltSet<PropertyTransform> get propertyTransforms;
 
   TransformationMetaModel._();
 
@@ -34,7 +36,7 @@ class $className extends AbstractTransformation<$fromTypeName,
   void mapProperties() {
     _log.finer(() => 'mapProperties for $fromTypeName');
 
-    ${mapProperties()}
+    ${_mapProperties()}
   }
 }
 ''');
@@ -42,6 +44,9 @@ class $className extends AbstractTransformation<$fromTypeName,
 
   String _transformField(String b(String f, String t)) =>
       requiredTransforms.map((f) => b(f.fromName, f.toName)).join('\n');
+
+  String _mapProperties() =>
+      propertyTransforms.map((p) => p.toString()).join('\n');
 }
 
 abstract class TransformationMetaModelBuilder
@@ -51,6 +56,8 @@ abstract class TransformationMetaModelBuilder
   String toTypeName;
   ListBuilder<TransformMetaModelBuilder> requiredTransforms =
       new ListBuilder<TransformMetaModelBuilder>();
+  SetBuilder<PropertyTransformBuilder> propertyTransforms =
+      new SetBuilder<PropertyTransformBuilder>();
 
   TransformationMetaModelBuilder._();
 
@@ -76,6 +83,55 @@ abstract class TransformMetaModelBuilder
   TransformMetaModelBuilder._();
 
   factory TransformMetaModelBuilder() = _$TransformMetaModelBuilder;
+}
+
+abstract class PropertyTransform
+    implements Built<PropertyTransform, PropertyTransformBuilder> {
+  BuiltList<String> get fromPathSegments;
+  BuiltList<String> get toPathSegments;
+  Option<String> get transformName;
+  bool get isCollection;
+  bool get requiresToBuilder;
+
+  PropertyTransform._();
+
+  factory PropertyTransform([updates(PropertyTransformBuilder b)]) =
+      _$PropertyTransform;
+
+  String toString() => isCollection ? _toCollectionString() : _toSingleString();
+
+  String get _fromPath => (['from']..addAll(fromPathSegments)).join('.');
+  String get _toPath => (['toBuilder']..addAll(toPathSegments)).join('.');
+
+  String _possiblyTransformed(String varName) =>
+      transformName.map((tn) => '$tn($varName)').getOrElse(() => varName);
+
+  String _toSingleString() => "$_toPath = ${_possiblyTransformed(_fromPath)};";
+
+  String get _possiblyToBuilder => requiresToBuilder ? '?.toBuilder()' : '';
+
+  String _toCollectionString() {
+    return '''
+    if ($_fromPath != null) {
+      $_fromPath.forEach((e) {
+        $_toPath.add(${_possiblyTransformed('e')}$_possiblyToBuilder);
+      });
+    }
+    ''';
+  }
+}
+
+abstract class PropertyTransformBuilder
+    implements Builder<PropertyTransform, PropertyTransformBuilder> {
+  BuiltList<String> fromPathSegments;
+  BuiltList<String> toPathSegments;
+  Option<String> transformName;
+  bool isCollection;
+  bool requiresToBuilder = false;
+
+  PropertyTransformBuilder._();
+
+  factory PropertyTransformBuilder() = _$PropertyTransformBuilder;
 }
 
 // TODO: these should be in a util
