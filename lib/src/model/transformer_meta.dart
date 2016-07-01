@@ -25,11 +25,11 @@ abstract class TransformationMetaModel
 class $className extends AbstractTransformation<$fromTypeName,
     ${fromTypeName}Builder, $toTypeName, ${toTypeName}Builder> {
   ${_transformField((f, t) => '''
-  final Transform<$f, $t> ${_uncapitalise(f)}To${t}Transform;
+  final Transform<$f, $t> ${_unCapitalise(f)}To${t}Transform;
   ''')}
   $className($fromTypeName from, TransformationContext context
   ${_transformField((f, t) => '''
-      , this.${_uncapitalise(f)}To${t}Transform''')})
+      , this.${_unCapitalise(f)}To${t}Transform''')})
       : super(from, context, new ${toTypeName}Builder());
 
   @override
@@ -134,9 +134,121 @@ abstract class PropertyTransformBuilder
   factory PropertyTransformBuilder() = _$PropertyTransformBuilder;
 }
 
+abstract class TransformationContextMetaModel
+    implements
+        Built<TransformationContextMetaModel,
+            TransformationContextMetaModelBuilder> {
+  BuiltSet<TransformationMetaModel> get transformations;
+
+  TransformationContextMetaModel._();
+
+  factory TransformationContextMetaModel(
+          [updates(TransformationContextMetaModelBuilder b)]) =
+      _$TransformationContextMetaModel;
+
+  String perClassRelation(
+      String b(String fromName, String toName,
+          [String transformField(String b(String f, String t))])) {
+    return transformations.map((h) {
+      return b(h.fromTypeName, h.toTypeName, h._transformField);
+    }).join('\n');
+  }
+
+  void generate(StringSink sink) {
+    sink.writeln('''
+Option<Transform/*<F, T>*/ > lookupTransform/*<F, T>*/(
+    Type fromType, Type toType) {
+  return new _TransformationContext(relations.rootPackageRelation)
+      .lookupTransform/*<F, T>*/(fromType, toType);
+}
+
+class _TransformationContext extends BaseTransformationContext {
+  final PackageRelation packageRelation;
+
+  _TransformationContext(this.packageRelation) {
+    transformers = (new MapBuilder<TransformKey, TransformFactory>()
+${perClassRelation((String fromName, String toName, _) =>
+    '''
+          ..[new TransformKey((b) => b
+            ..from = $fromName
+            ..to = $toName)] = _create${fromName}To${toName}Transform
+''')})
+        .build();
+  }
+
+${perClassRelation((String fromName, String toName,
+      [String transformField(String b(String f, String t))]) =>
+    '''
+  Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
+    return ($fromName ${_unCapitalise(fromName)}) => new ${fromName}To${toName}Transformation(${_unCapitalise(fromName)}, this
+  ${transformField((f, t) => '''
+      , _create${f}To${t}Transform()''')})
+        .transform();
+  }
+''')}
+
+${perRequiredAbstractToConcreteTransform((String fromName, String toName,
+      String perSubTypeTransform(String b(String f, String t))) =>
+    '''
+  Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
+${perSubTypeTransform((String f, String t) =>
+    '''
+    final ${_unCapitalise(f)}To${t}Transformation =
+        _create${f}To${t}Transform();
+''')}
+    return ($fromName ${_unCapitalise(fromName)}) {
+${perSubTypeTransform((String f, String t) =>
+    '''
+      if (${_unCapitalise(fromName)} is $f) {
+        return ${_unCapitalise(f)}To${t}Transformation(${_unCapitalise(fromName)} as $f);
+      }''')}
+ else {
+        throw new StateError(
+            "No transform from \${${_unCapitalise(fromName)}.runtimeType} to $toName");
+      }
+    };
+  }
+''')}
+
+${perCustomTransform((String fromName, String toName,
+      String fromPathSegments,String toPathSegments) =>
+    '''
+  Transform<$fromName, $toName> _create${fromName}To${toName}Transform() {
+    // TODO: should cache these lookups
+    final classRelation = packageRelation.classifierRelations.firstWhere(
+            (cr) => cr.from.name == '$fromName' && cr.to.name == '$toName')
+        as ValueClassRelation;
+
+    final propertyRelation = classRelation.propertyRelations.firstWhere((pr) =>
+        pr.from.path == new BuiltList<String>($fromPathSegments) &&
+        pr.to.path == new BuiltList<String>($toPathSegments));
+
+    return propertyRelation.transform.forwards as Transform<$fromName, $toName>;
+  }
+
+''')}
+
+}
+''');
+  }
+}
+
+abstract class TransformationContextMetaModelBuilder
+    implements
+        Builder<TransformationContextMetaModel,
+            TransformationContextMetaModelBuilder> {
+  SetBuilder<TransformationMetaModelBuilder> transformations =
+      new SetBuilder<TransformationMetaModelBuilder>();
+
+  TransformationContextMetaModelBuilder._();
+
+  factory TransformationContextMetaModelBuilder() =
+      _$TransformationContextMetaModelBuilder;
+}
+
 // TODO: these should be in a util
 String _capitalise(String s) =>
     s.substring(0, 1).toUpperCase() + s.substring(1);
 
-String _uncapitalise(String s) =>
+String _unCapitalise(String s) =>
     s.substring(0, 1).toLowerCase() + s.substring(1);
