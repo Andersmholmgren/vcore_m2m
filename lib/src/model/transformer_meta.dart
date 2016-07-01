@@ -22,11 +22,11 @@ abstract class TransformationMetaModel
     sink.writeln('''
 class $className extends AbstractTransformation<$fromTypeName,
     ${fromTypeName}Builder, $toTypeName, ${toTypeName}Builder> {
-  ${transformField((f, t) => '''
+  ${_transformField((f, t) => '''
   final Transform<$f, $t> ${_uncapitalise(f)}To${t}Transform;
   ''')}
   $className($fromTypeName from, TransformationContext context
-  ${transformField((f, t) => '''
+  ${_transformField((f, t) => '''
       , this.${_uncapitalise(f)}To${t}Transform''')})
       : super(from, context, new ${toTypeName}Builder());
 
@@ -40,7 +40,7 @@ class $className extends AbstractTransformation<$fromTypeName,
 ''');
   }
 
-  String transformField(String b(String f, String t)) =>
+  String _transformField(String b(String f, String t)) =>
       requiredTransforms.map((f) => b(f.fromName, f.toName)).join('\n');
 }
 
