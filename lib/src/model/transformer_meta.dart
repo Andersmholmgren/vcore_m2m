@@ -3,6 +3,7 @@ library transformer_meta;
 import 'package:built_value/built_value.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:option/option.dart';
+import 'package:vcore/vcore.dart';
 
 part 'transformer_meta.g.dart';
 
@@ -128,8 +129,10 @@ abstract class TransformMetaModelBuilder
 
 abstract class PropertyTransform
     implements Built<PropertyTransform, PropertyTransformBuilder> {
-  String get fromTypeName;
-  String get toTypeName;
+  Classifier get fromSimpleType;
+  Classifier get toSimpleType;
+  String get fromTypeName => fromSimpleType.name;
+  String get toTypeName => toSimpleType.name;
   BuiltList<String> get fromPathSegments;
   BuiltList<String> get toPathSegments;
   bool get converterRequired => fromTypeName != toTypeName;
@@ -180,8 +183,8 @@ abstract class PropertyTransform
 
 abstract class PropertyTransformBuilder
     implements Builder<PropertyTransform, PropertyTransformBuilder> {
-  String fromTypeName;
-  String toTypeName;
+  Classifier fromSimpleType;
+  Classifier toSimpleType;
   BuiltList<String> fromPathSegments;
   BuiltList<String> toPathSegments;
   bool hasCustomTransform;

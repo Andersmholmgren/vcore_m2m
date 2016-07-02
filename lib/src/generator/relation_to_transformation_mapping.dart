@@ -29,8 +29,11 @@ TransformationContextMetaModel transform(PackageRelation packageRelation) {
 
     abstractPropertyTransforms.map((pt) {
       final b = new AbstractTypeMappingBuilder()
-        ..fromTypeName = pt.fromTypeName
-        ..toTypeName = pt.toTypeName;
+        ..fromTypeName = pt.fromSimpleType.name
+        ..toTypeName = pt.toSimpleType.name;
+
+      subTypesOf(
+          pt.fromSimpleType as ValueClass, pt.toSimpleType as ValueClass);
     });
   });
 
@@ -50,8 +53,6 @@ Iterable<PropertyTransformBuilder> createPropertyTransforms(
     return p.type;
   }
 
-  String singleTypeName(PropertyRelationEnd end) => singleType(end).name;
-
   return classRelation.propertyRelations.map((pr) {
     if (pr.to.property.isCollection != pr.from.property.isCollection) {
       throw new ArgumentError(
@@ -63,8 +64,8 @@ Iterable<PropertyTransformBuilder> createPropertyTransforms(
         fromSingleType.isAbstract || toSingleType.isAbstract;
 
     return new PropertyTransformBuilder()
-      ..fromTypeName = singleTypeName(pr.from)
-      ..toTypeName = singleTypeName(pr.to)
+      ..fromSimpleType = singleType(pr.from)
+      ..toSimpleType = singleType(pr.to)
       ..fromPathSegments = pr.to.path
       ..toPathSegments = pr.from.path
       ..hasCustomTransform = pr.transform != null
