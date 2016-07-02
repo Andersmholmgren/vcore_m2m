@@ -9,10 +9,12 @@ TransformationContextMetaModel transform(PackageRelation packageRelation) {
 
   final transformations = valueClassRelations.map((vr) {
     final classRelation = vr as ValueClassRelation;
-    return new TransformationMetaModelBuilder()
+    final tb =  new TransformationMetaModelBuilder()
       ..fromTypeName = classRelation.from.name
       ..toTypeName = classRelation.to.name
       ..propertyTransforms.addAll(createPropertyTransforms(classRelation));
+
+    tb.propertyTransforms.
 //      tb.propertyTransforms.
 //    });
   });

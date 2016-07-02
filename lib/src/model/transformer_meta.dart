@@ -92,6 +92,7 @@ abstract class PropertyTransform
   BuiltList<String> get fromPathSegments;
   BuiltList<String> get toPathSegments;
   bool get converterRequired => fromTypeName != toTypeName;
+  // TODO: duping naming scheme here
   Option<String> get transformName => converterRequired
       ? new Some('${_unCapitalise(fromTypeName)}To${toTypeName}Transform')
       : const None();
