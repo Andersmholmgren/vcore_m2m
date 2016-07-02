@@ -15,6 +15,7 @@ abstract class TransformationMetaModel
   BuiltList<TransformMetaModel> get requiredTransforms =>
       _requiredTransforms ??= new BuiltList<TransformMetaModel>(
           propertyTransforms.expand((pt) => pt.transform));
+
   BuiltSet<PropertyTransform> get propertyTransforms;
 
   TransformationMetaModel._();
@@ -57,8 +58,6 @@ abstract class TransformationMetaModelBuilder
         Builder<TransformationMetaModel, TransformationMetaModelBuilder> {
   String fromTypeName;
   String toTypeName;
-//  ListBuilder<TransformMetaModelBuilder> requiredTransforms =
-//      new ListBuilder<TransformMetaModelBuilder>();
   SetBuilder<PropertyTransformBuilder> propertyTransforms =
       new SetBuilder<PropertyTransformBuilder>();
 
@@ -328,8 +327,8 @@ abstract class AbstractTypeMappingBuilder
 }
 
 // TODO: these should be in a util
-String _capitalise(String s) =>
-    s.substring(0, 1).toUpperCase() + s.substring(1);
+//String _capitalise(String s) =>
+//    s.substring(0, 1).toUpperCase() + s.substring(1);
 
 String _unCapitalise(String s) =>
     s.substring(0, 1).toLowerCase() + s.substring(1);
