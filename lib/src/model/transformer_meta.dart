@@ -297,24 +297,6 @@ abstract class AbstractTypeMapping
 
   String perSubTypeTransform(String b(String f, String t)) =>
       subTypeMappings.map((h) => b(h.fromName, h.toName)).join('\n');
-
-  /*
-    Transform<SchemaReference, Classifier>
-      _createSchemaReferenceToClassifierTransform() {
-    final schemaToValueClassTransformation =
-        _createSchemaToValueClassTransform();
-
-    return (SchemaReference schemaReference) {
-      if (schemaReference is Schema) {
-        return schemaToValueClassTransformation(schemaReference as Schema);
-      } else {
-        throw new StateError(
-            "No transform from ${schemaReference.runtimeType} to Classifier");
-      }
-    };
-  }
-
-   */
 }
 
 abstract class AbstractTypeMappingBuilder
