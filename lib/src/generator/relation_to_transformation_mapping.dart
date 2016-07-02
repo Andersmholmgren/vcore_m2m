@@ -1,6 +1,7 @@
 import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/src/model/relation.dart';
 import 'package:vcore_m2m/src/model/transformer_meta.dart';
+import 'package:built_collection/built_collection.dart';
 
 TransformationContextMetaModel transform(PackageRelation packageRelation) {
   final b = new TransformationContextMetaModelBuilder();
@@ -17,21 +18,19 @@ TransformationContextMetaModel transform(PackageRelation packageRelation) {
 
   b.transformations.addAll(transformations);
 
+  BuiltSet<ValueClassRelation> subTypesOf(ValueClass from, ValueClass to) =>
+      new BuiltSet<ValueClassRelation>(valueClassRelations.where(
+          (classRelation) =>
+              (classRelation as ValueClassRelation).isSubTypeOf(from, to)));
+
   transformations.map((t) {
     final abstractPropertyTransforms =
         t.propertyTransforms.build().where((pt) => pt.isAbstract);
 
     abstractPropertyTransforms.map((pt) {
-      BuiltSet<_ValueClassRelationHelper> subTypesOf(
-        ValueClass from, ValueClass to) =>
-        new BuiltSet<_ValueClassRelationHelper>(
-          classHelpers.where((ch) => ch.classRelation.isSubTypeOf(from, to)));
-
       final b = new AbstractTypeMappingBuilder()
         ..fromTypeName = pt.fromTypeName
         ..toTypeName = pt.toTypeName;
-
-
     });
   });
 
