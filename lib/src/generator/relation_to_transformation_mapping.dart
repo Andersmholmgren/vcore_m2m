@@ -40,8 +40,6 @@ Iterable<PropertyTransformBuilder> createPropertyTransforms(
           'only support relationships between properties of the same arity');
     }
 
-//    final converterRequired = pr.from.singleType != pr.to.singleType;
-
     return new PropertyTransformBuilder()
       ..fromTypeName = singleTypeName(pr.from)
       ..toTypeName = singleTypeName(pr.to)
@@ -49,6 +47,6 @@ Iterable<PropertyTransformBuilder> createPropertyTransforms(
       ..toPathSegments = pr.from.path
       ..hasCustomTransform = pr.transform != null
       ..isCollection = pr.to.property.isCollection
-      ..requiresToBuilder = false;
+      ..requiresToBuilder = true;
   });
 }
