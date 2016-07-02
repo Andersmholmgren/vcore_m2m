@@ -17,6 +17,26 @@ TransformationContextMetaModel transform(PackageRelation packageRelation) {
 
   b.transformations.addAll(transformations);
 
+  transformations.map((t) {
+    final abstractPropertyTransforms =
+        t.propertyTransforms.build().where((pt) => pt.isAbstract);
+
+    abstractPropertyTransforms.map((pt) {
+      BuiltSet<_ValueClassRelationHelper> subTypesOf(
+        ValueClass from, ValueClass to) =>
+        new BuiltSet<_ValueClassRelationHelper>(
+          classHelpers.where((ch) => ch.classRelation.isSubTypeOf(from, to)));
+
+      final b = new AbstractTypeMappingBuilder()
+        ..fromTypeName = pt.fromTypeName
+        ..toTypeName = pt.toTypeName;
+
+
+    });
+  });
+
+//  b.abstractTypeMappings
+
   return b.build();
 }
 
@@ -38,6 +58,10 @@ Iterable<PropertyTransformBuilder> createPropertyTransforms(
       throw new ArgumentError(
           'only support relationships between properties of the same arity');
     }
+    final fromSingleType = singleType(pr.from);
+    final toSingleType = singleType(pr.to);
+    final bool isAbstract =
+        fromSingleType.isAbstract || toSingleType.isAbstract;
 
     return new PropertyTransformBuilder()
       ..fromTypeName = singleTypeName(pr.from)
@@ -46,6 +70,7 @@ Iterable<PropertyTransformBuilder> createPropertyTransforms(
       ..toPathSegments = pr.from.path
       ..hasCustomTransform = pr.transform != null
       ..isCollection = pr.to.property.isCollection
-      ..requiresToBuilder = true;
+      ..requiresToBuilder = true
+      ..isAbstract = isAbstract;
   });
 }

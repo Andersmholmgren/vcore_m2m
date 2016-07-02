@@ -6,6 +6,44 @@ import 'package:option/option.dart';
 
 part 'transformer_meta.g.dart';
 
+abstract class PackageTransformationMetaModel
+    implements
+        Built<PackageTransformationMetaModel,
+            PackageTransformationMetaModelBuilder> {
+  PackageTransformationMetaModel._();
+
+  factory PackageTransformationMetaModel(
+          [updates(PackageTransformationMetaModelBuilder b)]) =
+      _$PackageTransformationMetaModel;
+
+  void generate() {
+/*
+        '''
+import 'package:vcore/vcore.dart';
+import 'package:vcore_m2m/vcore_m2m.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:option/option.dart';
+import 'package:logging/logging.dart';
+
+import '$sourceModelPackage';
+import '$packageRelationPackage' as relations;
+
+final _log = new Logger('${_uncapitalise(fromPackageName)}To${_capitalise(toPackageName)}Relation');
+
+     */
+  }
+}
+
+abstract class PackageTransformationMetaModelBuilder
+    implements
+        Builder<PackageTransformationMetaModel,
+            PackageTransformationMetaModelBuilder> {
+  PackageTransformationMetaModelBuilder._();
+
+  factory PackageTransformationMetaModelBuilder() =
+      _$PackageTransformationMetaModelBuilder;
+}
+
 /// meta model for a [AbstractTransformation]
 abstract class TransformationMetaModel
     implements Built<TransformationMetaModel, TransformationMetaModelBuilder> {
@@ -110,6 +148,7 @@ abstract class PropertyTransform
   bool get hasCustomTransform;
   bool get isCollection;
   bool get requiresToBuilder;
+  bool get isAbstract;
 
   PropertyTransform._();
 
@@ -148,6 +187,7 @@ abstract class PropertyTransformBuilder
   bool hasCustomTransform;
   bool isCollection;
   bool requiresToBuilder = false;
+  bool isAbstract;
 
   PropertyTransformBuilder._();
 
