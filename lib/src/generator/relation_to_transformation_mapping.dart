@@ -2,8 +2,10 @@ import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/src/model/relation.dart';
 import 'package:vcore_m2m/src/model/transformer_meta.dart';
 
-PackageTransformationMetaModel transformPackageRelation(PackageRelation packageRelation,
-    Uri packageRelationPackageUri, Uri sourceModelPackageUri) {
+PackageTransformationMetaModel transformPackageRelation(
+    PackageRelation packageRelation,
+    Uri packageRelationPackageUri,
+    Uri sourceModelPackageUri) {
   final b = new TransformationContextMetaModelBuilder();
   final valueClassRelations = packageRelation.classifierRelations
       .where((cr) => cr is ValueClassRelation);
@@ -81,8 +83,8 @@ Iterable<PropertyTransformBuilder> createPropertyTransforms(
     return new PropertyTransformBuilder()
       ..fromSimpleType = singleType(pr.from)
       ..toSimpleType = singleType(pr.to)
-      ..fromPathSegments = pr.to.path
-      ..toPathSegments = pr.from.path
+      ..fromPathSegments = pr.from.path
+      ..toPathSegments = pr.to.path
       ..hasCustomTransform = pr.transform != null
       ..isCollection = pr.to.property.isCollection
       ..requiresToBuilder = true
