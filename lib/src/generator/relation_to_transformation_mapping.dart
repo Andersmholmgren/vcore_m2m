@@ -34,7 +34,7 @@ Iterable<PropertyTransformBuilder> createPropertyTransforms(
 
   String singleTypeName(PropertyRelationEnd end) => singleType(end).name;
 
-  classRelation.propertyRelations.map((pr) {
+  return classRelation.propertyRelations.map((pr) {
     if (pr.to.property.isCollection != pr.from.property.isCollection) {
       throw new ArgumentError(
           'only support relationships between properties of the same arity');
