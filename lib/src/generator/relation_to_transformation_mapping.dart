@@ -2,7 +2,7 @@ import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/src/model/relation.dart';
 import 'package:vcore_m2m/src/model/transformer_meta.dart';
 
-PackageTransformationMetaModel transform(PackageRelation packageRelation,
+PackageTransformationMetaModel transformPackageRelation(PackageRelation packageRelation,
     Uri packageRelationPackageUri, Uri sourceModelPackageUri) {
   final b = new TransformationContextMetaModelBuilder();
   final valueClassRelations = packageRelation.classifierRelations

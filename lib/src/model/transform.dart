@@ -1,10 +1,9 @@
 library transform;
 
-import 'package:built_collection/built_collection.dart';
-import 'package:built_json/built_json.dart';
 import 'package:built_value/built_value.dart';
 import 'package:option/option.dart';
 import 'package:vcore/vcore.dart';
+import 'package:vcore_m2m/src/model/relation.dart';
 
 part 'transform.g.dart';
 
