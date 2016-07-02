@@ -13,8 +13,6 @@ TransformationContextMetaModel transform(PackageRelation packageRelation) {
       ..fromTypeName = classRelation.from.name
       ..toTypeName = classRelation.to.name
       ..propertyTransforms.addAll(createPropertyTransforms(classRelation));
-//      tb.propertyTransforms.
-//    });
   });
 
   b.transformations.addAll(transformations);
