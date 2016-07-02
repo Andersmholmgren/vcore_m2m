@@ -1,7 +1,6 @@
+import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/src/model/relation.dart';
 import 'package:vcore_m2m/src/model/transformer_meta.dart';
-import 'package:vcore/vcore.dart';
-import 'package:option/option.dart';
 
 TransformationContextMetaModel transform(PackageRelation packageRelation) {
   final b = new TransformationContextMetaModelBuilder();
@@ -19,6 +18,8 @@ TransformationContextMetaModel transform(PackageRelation packageRelation) {
   });
 
   b.transformations.addAll(transformations);
+
+  return b.build();
 }
 
 Iterable<PropertyTransformBuilder> createPropertyTransforms(
