@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-07-02T00:12:48.569615Z
+// 2016-07-02T01:27:03.580086Z
 
 part of transformer_meta;
 
@@ -11,18 +11,12 @@ part of transformer_meta;
 class _$TransformationMetaModel extends TransformationMetaModel {
   final String fromTypeName;
   final String toTypeName;
-  final BuiltList<TransformMetaModel> requiredTransforms;
   final BuiltSet<PropertyTransform> propertyTransforms;
   _$TransformationMetaModel._(
-      {this.fromTypeName,
-      this.toTypeName,
-      this.requiredTransforms,
-      this.propertyTransforms})
+      {this.fromTypeName, this.toTypeName, this.propertyTransforms})
       : super._() {
     if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
     if (toTypeName == null) throw new ArgumentError('null toTypeName');
-    if (requiredTransforms == null)
-      throw new ArgumentError('null requiredTransforms');
     if (propertyTransforms == null)
       throw new ArgumentError('null propertyTransforms');
   }
@@ -37,20 +31,17 @@ class _$TransformationMetaModel extends TransformationMetaModel {
     if (other is! TransformationMetaModel) return false;
     return fromTypeName == other.fromTypeName &&
         toTypeName == other.toTypeName &&
-        requiredTransforms == other.requiredTransforms &&
         propertyTransforms == other.propertyTransforms;
   }
 
   int get hashCode {
-    return hashObjects(
-        [fromTypeName, toTypeName, requiredTransforms, propertyTransforms]);
+    return hashObjects([fromTypeName, toTypeName, propertyTransforms]);
   }
 
   String toString() {
     return 'TransformationMetaModel {'
         'fromTypeName=${fromTypeName.toString()}\n'
         'toTypeName=${toTypeName.toString()}\n'
-        'requiredTransforms=${requiredTransforms.toString()}\n'
         'propertyTransforms=${propertyTransforms.toString()}\n'
         '}';
   }
@@ -61,7 +52,6 @@ class _$TransformationMetaModelBuilder extends TransformationMetaModelBuilder {
   void replace(TransformationMetaModel other) {
     super.fromTypeName = other.fromTypeName;
     super.toTypeName = other.toTypeName;
-    super.requiredTransforms = other.requiredTransforms?.toBuilder();
     super.propertyTransforms = other.propertyTransforms?.toBuilder();
   }
 
@@ -72,17 +62,11 @@ class _$TransformationMetaModelBuilder extends TransformationMetaModelBuilder {
   TransformationMetaModel build() {
     if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
     if (toTypeName == null) throw new ArgumentError('null toTypeName');
-    if (requiredTransforms == null)
-      throw new ArgumentError('null requiredTransforms');
     if (propertyTransforms == null)
       throw new ArgumentError('null propertyTransforms');
     return new _$TransformationMetaModel._(
         fromTypeName: fromTypeName,
         toTypeName: toTypeName,
-        requiredTransforms: requiredTransforms != null
-            ? new ListBuilder<TransformMetaModel>(
-                requiredTransforms.build().map((v) => v.build())).build()
-            : null,
         propertyTransforms: propertyTransforms != null
             ? new SetBuilder<PropertyTransform>(
                 propertyTransforms.build().map((v) => v.build())).build()
@@ -153,7 +137,6 @@ class _$PropertyTransform extends PropertyTransform {
   final String toTypeName;
   final BuiltList<String> fromPathSegments;
   final BuiltList<String> toPathSegments;
-  final Option<String> transformName;
   final bool hasCustomTransform;
   final bool isCollection;
   final bool requiresToBuilder;
@@ -162,7 +145,6 @@ class _$PropertyTransform extends PropertyTransform {
       this.toTypeName,
       this.fromPathSegments,
       this.toPathSegments,
-      this.transformName,
       this.hasCustomTransform,
       this.isCollection,
       this.requiresToBuilder})
@@ -172,7 +154,6 @@ class _$PropertyTransform extends PropertyTransform {
     if (fromPathSegments == null)
       throw new ArgumentError('null fromPathSegments');
     if (toPathSegments == null) throw new ArgumentError('null toPathSegments');
-    if (transformName == null) throw new ArgumentError('null transformName');
     if (hasCustomTransform == null)
       throw new ArgumentError('null hasCustomTransform');
     if (isCollection == null) throw new ArgumentError('null isCollection');
@@ -191,7 +172,6 @@ class _$PropertyTransform extends PropertyTransform {
         toTypeName == other.toTypeName &&
         fromPathSegments == other.fromPathSegments &&
         toPathSegments == other.toPathSegments &&
-        transformName == other.transformName &&
         hasCustomTransform == other.hasCustomTransform &&
         isCollection == other.isCollection &&
         requiresToBuilder == other.requiresToBuilder;
@@ -203,7 +183,6 @@ class _$PropertyTransform extends PropertyTransform {
       toTypeName,
       fromPathSegments,
       toPathSegments,
-      transformName,
       hasCustomTransform,
       isCollection,
       requiresToBuilder
@@ -216,7 +195,6 @@ class _$PropertyTransform extends PropertyTransform {
         'toTypeName=${toTypeName.toString()}\n'
         'fromPathSegments=${fromPathSegments.toString()}\n'
         'toPathSegments=${toPathSegments.toString()}\n'
-        'transformName=${transformName.toString()}\n'
         'hasCustomTransform=${hasCustomTransform.toString()}\n'
         'isCollection=${isCollection.toString()}\n'
         'requiresToBuilder=${requiresToBuilder.toString()}\n'
@@ -231,7 +209,6 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
     super.toTypeName = other.toTypeName;
     super.fromPathSegments = other.fromPathSegments;
     super.toPathSegments = other.toPathSegments;
-    super.transformName = other.transformName;
     super.hasCustomTransform = other.hasCustomTransform;
     super.isCollection = other.isCollection;
     super.requiresToBuilder = other.requiresToBuilder;
@@ -247,7 +224,6 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
     if (fromPathSegments == null)
       throw new ArgumentError('null fromPathSegments');
     if (toPathSegments == null) throw new ArgumentError('null toPathSegments');
-    if (transformName == null) throw new ArgumentError('null transformName');
     if (hasCustomTransform == null)
       throw new ArgumentError('null hasCustomTransform');
     if (isCollection == null) throw new ArgumentError('null isCollection');
@@ -258,7 +234,6 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
         toTypeName: toTypeName,
         fromPathSegments: fromPathSegments,
         toPathSegments: toPathSegments,
-        transformName: transformName,
         hasCustomTransform: hasCustomTransform,
         isCollection: isCollection,
         requiresToBuilder: requiresToBuilder);

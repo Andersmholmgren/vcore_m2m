@@ -11,9 +11,8 @@ abstract class TransformationMetaModel
     implements Built<TransformationMetaModel, TransformationMetaModelBuilder> {
   String get fromTypeName;
   String get toTypeName;
-  BuiltList<TransformMetaModel> _requiredTransforms;
   BuiltList<TransformMetaModel> get requiredTransforms =>
-      _requiredTransforms ??= new BuiltList<TransformMetaModel>(
+      new BuiltList<TransformMetaModel>(
           propertyTransforms.expand((pt) => pt.transform));
 
   BuiltSet<PropertyTransform> get propertyTransforms;
