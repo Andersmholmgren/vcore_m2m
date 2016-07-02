@@ -145,6 +145,7 @@ abstract class TransformationContextMetaModel
         Built<TransformationContextMetaModel,
             TransformationContextMetaModelBuilder> {
   BuiltSet<TransformationMetaModel> get transformations;
+  BuiltSet<AbstractTypeMapping> get abstractTypeMappings;
 
   TransformationContextMetaModel._();
 
@@ -251,30 +252,20 @@ ${_perCustomTransform((String fromName, String toName,
   }
 
   String _perRequiredAbstractToConcreteTransform(
-    String b(String fromName, String toName,
-      String perAvailableTransform(String b(String f, String t)))) {
+      String b(String fromName, String toName,
+          String perAvailableTransform(String b(String f, String t)))) {
     final StringBuffer buffer = new StringBuffer();
 
-    packageRelationHelper.requiredAbstractTransforms.forEach((from, to) {
-      final fromName = from.name;
-      final toName = to.name;
+    abstractTypeMappings.forEach((m) {
+      final fromName = m.fromTypeName;
+      final toName = m.toTypeName;
       print('requiredAbstractTransforms: $fromName -> $toName');
 
-      if (from is ValueClass && to is ValueClass) {
-        String perSubTypeTransform(String b(String f, String t)) {
-          return packageRelationHelper
-            .subTypesOf(from, to)
-            .map((h) => b(h.fromName, h.toName))
-            .join('\n');
-        }
-
-        buffer.writeln(b(fromName, toName, perSubTypeTransform));
-      }
+      buffer.writeln(b(fromName, toName, m.perSubTypeTransform));
     });
 
     return buffer.toString();
   }
-
 }
 
 abstract class TransformationContextMetaModelBuilder
@@ -284,10 +275,58 @@ abstract class TransformationContextMetaModelBuilder
   SetBuilder<TransformationMetaModelBuilder> transformations =
       new SetBuilder<TransformationMetaModelBuilder>();
 
+  SetBuilder<AbstractTypeMappingBuilder> abstractTypeMappings =
+      new SetBuilder<AbstractTypeMappingBuilder>();
+
   TransformationContextMetaModelBuilder._();
 
   factory TransformationContextMetaModelBuilder() =
       _$TransformationContextMetaModelBuilder;
+}
+
+abstract class AbstractTypeMapping
+    implements Built<AbstractTypeMapping, AbstractTypeMappingBuilder> {
+  String get fromTypeName;
+  String get toTypeName;
+  BuiltSet<TransformMetaModel> get subTypeMappings;
+
+  AbstractTypeMapping._();
+
+  factory AbstractTypeMapping([updates(AbstractTypeMappingBuilder b)]) =
+      _$AbstractTypeMapping;
+
+  String perSubTypeTransform(String b(String f, String t)) =>
+      subTypeMappings.map((h) => b(h.fromName, h.toName)).join('\n');
+
+  /*
+    Transform<SchemaReference, Classifier>
+      _createSchemaReferenceToClassifierTransform() {
+    final schemaToValueClassTransformation =
+        _createSchemaToValueClassTransform();
+
+    return (SchemaReference schemaReference) {
+      if (schemaReference is Schema) {
+        return schemaToValueClassTransformation(schemaReference as Schema);
+      } else {
+        throw new StateError(
+            "No transform from ${schemaReference.runtimeType} to Classifier");
+      }
+    };
+  }
+
+   */
+}
+
+abstract class AbstractTypeMappingBuilder
+    implements Builder<AbstractTypeMapping, AbstractTypeMappingBuilder> {
+  String fromTypeName;
+  String toTypeName;
+  SetBuilder<TransformMetaModelBuilder> subTypeMappings =
+      new SetBuilder<TransformMetaModelBuilder>();
+
+  AbstractTypeMappingBuilder._();
+
+  factory AbstractTypeMappingBuilder() = _$AbstractTypeMappingBuilder;
 }
 
 // TODO: these should be in a util

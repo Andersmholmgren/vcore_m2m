@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-07-01T23:13:47.971594Z
+// 2016-07-02T00:07:33.648280Z
 
 part of transformer_meta;
 
@@ -149,22 +149,32 @@ class _$TransformMetaModelBuilder extends TransformMetaModelBuilder {
 // **************************************************************************
 
 class _$PropertyTransform extends PropertyTransform {
+  final String fromTypeName;
+  final String toTypeName;
   final BuiltList<String> fromPathSegments;
   final BuiltList<String> toPathSegments;
   final Option<String> transformName;
+  final bool hasCustomTransform;
   final bool isCollection;
   final bool requiresToBuilder;
   _$PropertyTransform._(
-      {this.fromPathSegments,
+      {this.fromTypeName,
+      this.toTypeName,
+      this.fromPathSegments,
       this.toPathSegments,
       this.transformName,
+      this.hasCustomTransform,
       this.isCollection,
       this.requiresToBuilder})
       : super._() {
+    if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
+    if (toTypeName == null) throw new ArgumentError('null toTypeName');
     if (fromPathSegments == null)
       throw new ArgumentError('null fromPathSegments');
     if (toPathSegments == null) throw new ArgumentError('null toPathSegments');
     if (transformName == null) throw new ArgumentError('null transformName');
+    if (hasCustomTransform == null)
+      throw new ArgumentError('null hasCustomTransform');
     if (isCollection == null) throw new ArgumentError('null isCollection');
     if (requiresToBuilder == null)
       throw new ArgumentError('null requiresToBuilder');
@@ -177,18 +187,24 @@ class _$PropertyTransform extends PropertyTransform {
       new _$PropertyTransformBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! PropertyTransform) return false;
-    return fromPathSegments == other.fromPathSegments &&
+    return fromTypeName == other.fromTypeName &&
+        toTypeName == other.toTypeName &&
+        fromPathSegments == other.fromPathSegments &&
         toPathSegments == other.toPathSegments &&
         transformName == other.transformName &&
+        hasCustomTransform == other.hasCustomTransform &&
         isCollection == other.isCollection &&
         requiresToBuilder == other.requiresToBuilder;
   }
 
   int get hashCode {
     return hashObjects([
+      fromTypeName,
+      toTypeName,
       fromPathSegments,
       toPathSegments,
       transformName,
+      hasCustomTransform,
       isCollection,
       requiresToBuilder
     ]);
@@ -196,9 +212,12 @@ class _$PropertyTransform extends PropertyTransform {
 
   String toString() {
     return 'PropertyTransform {'
+        'fromTypeName=${fromTypeName.toString()}\n'
+        'toTypeName=${toTypeName.toString()}\n'
         'fromPathSegments=${fromPathSegments.toString()}\n'
         'toPathSegments=${toPathSegments.toString()}\n'
         'transformName=${transformName.toString()}\n'
+        'hasCustomTransform=${hasCustomTransform.toString()}\n'
         'isCollection=${isCollection.toString()}\n'
         'requiresToBuilder=${requiresToBuilder.toString()}\n'
         '}';
@@ -208,9 +227,12 @@ class _$PropertyTransform extends PropertyTransform {
 class _$PropertyTransformBuilder extends PropertyTransformBuilder {
   _$PropertyTransformBuilder() : super._();
   void replace(PropertyTransform other) {
+    super.fromTypeName = other.fromTypeName;
+    super.toTypeName = other.toTypeName;
     super.fromPathSegments = other.fromPathSegments;
     super.toPathSegments = other.toPathSegments;
     super.transformName = other.transformName;
+    super.hasCustomTransform = other.hasCustomTransform;
     super.isCollection = other.isCollection;
     super.requiresToBuilder = other.requiresToBuilder;
   }
@@ -220,17 +242,24 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
   }
 
   PropertyTransform build() {
+    if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
+    if (toTypeName == null) throw new ArgumentError('null toTypeName');
     if (fromPathSegments == null)
       throw new ArgumentError('null fromPathSegments');
     if (toPathSegments == null) throw new ArgumentError('null toPathSegments');
     if (transformName == null) throw new ArgumentError('null transformName');
+    if (hasCustomTransform == null)
+      throw new ArgumentError('null hasCustomTransform');
     if (isCollection == null) throw new ArgumentError('null isCollection');
     if (requiresToBuilder == null)
       throw new ArgumentError('null requiresToBuilder');
     return new _$PropertyTransform._(
+        fromTypeName: fromTypeName,
+        toTypeName: toTypeName,
         fromPathSegments: fromPathSegments,
         toPathSegments: toPathSegments,
         transformName: transformName,
+        hasCustomTransform: hasCustomTransform,
         isCollection: isCollection,
         requiresToBuilder: requiresToBuilder);
   }
@@ -242,7 +271,11 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
 // **************************************************************************
 
 class _$TransformationContextMetaModel extends TransformationContextMetaModel {
-  _$TransformationContextMetaModel._() : super._() {}
+  final BuiltSet<TransformationMetaModel> transformations;
+  _$TransformationContextMetaModel._({this.transformations}) : super._() {
+    if (transformations == null)
+      throw new ArgumentError('null transformations');
+  }
   factory _$TransformationContextMetaModel(
           [updates(TransformationContextMetaModelBuilder b)]) =>
       (new TransformationContextMetaModelBuilder()..update(updates)).build();
@@ -253,27 +286,108 @@ class _$TransformationContextMetaModel extends TransformationContextMetaModel {
       new _$TransformationContextMetaModelBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! TransformationContextMetaModel) return false;
-    return true;
+    return transformations == other.transformations;
   }
 
   int get hashCode {
-    return 200256111;
+    return hashObjects([transformations]);
   }
 
   String toString() {
-    return 'TransformationContextMetaModel {}';
+    return 'TransformationContextMetaModel {'
+        'transformations=${transformations.toString()}\n'
+        '}';
   }
 }
 
 class _$TransformationContextMetaModelBuilder
     extends TransformationContextMetaModelBuilder {
   _$TransformationContextMetaModelBuilder() : super._();
-  void replace(TransformationContextMetaModel other) {}
+  void replace(TransformationContextMetaModel other) {
+    super.transformations = other.transformations?.toBuilder();
+  }
+
   void update(updates(TransformationContextMetaModelBuilder b)) {
     if (updates != null) updates(this);
   }
 
   TransformationContextMetaModel build() {
-    return new _$TransformationContextMetaModel._();
+    if (transformations == null)
+      throw new ArgumentError('null transformations');
+    return new _$TransformationContextMetaModel._(
+        transformations: transformations != null
+            ? new SetBuilder<TransformationMetaModel>(
+                transformations.build().map((v) => v.build())).build()
+            : null);
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class AbstractTypeMapping
+// **************************************************************************
+
+class _$AbstractTypeMapping extends AbstractTypeMapping {
+  final String fromTypeName;
+  final String toTypeName;
+  final BuiltSet<TransformMetaModel> subTypeMappings;
+  _$AbstractTypeMapping._(
+      {this.fromTypeName, this.toTypeName, this.subTypeMappings})
+      : super._() {
+    if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
+    if (toTypeName == null) throw new ArgumentError('null toTypeName');
+    if (subTypeMappings == null)
+      throw new ArgumentError('null subTypeMappings');
+  }
+  factory _$AbstractTypeMapping([updates(AbstractTypeMappingBuilder b)]) =>
+      (new AbstractTypeMappingBuilder()..update(updates)).build();
+  AbstractTypeMapping rebuild(updates(AbstractTypeMappingBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$AbstractTypeMappingBuilder toBuilder() =>
+      new _$AbstractTypeMappingBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! AbstractTypeMapping) return false;
+    return fromTypeName == other.fromTypeName &&
+        toTypeName == other.toTypeName &&
+        subTypeMappings == other.subTypeMappings;
+  }
+
+  int get hashCode {
+    return hashObjects([fromTypeName, toTypeName, subTypeMappings]);
+  }
+
+  String toString() {
+    return 'AbstractTypeMapping {'
+        'fromTypeName=${fromTypeName.toString()}\n'
+        'toTypeName=${toTypeName.toString()}\n'
+        'subTypeMappings=${subTypeMappings.toString()}\n'
+        '}';
+  }
+}
+
+class _$AbstractTypeMappingBuilder extends AbstractTypeMappingBuilder {
+  _$AbstractTypeMappingBuilder() : super._();
+  void replace(AbstractTypeMapping other) {
+    super.fromTypeName = other.fromTypeName;
+    super.toTypeName = other.toTypeName;
+    super.subTypeMappings = other.subTypeMappings?.toBuilder();
+  }
+
+  void update(updates(AbstractTypeMappingBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  AbstractTypeMapping build() {
+    if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
+    if (toTypeName == null) throw new ArgumentError('null toTypeName');
+    if (subTypeMappings == null)
+      throw new ArgumentError('null subTypeMappings');
+    return new _$AbstractTypeMapping._(
+        fromTypeName: fromTypeName,
+        toTypeName: toTypeName,
+        subTypeMappings: subTypeMappings != null
+            ? new SetBuilder<TransformMetaModel>(
+                subTypeMappings.build().map((v) => v.build())).build()
+            : null);
   }
 }
