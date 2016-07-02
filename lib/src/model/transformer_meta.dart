@@ -91,7 +91,11 @@ abstract class PropertyTransform
   String get toTypeName;
   BuiltList<String> get fromPathSegments;
   BuiltList<String> get toPathSegments;
-  Option<String> get transformName;
+  bool get converterRequired => fromTypeName != toTypeName;
+  Option<String> get transformName => converterRequired
+      ? new Some('${_unCapitalise(fromTypeName)}To${toTypeName}Transform')
+      : const None();
+
   bool get hasCustomTransform;
   bool get isCollection;
   bool get requiresToBuilder;
@@ -130,7 +134,6 @@ abstract class PropertyTransformBuilder
   String toTypeName;
   BuiltList<String> fromPathSegments;
   BuiltList<String> toPathSegments;
-  Option<String> transformName;
   bool hasCustomTransform;
   bool isCollection;
   bool requiresToBuilder = false;
