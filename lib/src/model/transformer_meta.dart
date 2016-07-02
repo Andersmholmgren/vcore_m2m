@@ -11,7 +11,10 @@ abstract class TransformationMetaModel
     implements Built<TransformationMetaModel, TransformationMetaModelBuilder> {
   String get fromTypeName;
   String get toTypeName;
-  BuiltList<TransformMetaModel> get requiredTransforms;
+  BuiltList<TransformMetaModel> _requiredTransforms;
+  BuiltList<TransformMetaModel> get requiredTransforms =>
+      _requiredTransforms ??= new BuiltList<TransformMetaModel>(
+          propertyTransforms.expand((pt) => pt.transform));
   BuiltSet<PropertyTransform> get propertyTransforms;
 
   TransformationMetaModel._();
@@ -54,8 +57,8 @@ abstract class TransformationMetaModelBuilder
         Builder<TransformationMetaModel, TransformationMetaModelBuilder> {
   String fromTypeName;
   String toTypeName;
-  ListBuilder<TransformMetaModelBuilder> requiredTransforms =
-      new ListBuilder<TransformMetaModelBuilder>();
+//  ListBuilder<TransformMetaModelBuilder> requiredTransforms =
+//      new ListBuilder<TransformMetaModelBuilder>();
   SetBuilder<PropertyTransformBuilder> propertyTransforms =
       new SetBuilder<PropertyTransformBuilder>();
 
@@ -68,6 +71,8 @@ abstract class TransformMetaModel
     implements Built<TransformMetaModel, TransformMetaModelBuilder> {
   String get fromName;
   String get toName;
+
+  String get variableName => '${_unCapitalise(fromName)}To${toName}Transform';
 
   TransformMetaModel._();
 
@@ -92,10 +97,17 @@ abstract class PropertyTransform
   BuiltList<String> get fromPathSegments;
   BuiltList<String> get toPathSegments;
   bool get converterRequired => fromTypeName != toTypeName;
-  // TODO: duping naming scheme here
-  Option<String> get transformName => converterRequired
-      ? new Some('${_unCapitalise(fromTypeName)}To${toTypeName}Transform')
+
+  Option<TransformMetaModel> get transform => converterRequired
+      ? new Some(new TransformMetaModel((b) {
+          b
+            ..fromName = fromTypeName
+            ..toName = toTypeName;
+        }))
       : const None();
+
+  Option<String> get transformName =>
+      transform.map((t) => t.variableName) as Option<String>;
 
   bool get hasCustomTransform;
   bool get isCollection;
