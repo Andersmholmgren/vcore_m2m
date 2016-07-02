@@ -18,26 +18,35 @@ TransformationContextMetaModel transform(PackageRelation packageRelation) {
 
   b.transformations.addAll(transformations);
 
-  BuiltSet<ValueClassRelation> subTypesOf(ValueClass from, ValueClass to) =>
-      new BuiltSet<ValueClassRelation>(valueClassRelations.where(
-          (classRelation) =>
-              (classRelation as ValueClassRelation).isSubTypeOf(from, to)));
+  Iterable<ValueClassRelation> subTypesOf(ValueClass from, ValueClass to) =>
+      valueClassRelations.where((classRelation) =>
+          (classRelation as ValueClassRelation).isSubTypeOf(from, to));
 
-  transformations.map((t) {
+  Iterable<TransformMetaModelBuilder> subTransforms(
+          Classifier from, Classifier to) =>
+      from is ValueClass && to is ValueClass
+          ? subTypesOf(from as ValueClass, to as ValueClass).map((vr) {
+              return new TransformMetaModelBuilder()
+                ..fromName = vr.from.name
+                ..toName = vr.to.name;
+            })
+          : [];
+
+  final abstractTypeMappings =
+      transformations.expand/*<AbstractTypeMappingBuilder>*/((t) {
     final abstractPropertyTransforms =
         t.propertyTransforms.build().where((pt) => pt.isAbstract);
 
-    abstractPropertyTransforms.map((pt) {
-      final b = new AbstractTypeMappingBuilder()
+    return abstractPropertyTransforms.map((pt) {
+      return new AbstractTypeMappingBuilder()
         ..fromTypeName = pt.fromSimpleType.name
-        ..toTypeName = pt.toSimpleType.name;
-
-      subTypesOf(
-          pt.fromSimpleType as ValueClass, pt.toSimpleType as ValueClass);
+        ..toTypeName = pt.toSimpleType.name
+        ..subTypeMappings
+            .addAll(subTransforms(pt.fromSimpleType, pt.toSimpleType));
     });
   });
 
-//  b.abstractTypeMappings
+  b.abstractTypeMappings.addAll(abstractTypeMappings);
 
   return b.build();
 }
