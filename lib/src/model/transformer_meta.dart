@@ -11,27 +11,37 @@ abstract class PackageTransformationMetaModel
     implements
         Built<PackageTransformationMetaModel,
             PackageTransformationMetaModelBuilder> {
+  TransformationContextMetaModel get context;
+  Uri get packageRelationPackageUri;
+  Uri get sourceModelPackageUri;
+  String get fromPackageName;
+  String get toPackageName;
+
   PackageTransformationMetaModel._();
 
   factory PackageTransformationMetaModel(
           [updates(PackageTransformationMetaModelBuilder b)]) =
       _$PackageTransformationMetaModel;
 
-  void generate() {
-/*
-        '''
+  void generate(StringSink sink) {
+    sink.writeln('''
 import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/vcore_m2m.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:option/option.dart';
 import 'package:logging/logging.dart';
 
-import '$sourceModelPackage';
-import '$packageRelationPackage' as relations;
+import '${sourceModelPackageUri.toString()}';
+import '${packageRelationPackageUri.toString()}' as relations;
 
-final _log = new Logger('${_uncapitalise(fromPackageName)}To${_capitalise(toPackageName)}Relation');
+final _log = new Logger('${_unCapitalise(fromPackageName)}To${_capitalise(toPackageName)}Relation');
+''');
 
-     */
+    context.transformations.forEach((t) {
+      t.generate(sink);
+    });
+
+    context.generate(sink);
   }
 }
 
@@ -39,6 +49,13 @@ abstract class PackageTransformationMetaModelBuilder
     implements
         Builder<PackageTransformationMetaModel,
             PackageTransformationMetaModelBuilder> {
+  TransformationContextMetaModelBuilder context =
+      new TransformationContextMetaModelBuilder();
+  Uri packageRelationPackageUri;
+  Uri sourceModelPackageUri;
+  String fromPackageName;
+  String toPackageName;
+
   PackageTransformationMetaModelBuilder._();
 
   factory PackageTransformationMetaModelBuilder() =
@@ -369,8 +386,8 @@ abstract class AbstractTypeMappingBuilder
 }
 
 // TODO: these should be in a util
-//String _capitalise(String s) =>
-//    s.substring(0, 1).toUpperCase() + s.substring(1);
+String _capitalise(String s) =>
+    s.substring(0, 1).toUpperCase() + s.substring(1);
 
 String _unCapitalise(String s) =>
     s.substring(0, 1).toLowerCase() + s.substring(1);

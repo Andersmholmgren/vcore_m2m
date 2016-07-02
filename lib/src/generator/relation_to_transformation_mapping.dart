@@ -1,9 +1,9 @@
 import 'package:vcore/vcore.dart';
 import 'package:vcore_m2m/src/model/relation.dart';
 import 'package:vcore_m2m/src/model/transformer_meta.dart';
-import 'package:built_collection/built_collection.dart';
 
-TransformationContextMetaModel transform(PackageRelation packageRelation) {
+PackageTransformationMetaModel transform(PackageRelation packageRelation,
+    Uri packageRelationPackageUri, Uri sourceModelPackageUri) {
   final b = new TransformationContextMetaModelBuilder();
   final valueClassRelations = packageRelation.classifierRelations
       .where((cr) => cr is ValueClassRelation);
@@ -48,7 +48,13 @@ TransformationContextMetaModel transform(PackageRelation packageRelation) {
 
   b.abstractTypeMappings.addAll(abstractTypeMappings);
 
-  return b.build();
+  return new PackageTransformationMetaModel((pb) {
+    pb.context = b;
+    pb.fromPackageName = packageRelation.from.name;
+    pb.toPackageName = packageRelation.to.name;
+    pb.sourceModelPackageUri = sourceModelPackageUri;
+    pb.packageRelationPackageUri = packageRelationPackageUri;
+  });
 }
 
 Iterable<PropertyTransformBuilder> createPropertyTransforms(

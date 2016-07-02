@@ -1,7 +1,105 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-07-02T01:27:03.580086Z
+// 2016-07-02T02:23:17.170391Z
 
 part of transformer_meta;
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class PackageTransformationMetaModel
+// **************************************************************************
+
+class _$PackageTransformationMetaModel extends PackageTransformationMetaModel {
+  final TransformationContextMetaModel context;
+  final Uri packageRelationPackageUri;
+  final Uri sourceModelPackageUri;
+  final String fromPackageName;
+  final String toPackageName;
+  _$PackageTransformationMetaModel._(
+      {this.context,
+      this.packageRelationPackageUri,
+      this.sourceModelPackageUri,
+      this.fromPackageName,
+      this.toPackageName})
+      : super._() {
+    if (context == null) throw new ArgumentError('null context');
+    if (packageRelationPackageUri == null)
+      throw new ArgumentError('null packageRelationPackageUri');
+    if (sourceModelPackageUri == null)
+      throw new ArgumentError('null sourceModelPackageUri');
+    if (fromPackageName == null)
+      throw new ArgumentError('null fromPackageName');
+    if (toPackageName == null) throw new ArgumentError('null toPackageName');
+  }
+  factory _$PackageTransformationMetaModel(
+          [updates(PackageTransformationMetaModelBuilder b)]) =>
+      (new PackageTransformationMetaModelBuilder()..update(updates)).build();
+  PackageTransformationMetaModel rebuild(
+          updates(PackageTransformationMetaModelBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+  _$PackageTransformationMetaModelBuilder toBuilder() =>
+      new _$PackageTransformationMetaModelBuilder()..replace(this);
+  bool operator ==(other) {
+    if (other is! PackageTransformationMetaModel) return false;
+    return context == other.context &&
+        packageRelationPackageUri == other.packageRelationPackageUri &&
+        sourceModelPackageUri == other.sourceModelPackageUri &&
+        fromPackageName == other.fromPackageName &&
+        toPackageName == other.toPackageName;
+  }
+
+  int get hashCode {
+    return hashObjects([
+      context,
+      packageRelationPackageUri,
+      sourceModelPackageUri,
+      fromPackageName,
+      toPackageName
+    ]);
+  }
+
+  String toString() {
+    return 'PackageTransformationMetaModel {'
+        'context=${context.toString()}\n'
+        'packageRelationPackageUri=${packageRelationPackageUri.toString()}\n'
+        'sourceModelPackageUri=${sourceModelPackageUri.toString()}\n'
+        'fromPackageName=${fromPackageName.toString()}\n'
+        'toPackageName=${toPackageName.toString()}\n'
+        '}';
+  }
+}
+
+class _$PackageTransformationMetaModelBuilder
+    extends PackageTransformationMetaModelBuilder {
+  _$PackageTransformationMetaModelBuilder() : super._();
+  void replace(PackageTransformationMetaModel other) {
+    super.context = other.context?.toBuilder();
+    super.packageRelationPackageUri = other.packageRelationPackageUri;
+    super.sourceModelPackageUri = other.sourceModelPackageUri;
+    super.fromPackageName = other.fromPackageName;
+    super.toPackageName = other.toPackageName;
+  }
+
+  void update(updates(PackageTransformationMetaModelBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  PackageTransformationMetaModel build() {
+    if (context == null) throw new ArgumentError('null context');
+    if (packageRelationPackageUri == null)
+      throw new ArgumentError('null packageRelationPackageUri');
+    if (sourceModelPackageUri == null)
+      throw new ArgumentError('null sourceModelPackageUri');
+    if (fromPackageName == null)
+      throw new ArgumentError('null fromPackageName');
+    if (toPackageName == null) throw new ArgumentError('null toPackageName');
+    return new _$PackageTransformationMetaModel._(
+        context: context?.build(),
+        packageRelationPackageUri: packageRelationPackageUri,
+        sourceModelPackageUri: sourceModelPackageUri,
+        fromPackageName: fromPackageName,
+        toPackageName: toPackageName);
+  }
+}
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
@@ -133,24 +231,26 @@ class _$TransformMetaModelBuilder extends TransformMetaModelBuilder {
 // **************************************************************************
 
 class _$PropertyTransform extends PropertyTransform {
-  final String fromTypeName;
-  final String toTypeName;
+  final Classifier fromSimpleType;
+  final Classifier toSimpleType;
   final BuiltList<String> fromPathSegments;
   final BuiltList<String> toPathSegments;
   final bool hasCustomTransform;
   final bool isCollection;
   final bool requiresToBuilder;
+  final bool isAbstract;
   _$PropertyTransform._(
-      {this.fromTypeName,
-      this.toTypeName,
+      {this.fromSimpleType,
+      this.toSimpleType,
       this.fromPathSegments,
       this.toPathSegments,
       this.hasCustomTransform,
       this.isCollection,
-      this.requiresToBuilder})
+      this.requiresToBuilder,
+      this.isAbstract})
       : super._() {
-    if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
-    if (toTypeName == null) throw new ArgumentError('null toTypeName');
+    if (fromSimpleType == null) throw new ArgumentError('null fromSimpleType');
+    if (toSimpleType == null) throw new ArgumentError('null toSimpleType');
     if (fromPathSegments == null)
       throw new ArgumentError('null fromPathSegments');
     if (toPathSegments == null) throw new ArgumentError('null toPathSegments');
@@ -159,6 +259,7 @@ class _$PropertyTransform extends PropertyTransform {
     if (isCollection == null) throw new ArgumentError('null isCollection');
     if (requiresToBuilder == null)
       throw new ArgumentError('null requiresToBuilder');
+    if (isAbstract == null) throw new ArgumentError('null isAbstract');
   }
   factory _$PropertyTransform([updates(PropertyTransformBuilder b)]) =>
       (new PropertyTransformBuilder()..update(updates)).build();
@@ -168,36 +269,39 @@ class _$PropertyTransform extends PropertyTransform {
       new _$PropertyTransformBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! PropertyTransform) return false;
-    return fromTypeName == other.fromTypeName &&
-        toTypeName == other.toTypeName &&
+    return fromSimpleType == other.fromSimpleType &&
+        toSimpleType == other.toSimpleType &&
         fromPathSegments == other.fromPathSegments &&
         toPathSegments == other.toPathSegments &&
         hasCustomTransform == other.hasCustomTransform &&
         isCollection == other.isCollection &&
-        requiresToBuilder == other.requiresToBuilder;
+        requiresToBuilder == other.requiresToBuilder &&
+        isAbstract == other.isAbstract;
   }
 
   int get hashCode {
     return hashObjects([
-      fromTypeName,
-      toTypeName,
+      fromSimpleType,
+      toSimpleType,
       fromPathSegments,
       toPathSegments,
       hasCustomTransform,
       isCollection,
-      requiresToBuilder
+      requiresToBuilder,
+      isAbstract
     ]);
   }
 
   String toString() {
     return 'PropertyTransform {'
-        'fromTypeName=${fromTypeName.toString()}\n'
-        'toTypeName=${toTypeName.toString()}\n'
+        'fromSimpleType=${fromSimpleType.toString()}\n'
+        'toSimpleType=${toSimpleType.toString()}\n'
         'fromPathSegments=${fromPathSegments.toString()}\n'
         'toPathSegments=${toPathSegments.toString()}\n'
         'hasCustomTransform=${hasCustomTransform.toString()}\n'
         'isCollection=${isCollection.toString()}\n'
         'requiresToBuilder=${requiresToBuilder.toString()}\n'
+        'isAbstract=${isAbstract.toString()}\n'
         '}';
   }
 }
@@ -205,13 +309,14 @@ class _$PropertyTransform extends PropertyTransform {
 class _$PropertyTransformBuilder extends PropertyTransformBuilder {
   _$PropertyTransformBuilder() : super._();
   void replace(PropertyTransform other) {
-    super.fromTypeName = other.fromTypeName;
-    super.toTypeName = other.toTypeName;
+    super.fromSimpleType = other.fromSimpleType;
+    super.toSimpleType = other.toSimpleType;
     super.fromPathSegments = other.fromPathSegments;
     super.toPathSegments = other.toPathSegments;
     super.hasCustomTransform = other.hasCustomTransform;
     super.isCollection = other.isCollection;
     super.requiresToBuilder = other.requiresToBuilder;
+    super.isAbstract = other.isAbstract;
   }
 
   void update(updates(PropertyTransformBuilder b)) {
@@ -219,8 +324,8 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
   }
 
   PropertyTransform build() {
-    if (fromTypeName == null) throw new ArgumentError('null fromTypeName');
-    if (toTypeName == null) throw new ArgumentError('null toTypeName');
+    if (fromSimpleType == null) throw new ArgumentError('null fromSimpleType');
+    if (toSimpleType == null) throw new ArgumentError('null toSimpleType');
     if (fromPathSegments == null)
       throw new ArgumentError('null fromPathSegments');
     if (toPathSegments == null) throw new ArgumentError('null toPathSegments');
@@ -229,14 +334,16 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
     if (isCollection == null) throw new ArgumentError('null isCollection');
     if (requiresToBuilder == null)
       throw new ArgumentError('null requiresToBuilder');
+    if (isAbstract == null) throw new ArgumentError('null isAbstract');
     return new _$PropertyTransform._(
-        fromTypeName: fromTypeName,
-        toTypeName: toTypeName,
+        fromSimpleType: fromSimpleType,
+        toSimpleType: toSimpleType,
         fromPathSegments: fromPathSegments,
         toPathSegments: toPathSegments,
         hasCustomTransform: hasCustomTransform,
         isCollection: isCollection,
-        requiresToBuilder: requiresToBuilder);
+        requiresToBuilder: requiresToBuilder,
+        isAbstract: isAbstract);
   }
 }
 
