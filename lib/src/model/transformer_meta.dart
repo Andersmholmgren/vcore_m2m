@@ -105,7 +105,7 @@ class $className extends AbstractTransformation<$fromTypeName,
       requiredTransforms.map((f) => b(f.fromName, f.toName)).join('\n');
 
   String _mapProperties() =>
-      propertyTransforms.map((p) => p.toString()).join('\n');
+      propertyTransforms.map((p) => p.toSourceString()).join('\n');
 }
 
 abstract class TransformationMetaModelBuilder
@@ -175,7 +175,7 @@ abstract class PropertyTransform
   factory PropertyTransform([updates(PropertyTransformBuilder b)]) =
       _$PropertyTransform;
 
-  String toString() => isCollection ? _toCollectionString() : _toSingleString();
+  String toSourceString() => isCollection ? _toCollectionString() : _toSingleString();
 
   String get _fromPath => 'toBuilder.${toPathSegments.join('.')}';
   String get _toPath => 'from.${fromPathSegments.join('?.')}';
