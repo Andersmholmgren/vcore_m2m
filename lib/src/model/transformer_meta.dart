@@ -103,8 +103,8 @@ abstract class PropertyTransform
 
   String toString() => isCollection ? _toCollectionString() : _toSingleString();
 
-  String get _fromPath => (['from']..addAll(fromPathSegments)).join('.');
-  String get _toPath => (['toBuilder']..addAll(toPathSegments)).join('.');
+  String get _fromPath => 'toBuilder.${toPathSegments.join('.')}';
+  String get _toPath => 'from.${fromPathSegments.join('?.')}';
 
   String _possiblyTransformed(String varName) =>
       transformName.map((tn) => '$tn($varName)').getOrElse(() => varName);

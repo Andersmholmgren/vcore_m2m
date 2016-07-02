@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// 2016-07-02T00:07:33.648280Z
+// 2016-07-02T00:12:48.569615Z
 
 part of transformer_meta;
 
@@ -272,9 +272,14 @@ class _$PropertyTransformBuilder extends PropertyTransformBuilder {
 
 class _$TransformationContextMetaModel extends TransformationContextMetaModel {
   final BuiltSet<TransformationMetaModel> transformations;
-  _$TransformationContextMetaModel._({this.transformations}) : super._() {
+  final BuiltSet<AbstractTypeMapping> abstractTypeMappings;
+  _$TransformationContextMetaModel._(
+      {this.transformations, this.abstractTypeMappings})
+      : super._() {
     if (transformations == null)
       throw new ArgumentError('null transformations');
+    if (abstractTypeMappings == null)
+      throw new ArgumentError('null abstractTypeMappings');
   }
   factory _$TransformationContextMetaModel(
           [updates(TransformationContextMetaModelBuilder b)]) =>
@@ -286,16 +291,18 @@ class _$TransformationContextMetaModel extends TransformationContextMetaModel {
       new _$TransformationContextMetaModelBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! TransformationContextMetaModel) return false;
-    return transformations == other.transformations;
+    return transformations == other.transformations &&
+        abstractTypeMappings == other.abstractTypeMappings;
   }
 
   int get hashCode {
-    return hashObjects([transformations]);
+    return hashObjects([transformations, abstractTypeMappings]);
   }
 
   String toString() {
     return 'TransformationContextMetaModel {'
         'transformations=${transformations.toString()}\n'
+        'abstractTypeMappings=${abstractTypeMappings.toString()}\n'
         '}';
   }
 }
@@ -305,6 +312,7 @@ class _$TransformationContextMetaModelBuilder
   _$TransformationContextMetaModelBuilder() : super._();
   void replace(TransformationContextMetaModel other) {
     super.transformations = other.transformations?.toBuilder();
+    super.abstractTypeMappings = other.abstractTypeMappings?.toBuilder();
   }
 
   void update(updates(TransformationContextMetaModelBuilder b)) {
@@ -314,10 +322,16 @@ class _$TransformationContextMetaModelBuilder
   TransformationContextMetaModel build() {
     if (transformations == null)
       throw new ArgumentError('null transformations');
+    if (abstractTypeMappings == null)
+      throw new ArgumentError('null abstractTypeMappings');
     return new _$TransformationContextMetaModel._(
         transformations: transformations != null
             ? new SetBuilder<TransformationMetaModel>(
                 transformations.build().map((v) => v.build())).build()
+            : null,
+        abstractTypeMappings: abstractTypeMappings != null
+            ? new SetBuilder<AbstractTypeMapping>(
+                abstractTypeMappings.build().map((v) => v.build())).build()
             : null);
   }
 }
