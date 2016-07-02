@@ -180,6 +180,11 @@ abstract class PropertyTransform
 
   String get _toPath => 'toBuilder.${toPathSegments.join('.')}';
   String get _fromPath => 'from.${fromPathSegments.join('?.')}';
+  String pathExpression(BuiltList<String> path) =>
+      '${[path.map((s) => "'$s'").join(', ')]}';
+
+  String get fromPathExpression => pathExpression(fromPathSegments);
+  String get toPathExpression => pathExpression(toPathSegments);
 
   String _possiblyTransformed(String varName) =>
       transformName.map((tn) => '$tn($varName)').getOrElse(() => varName);
@@ -321,7 +326,8 @@ ${_perCustomTransform((String fromName, String toName,
         transformations.expand((h) => h.propertyTransforms).toSet();
     return propertyHelpers.map((ph) {
       return ph.hasCustomTransform
-          ? b(ph.fromTypeName, ph.toTypeName, ph._fromPath, ph._toPath)
+          ? b(ph.fromTypeName, ph.toTypeName, ph.fromPathExpression,
+              ph.toPathExpression)
           : "";
     }).join('\n');
   }
