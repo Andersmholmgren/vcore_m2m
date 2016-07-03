@@ -26,7 +26,8 @@ PackageRelation relateModels(
       ..reflectTo = reflectTo
       ..classifierRelations.addAll(packageHelper.classifierRelations
           .build()
-          .map((h) => h.classRelation));
+          .map/*<ClassifierRelation>*/(
+              (h) => h.classRelation as ClassifierRelation));
   });
 }
 
