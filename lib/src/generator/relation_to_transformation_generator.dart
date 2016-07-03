@@ -27,6 +27,17 @@ class RelationToTransformationGenerator extends Generator {
 
     print('yaaay: ${element.name}');
 
+    print(fElement.enclosingElement.runtimeType);
+    final packageRelationElement = (fElement.enclosingElement
+            as CompilationUnitElement)
+        .accessors
+        .firstWhere(
+            (a) => a.isGetter && a.returnType.displayName == 'PackageRelation');
+
+//    fElement.enclosingElement.
+
+    print(packageRelationElement);
+
     return "yay";
 //    final package = convert(element);
 //
