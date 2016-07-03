@@ -44,7 +44,8 @@ abstract class PackageRelation
       ..reflectFrom = reflectTo
       ..reflectTo = reflectFrom
       ..classifierRelations = (new SetBuilder<ClassifierRelation>()
-        ..addAll(classifierRelations.map((pr) => pr.reversed()))));
+        ..addAll(classifierRelations.map/*<ClassifierRelation>*/(
+            (pr) => pr.reversed() as ClassifierRelation))));
   }
 }
 
