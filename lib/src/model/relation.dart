@@ -63,10 +63,10 @@ abstract class PackageRelationBuilder
 }
 
 abstract class ClassifierRelation<
-        V extends Classifier<V, B>,
-        B extends ClassifierBuilder<V, B>,
-        V2 extends Classifier<V2, B2>,
-        B2 extends ClassifierBuilder<V2, B2>>
+        V extends TypedClassifier<V, B>,
+        B extends TypedClassifierBuilder<V, B>,
+        V2 extends TypedClassifier<V2, B2>,
+        B2 extends TypedClassifierBuilder<V2, B2>>
     implements
         Relation<V, V2, ClassifierRelation<V, B, V2, B2>,
             ClassifierRelation<V2, B2, V, B>> {
@@ -77,10 +77,10 @@ abstract class ClassifierRelation<
 }
 
 abstract class ClassifierRelationBuilder<
-    V extends Classifier<V, B>,
-    B extends ClassifierBuilder<V, B>,
-    V2 extends Classifier<V2, B2>,
-    B2 extends ClassifierBuilder<V2, B2>> {
+    V extends TypedClassifier<V, B>,
+    B extends TypedClassifierBuilder<V, B>,
+    V2 extends TypedClassifier<V2, B2>,
+    B2 extends TypedClassifierBuilder<V2, B2>> {
   V from;
   V2 to;
 }
@@ -218,7 +218,6 @@ abstract class SchemeBasedNameRelation
     implements
         Built<SchemeBasedNameRelation, SchemeBasedNameRelationBuilder>,
         NameRelation {
-
   NameConversion get forwardConversion;
   NameConversion get reverseConversion;
 
