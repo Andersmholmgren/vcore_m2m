@@ -24,8 +24,6 @@ abstract class PackageRelation
     implements
         Built<PackageRelation, PackageRelationBuilder>,
         SymmetricallyTypedRelation<Package, PackageRelation> {
-  static final Serializer<PackageRelation> serializer =
-      _$packageRelationSerializer;
   Package get from;
   Package get to;
 
@@ -93,9 +91,6 @@ abstract class ValueClassRelation
         ClassifierRelation<ValueClass, ValueClassBuilder, ValueClass,
             ValueClassBuilder>,
         SymmetricallyTypedRelation<ValueClass, ValueClassRelation> {
-  static final Serializer<ValueClassRelation> serializer =
-      _$valueClassRelationSerializer;
-
   ValueClass get from;
   ValueClass get to;
   BuiltSet<PropertyRelation> get propertyRelations;
@@ -142,9 +137,6 @@ abstract class PropertyRelation
     implements
         Built<PropertyRelation, PropertyRelationBuilder>,
         SymmetricallyTypedRelation<Property, PropertyRelation> {
-  static final Serializer<PropertyRelation> serializer =
-      _$propertyRelationSerializer;
-
   PropertyRelationEnd get from;
   PropertyRelationEnd get to;
   @nullable
@@ -226,8 +218,6 @@ abstract class SchemeBasedNameRelation
     implements
         Built<SchemeBasedNameRelation, SchemeBasedNameRelationBuilder>,
         NameRelation {
-  static final Serializer<SchemeBasedNameRelation> serializer =
-      _$schemeBasedNameRelationSerializer;
 
   NameConversion get forwardConversion;
   NameConversion get reverseConversion;
