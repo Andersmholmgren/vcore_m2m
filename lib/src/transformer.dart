@@ -58,9 +58,9 @@ class Transformer {
 
     if (classifierRelation is ValueClassRelation) {
 //      final toBuilder = context.builderFor(classifierRelation.to);
-      final ValueClassRelation classRelation = classifierRelation;
+      final classRelation = classifierRelation as ValueClassRelation;
       classRelation.propertyRelations.forEach((pr) {
-        _transformProperty(fromClassifier, classifierRelation.to, pr, context);
+        _transformProperty(fromClassifier, classRelation.to, pr, context);
       });
     }
 //    classifierRelation.
@@ -68,13 +68,13 @@ class Transformer {
 
   void _transformProperty(ValueClass fromClassifier, ValueClass toClassifier,
       PropertyRelation pr, _TransformationContext context) {
-    final Property sourceProperty = _resolvePath(fromClassifier, pr.fromPath);
+    final Property sourceProperty = _resolvePath(fromClassifier, pr.from.path);
     if (sourceProperty == null) {
-      print('No property found for path ${pr.fromPath.join('.')} '
+      print('No property found for path ${pr.from.path.join('.')} '
           'on $fromClassifier');
       // ignore. Is that correct or an error?
     } else {
-      final Property targetProperty = _resolvePath(toClassifier, pr.toPath);
+      final Property targetProperty = _resolvePath(toClassifier, pr.to.path);
       // can't be null
       if (targetProperty.isCollection != sourceProperty.isCollection) {
         String _m(Property p) =>
@@ -85,14 +85,14 @@ class Transformer {
       if (sourceProperty.isCollection) {
         print('TODO: support mapping collections');
       } else {
-        final sourceValue = context.lookupSourceValue(pr.fromPath);
+        final sourceValue = context.lookupSourceValue(pr.from.path);
         if (sourceValue == null) {
           return;
         } else {
           final targetValue = (sourceProperty.type == targetProperty.type)
               ? sourceValue
               : _transformTo(sourceValue, sourceProperty.type, context);
-          context.setTargetValue(pr.toPath, targetValue);
+          context.setTargetValue(pr.to.path, targetValue);
         }
       }
     }
@@ -176,7 +176,7 @@ abstract class BaseTransformationContext implements TransformationContext {
     return _lookupTransformFactory(fromType, toType)
         .map((TransformFactory/*<F, T>*/ f) {
       /*=T*/ transform/*<F, T>*/(/*=F*/ from) {
-        final Transform/*<F, T>*/ t = f();
+        final Transform/*<F, T>*/ t = f() as Transform/*<F, T>*/;
         return t(from);
       }
       return transform;
