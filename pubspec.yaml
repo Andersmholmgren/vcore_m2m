@@ -14,7 +14,7 @@ dependencies:
   vcore_generator: 
     path: "../vcore_generator"
 dev_dependencies:
-  built_json_generator: "^0.0.5"
+#  built_json_generator: "^0.0.5"
   test: ">=0.12.0 <0.13.0"
   built_value_generator: 
     path: "../built_value.dart/built_value_generator"
