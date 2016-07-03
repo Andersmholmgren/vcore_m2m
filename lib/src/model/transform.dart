@@ -37,7 +37,7 @@ abstract class BidirectionalTransform<F, T>
 
   factory BidirectionalTransform(
           [updates(BidirectionalTransformBuilder<F, T> b)]) =
-      _$BidirectionalTransform;
+      _$BidirectionalTransform<F, T>;
 
   @override
   BidirectionalTransform<T, F> reversed() =>
@@ -55,7 +55,8 @@ abstract class BidirectionalTransformBuilder<F, T>
   Transform<F, T> forwards;
   Transform<T, F> backwards;
 
-  factory BidirectionalTransformBuilder() = _$BidirectionalTransformBuilder;
+  factory BidirectionalTransformBuilder() =
+      _$BidirectionalTransformBuilder<F, T>;
 }
 
 //abstract class NamingScheme {

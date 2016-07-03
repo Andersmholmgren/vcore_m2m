@@ -8,20 +8,21 @@ part of transform;
 // Target: abstract class BidirectionalTransform
 // **************************************************************************
 
-class _$BidirectionalTransform extends BidirectionalTransform {
-  final Transform forwards;
-  final Transform backwards;
+class _$BidirectionalTransform<F, T> extends BidirectionalTransform<F, T> {
+  final Transform<F, T> forwards;
+  final Transform<T, F> backwards;
   _$BidirectionalTransform._({this.forwards, this.backwards}) : super._() {
     if (forwards == null) throw new ArgumentError('null forwards');
     if (backwards == null) throw new ArgumentError('null backwards');
   }
   factory _$BidirectionalTransform(
-          [updates(BidirectionalTransformBuilder b)]) =>
-      (new BidirectionalTransformBuilder()..update(updates)).build();
-  BidirectionalTransform rebuild(updates(BidirectionalTransformBuilder b)) =>
+          [updates(BidirectionalTransformBuilder<F, T> b)]) =>
+      (new BidirectionalTransformBuilder<F, T>()..update(updates)).build();
+  BidirectionalTransform<F, T> rebuild(
+          updates(BidirectionalTransformBuilder<F, T> b)) =>
       (toBuilder()..update(updates)).build();
-  _$BidirectionalTransformBuilder toBuilder() =>
-      new _$BidirectionalTransformBuilder()..replace(this);
+  _$BidirectionalTransformBuilder<F, T> toBuilder() =>
+      new _$BidirectionalTransformBuilder<F, T>()..replace(this);
   bool operator ==(other) {
     if (other is! BidirectionalTransform) return false;
     return forwards == other.forwards && backwards == other.backwards;
@@ -39,21 +40,22 @@ class _$BidirectionalTransform extends BidirectionalTransform {
   }
 }
 
-class _$BidirectionalTransformBuilder extends BidirectionalTransformBuilder {
+class _$BidirectionalTransformBuilder<F, T>
+    extends BidirectionalTransformBuilder<F, T> {
   _$BidirectionalTransformBuilder() : super._();
-  void replace(BidirectionalTransform other) {
+  void replace(BidirectionalTransform<F, T> other) {
     super.forwards = other.forwards;
     super.backwards = other.backwards;
   }
 
-  void update(updates(BidirectionalTransformBuilder b)) {
+  void update(updates(BidirectionalTransformBuilder<F, T> b)) {
     if (updates != null) updates(this);
   }
 
-  BidirectionalTransform build() {
+  BidirectionalTransform<F, T> build() {
     if (forwards == null) throw new ArgumentError('null forwards');
     if (backwards == null) throw new ArgumentError('null backwards');
-    return new _$BidirectionalTransform._(
+    return new _$BidirectionalTransform<F, T>._(
         forwards: forwards, backwards: backwards);
   }
 }

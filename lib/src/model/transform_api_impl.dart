@@ -156,9 +156,8 @@ class _PropertyRelationHelper<F, T>
     builder.transform = tb.build();
   }
 
-
   @override
-  via(Codec codec) {
+  via/*<A,V>*/(Codec/*<A,V>*/ codec) {
     // TODO: implement via
   }
 }

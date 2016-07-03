@@ -150,7 +150,8 @@ class _$TransformationMetaModelBuilder extends TransformationMetaModelBuilder {
   void replace(TransformationMetaModel other) {
     super.fromTypeName = other.fromTypeName;
     super.toTypeName = other.toTypeName;
-    super.propertyTransforms = other.propertyTransforms?.toBuilder();
+    super.propertyTransforms = new SetBuilder<PropertyTransformBuilder>(
+        other.propertyTransforms?.map((tp) => tp.toBuilder()));
   }
 
   void update(updates(TransformationMetaModelBuilder b)) {
@@ -393,8 +394,10 @@ class _$TransformationContextMetaModelBuilder
     extends TransformationContextMetaModelBuilder {
   _$TransformationContextMetaModelBuilder() : super._();
   void replace(TransformationContextMetaModel other) {
-    super.transformations = other.transformations?.toBuilder();
-    super.abstractTypeMappings = other.abstractTypeMappings?.toBuilder();
+    super.transformations = new SetBuilder<TransformationMetaModelBuilder>(
+        other.transformations?.map((tp) => tp.toBuilder()));
+    super.abstractTypeMappings = new SetBuilder<AbstractTypeMappingBuilder>(
+        other.abstractTypeMappings?.map((tp) => tp.toBuilder()));
   }
 
   void update(updates(TransformationContextMetaModelBuilder b)) {
@@ -466,7 +469,8 @@ class _$AbstractTypeMappingBuilder extends AbstractTypeMappingBuilder {
   void replace(AbstractTypeMapping other) {
     super.fromTypeName = other.fromTypeName;
     super.toTypeName = other.toTypeName;
-    super.subTypeMappings = other.subTypeMappings?.toBuilder();
+    super.subTypeMappings = new SetBuilder<TransformMetaModelBuilder>(
+        other.subTypeMappings?.map((tp) => tp.toBuilder()));
   }
 
   void update(updates(AbstractTypeMappingBuilder b)) {
