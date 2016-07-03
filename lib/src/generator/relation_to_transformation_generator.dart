@@ -3,7 +3,6 @@ library relation_to_transformation_generator;
 import 'dart:async';
 import 'dart:io';
 
-import 'package:analyzer/src/generated/element.dart';
 import 'package:source_gen/source_gen.dart';
 //import 'package:vcore_generator/src/dart_source_to_vcore.dart';
 import 'package:vcore_generator/vcore_generator.dart';
@@ -11,11 +10,13 @@ import 'package:vcore/vcore.dart';
 import 'dart:convert';
 //import 'package:vcore_generator/src/vcore_model_as_code_serialiser.dart';
 import 'package:vcore_m2m/src/model/transform.dart';
+import 'package:build/build.dart';
+import 'package:analyzer/dart/element/element.dart';
 
 /// Generates a [TransformLookup] from a [PackageRelation]
 ///
 class RelationToTransformationGenerator extends Generator {
-  Future<String> generate(Element element) async {
+  Future<String> generate(Element element, BuildStep buildStep) async {
     print('#########: ${element.name} ${element.runtimeType}');
     if (element is! FunctionElement) return null;
     print('*********: ${element.name}');
@@ -24,10 +25,7 @@ class RelationToTransformationGenerator extends Generator {
     if (!fElement.returnType.displayName.startsWith('TransformLookup'))
       return null;
 
-
     print('yaaay: ${element.name}');
-
-
 
     return "yay";
 //    final package = convert(element);
