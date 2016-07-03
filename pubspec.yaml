@@ -13,8 +13,6 @@ dependencies:
     path: "../vcore"
   vcore_generator: 
     path: "../vcore_generator"
-  dogma_codegen:
-    path: "../dogma_jefe_root/dogma_codegen"
 dev_dependencies:
   built_json_generator: "^0.0.5"
   test: ">=0.12.0 <0.13.0"
