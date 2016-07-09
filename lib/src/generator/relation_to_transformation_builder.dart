@@ -26,6 +26,8 @@ class RelationToTransformationBuilder extends Builder {
     final source = await _generateFormattedSource(buildStep);
     if (source == null || source.isEmpty) return null;
 
+    print('#### generated source $source');
+
     final output = new Asset(_outputId(buildStep.input.id), source);
     buildStep.writeAsString(output);
   }
@@ -34,7 +36,8 @@ class RelationToTransformationBuilder extends Builder {
     final source = await _generateSource();
     if (source == null || source.isEmpty) return null;
 
-    return _format(source, buildStep);
+    return source;
+//    return _format(source, buildStep);
   }
 
   Future<String> _format(String source, BuildStep buildStep) async {
@@ -56,11 +59,11 @@ if approppriate.""",
 
   Future<String> _generateSource() async {
     final result = await Process.run('/usr/local/bin/dart', [runnerPath]);
-    print(result.exitCode);
+    print('####### exit code: ${result.exitCode}');
     if (result.exitCode == 0) {
       return result.stdout;
     } else {
-      print(result.stderr);
+      print('####### stderr: ${result.stderr}');
       return null;
     }
   }
