@@ -26,7 +26,7 @@ class RelationToTransformationBuilder extends Builder {
     final source = await _generateFormattedSource(buildStep);
     if (source == null || source.isEmpty) return null;
 
-    print('#### generated source $source');
+//    print('#### generated source $source');
 
     final output = new Asset(_outputId(buildStep.input.id), source);
     buildStep.writeAsString(output);
