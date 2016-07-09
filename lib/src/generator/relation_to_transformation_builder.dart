@@ -7,17 +7,18 @@ import 'package:build/build.dart';
 import 'package:dart_style/src/dart_formatter.dart';
 import 'package:vcore_m2m/src/model/relation.dart';
 import 'package:vcore_m2m/src/model/transform.dart';
-//import 'package:vcore_generator/src/dart_source_to_vcore.dart';
-//import 'package:vcore_generator/src/vcore_model_as_code_serialiser.dart';
 
 /// Generates a [TransformLookup] from a [PackageRelation]
 ///
 class RelationToTransformationBuilder extends Builder {
+  final AssetId relationAssetId;
   final String runnerPath;
   final bool isForwards;
   String get _extension => isForwards ? '.g.forwards.dart' : '.g.reverse.dart';
+  AssetId get _outputId => relationAssetId.changeExtension(_extension);
 
-  RelationToTransformationBuilder(this.runnerPath, this.isForwards);
+  RelationToTransformationBuilder(
+      this.relationAssetId, this.runnerPath, this.isForwards);
 
   @override
   Future build(BuildStep buildStep) async {
@@ -28,7 +29,7 @@ class RelationToTransformationBuilder extends Builder {
 
 //    print('#### generated source $source');
 
-    final output = new Asset(_outputId(buildStep.input.id), source);
+    final output = new Asset(_outputId, source);
     buildStep.writeAsString(output);
   }
 
@@ -69,7 +70,5 @@ if approppriate.""",
   }
 
   @override
-  List<AssetId> declareOutputs(AssetId inputId) => [_outputId(inputId)];
-
-  AssetId _outputId(AssetId inputId) => inputId.changeExtension(_extension);
+  List<AssetId> declareOutputs(AssetId inputId) => [_outputId];
 }
