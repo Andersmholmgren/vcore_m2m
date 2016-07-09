@@ -10,5 +10,6 @@ export 'package:vcore_m2m/src/model/transform.dart';
 export 'package:vcore_m2m/src/model/relation.dart';
 export 'package:vcore_m2m/src/model/transform_api.dart';
 export 'package:vcore_m2m/src/transformer.dart';
-export 'package:vcore_m2m/src/generator/relation_to_transformation_generator.dart';
+//export 'package:vcore_m2m/src/generator/relation_to_transformation_generator.dart';
+export 'package:vcore_m2m/src/generator/relation_to_transformation_builder.dart';
 export 'package:vcore_m2m/src/generator/relation_to_transformation_mapping.dart';

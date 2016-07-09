@@ -7,8 +7,9 @@ PackageTransformationMetaModel transformPackageRelation(
     Uri packageRelationPackageUri,
     Uri sourceModelPackageUri) {
   final b = new TransformationContextMetaModelBuilder();
-  final valueClassRelations = packageRelation.classifierRelations
-      .where((cr) => cr is ValueClassRelation) as Iterable<ValueClassRelation>;
+  final valueClassRelations = new List<ValueClassRelation>.from(packageRelation
+      .classifierRelations
+      .where((cr) => cr is ValueClassRelation));
 
   final transformations = valueClassRelations.map((vr) {
     final classRelation = vr;
@@ -46,9 +47,10 @@ PackageTransformationMetaModel transformPackageRelation(
         ..subTypeMappings
             .addAll(subTransforms(pt.fromSimpleType, pt.toSimpleType));
     });
-  }) as Iterable<AbstractTypeMappingBuilder>;
+  });
 
-  b.abstractTypeMappings.addAll(abstractTypeMappings);
+  b.abstractTypeMappings
+      .addAll(abstractTypeMappings as Iterable<AbstractTypeMappingBuilder>);
 
   return new PackageTransformationMetaModel((pb) {
     pb.context = b;

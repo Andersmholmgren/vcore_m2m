@@ -9,6 +9,9 @@ import 'transform.dart';
 
 part 'relation.g.dart';
 
+typedef Relation<A, B, R1, R2> RelationFactory<A, B,
+    R1 extends Relation<A, B, R1, R2>, R2 extends Relation<B, A, R2, R1>>();
+
 abstract class Relation<A, B, R1 extends Relation<A, B, R1, R2>,
     R2 extends Relation<B, A, R2, R1>> {
   R2 reversed();
