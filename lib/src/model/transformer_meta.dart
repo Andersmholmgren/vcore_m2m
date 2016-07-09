@@ -340,7 +340,7 @@ ${_perCustomTransform((String fromName, String toName,
     abstractTypeMappings.forEach((m) {
       final fromName = m.fromTypeName;
       final toName = m.toTypeName;
-      print('requiredAbstractTransforms: $fromName -> $toName');
+//      print('requiredAbstractTransforms: $fromName -> $toName');
 
       buffer.writeln(b(fromName, toName, m.perSubTypeTransform));
     });

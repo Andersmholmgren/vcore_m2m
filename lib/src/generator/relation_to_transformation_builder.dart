@@ -36,8 +36,8 @@ class RelationToTransformationBuilder extends Builder {
     final source = await _generateSource();
     if (source == null || source.isEmpty) return null;
 
-    return source;
-//    return _format(source, buildStep);
+//    return source;
+    return _format(source, buildStep);
   }
 
   Future<String> _format(String source, BuildStep buildStep) async {
